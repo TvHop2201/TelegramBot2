@@ -32,4 +32,6 @@ app.listen(process.env.PORT || 8000, () => {
 
 //test
 const handleApi = require('./controller/handleApi')
-handleApi.fetchApi()
+setInterval(() => {
+    handleApi.fetchApi()
+}, 30000);

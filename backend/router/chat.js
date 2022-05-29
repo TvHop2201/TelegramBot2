@@ -9,9 +9,11 @@ router.get('/getRoom', ChatController.getRoom)
 
 router.get('/getUser', ChatController.getUser)
 
-router.get('/getChat/', ChatController.getChatById)
+router.get('/getChatById/:id', ChatController.getChatById)
 
 router.post('/sendChat', ChatController.sendChat)
+
+router.get('/getUserById/:id', ChatController.getUserById)
 
 
 
