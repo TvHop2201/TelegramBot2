@@ -83,8 +83,10 @@ class ChatController {
             const text = req.body.text
             const date = new Date()
 
+            const textEncode = encodeURI(text)
 
-            await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${text}`)
+
+            await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
 
             const sendData = await chatModel.create({
                 fromId: fromId,
@@ -99,6 +101,7 @@ class ChatController {
                     firstName: 'Bot'
                 })
             }
+
             res.json({
                 success: true,
                 data: sendData

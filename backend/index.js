@@ -35,11 +35,9 @@ app.listen(process.env.PORT || 8000, () => {
 
 //test
 const handleApi = require('./controller/handleApi')
-// setInterval(() => {
-//     handleApi.fetchApi()
-// }, 30000);
+setInterval(() => {
+    handleApi.fetchApi()
+}, 30000);
 
-const chatModel = require('./model/chat');
-const userModel = require('./model/user');
 
 

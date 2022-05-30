@@ -6,6 +6,7 @@ import Room from './room/Room';
 import Chat from './chat/Chat';
 import './Dashboard.css'
 import SendChat from './sendChat/SendChat';
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 const Dashboard = () => {
     const [room, setRoom] = useState([])
@@ -68,10 +69,12 @@ const Dashboard = () => {
                             </div>
                             <hr />
                             <div className="chat-history">
-                                <ul className="m-b-0">
-                                    {chat.map(data => (
-                                        <Chat chat={data} key={data.chat._id} />
-                                    ))}
+                                <ul className="m-b-0 ">
+                                    <ScrollToBottom className='scroll'>
+                                        {chat.map(data => (
+                                            <Chat chat={data} key={data.chat._id} />
+                                        ))}
+                                    </ScrollToBottom>
                                 </ul>
                             </div>
                             <div className="chat-message clearfix">
