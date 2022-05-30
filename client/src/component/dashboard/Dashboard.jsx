@@ -5,11 +5,13 @@ import Navbar from './navbar/Navbar';
 import Room from './room/Room';
 import Chat from './chat/Chat';
 import './Dashboard.css'
+import SendChat from './sendChat/SendChat';
 
 const Dashboard = () => {
     const [room, setRoom] = useState([])
     const [titleChat, setTitleChat] = useState()
     const [chat, setChat] = useState([])
+    const [chatId, setChatId] = useState()
 
     const url = process.env.REACT_APP_API
 
@@ -24,13 +26,15 @@ const Dashboard = () => {
     }
 
     const fetchChat = async (chatId) => {
-        const chatData = await axios.get(`${url}/chat/getChatById/${chatId}`)
+        const chatData = await axios.get(`${url}/chat/getChatUserById/${chatId}`)
         setChat(chatData.data.data)
+
     }
 
     const handleRoomSelect = (value) => {
         fetchChat(value.chatId);
         setTitleChat(value.firstName || value.title)
+        setChatId(value.chatId)
     }
 
     useEffect(() => {
@@ -67,14 +71,12 @@ const Dashboard = () => {
                             <div className="chat-history">
                                 <ul className="m-b-0">
                                     {chat.map(data => (
-                                        <Chat chat={data} key={data._id} />
+                                        <Chat chat={data} key={data.chat._id} />
                                     ))}
                                 </ul>
                             </div>
                             <div className="chat-message clearfix">
-                                <div className="input-group mb-0">
-                                    <input type="text" className="form-control" name='messager' placeholder="Nhập Tin Nhắn ....." />
-                                </div>
+                                <SendChat chatId={chatId} />
                             </div>
                         </div>
                     </div>
