@@ -39,7 +39,6 @@ const Dashboard = () => {
 
     useEffect(() => {
         getRoom()
-
     }, [])
 
 
@@ -76,7 +75,7 @@ const Dashboard = () => {
                                 </ul>
                             </div>
                             <div className="chat-message clearfix">
-                                <SendChat chatId={chatId} />
+                                <SendChat chatId={chatId} call={(value) => fetchChat(value)} />
                             </div>
                         </div>
                     </div>

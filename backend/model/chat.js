@@ -4,8 +4,7 @@ const Schema = mongoose.Schema
 const chatSchema = new Schema({
     messageId: {
         type: String,
-        default: null,
-        required: true
+        default: null
     },
     chatId: {
         type: Number,

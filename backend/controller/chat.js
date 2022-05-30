@@ -6,6 +6,8 @@ const chatError = require('../controller/error')
 
 const axios = require('axios')
 
+const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}`
+
 class ChatController {
     async getRoom(req, res) {
         try {
@@ -76,19 +78,27 @@ class ChatController {
 
     async sendChat(req, res) {
         try {
-            const messageId = req.body.messageId
             const chatId = req.body.chatId
+            const fromId = 11111111
             const text = req.body.text
             const date = new Date()
 
-            await axios.post(`${TelegramApi}/sendMessage?chat_id=${chatId}&text=${text}`)
+
+            await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${text}`)
 
             const sendData = await chatModel.create({
-                messageId: messageId,
+                fromId: fromId,
                 chatId: chatId,
                 text: text,
                 date: date
             })
+            const botUser = await userModel.findOne({ fromId: fromId })
+            if (!botUser) {
+                await userModel.create({
+                    fromId: fromId,
+                    firstName: 'Bot'
+                })
+            }
             res.json({
                 success: true,
                 data: sendData
