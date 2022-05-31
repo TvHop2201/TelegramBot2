@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
+
 const ChatController = require('../controller/chat')
 
 
 
-router.get('/getRoom', ChatController.getRoom)
+router.get('/getRoom/:page', ChatController.getRoom)
 
 router.get('/getUser', ChatController.getUser)
 

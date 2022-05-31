@@ -7,6 +7,7 @@ import Chat from './chat/Chat';
 import './Dashboard.css'
 import SendChat from './sendChat/SendChat';
 import ScrollToBottom from 'react-scroll-to-bottom';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const Dashboard = () => {
     const [room, setRoom] = useState([])
@@ -14,10 +15,13 @@ const Dashboard = () => {
     const [chat, setChat] = useState([])
     const [chatId, setChatId] = useState()
 
+
+    const [roomPage, setRoomPage] = useState(1)
+
     const url = process.env.REACT_APP_API
 
     const getRoom = async () => {
-        const RoomData = await axios.get(`${url}/chat/getRoom`)
+        const RoomData = await axios.get(`${url}/chat/getRoom/${roomPage}`)
         if (RoomData.data) {
             setRoom(RoomData.data.data)
         }

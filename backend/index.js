@@ -6,15 +6,15 @@ const fs = require('fs');
 const morgan = require('morgan')
 require('dotenv').config();
 
-
-
 const app = express();
+
 
 //Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors())
 app.use(morgan('dev'))
+
 
 //Mongoose
 mongoose.connect(process.env.MONGOOSE)
@@ -27,6 +27,13 @@ fs.readdirSync('./router/').forEach(file => {
     app.use(`/${path}`, require(`./router/${path}`))
 });
 
+//WebHook 
+const HandleWebhook = require('./utils/handleWebhook')
+app.post('/webhook', (req, res) => {
+    handleWebhook.webHook(req.body);
+    res.sendStatus(200)
+})
+
 
 //Listen
 app.listen(process.env.PORT || 8000, () => {
@@ -34,7 +41,8 @@ app.listen(process.env.PORT || 8000, () => {
 });
 
 //test
-const handleApi = require('./controller/handleApi')
+const handleApi = require('./utils/handleApi');
+const handleWebhook = require('./utils/handleWebhook');
 setInterval(() => {
     handleApi.fetchApi()
 }, 30000);

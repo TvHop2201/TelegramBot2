@@ -6,12 +6,16 @@ const chatError = require('../controller/error')
 
 const axios = require('axios')
 
+
 const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}`
 
 class ChatController {
-    async getRoom(req, res) {
+    async getRoom(req, res, next) {
         try {
-            const roomData = await roomModel.find()
+            let perPage = 10
+            let page = req.params.page
+
+            const roomData = await roomModel.find().skip((perPage * page) - perPage).limit(perPage)
             res.json({
                 success: true,
                 data: roomData
@@ -21,7 +25,7 @@ class ChatController {
         }
 
     }
-    async getUser(req, res) {
+    async getUser(req, res, next) {
         try {
             const userData = await userModel.find()
             res.json({
@@ -33,7 +37,7 @@ class ChatController {
             res.status(500).json(chatError.error(101, error))
         }
     }
-    async getUserById(req, res) {
+    async getUserById(req, res, next) {
         try {
             const userData = await userModel.findOne({ fromId: req.params.id })
             res.json({
@@ -45,7 +49,7 @@ class ChatController {
         }
     }
 
-    async getChatById(req, res) {
+    async getChatById(req, res, next) {
         try {
             const chatData = await chatModel.find({ chatId: req.params.id })
             res.json({
@@ -57,7 +61,7 @@ class ChatController {
         }
     }
 
-    async getChatUserById(req, res) {
+    async getChatUserById(req, res, next) {
         try {
             const chatData = await chatModel.find({ chatId: req.params.id })
             var result = []
@@ -76,7 +80,7 @@ class ChatController {
 
     }
 
-    async sendChat(req, res) {
+    async sendChat(req, res, next) {
         try {
             const chatId = req.body.chatId
             const fromId = 11111111
