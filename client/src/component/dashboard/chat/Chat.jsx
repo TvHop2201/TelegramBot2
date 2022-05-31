@@ -4,7 +4,12 @@ import gip from './giphy.gif'
 const Chat = (props) => {
     const [date, setDate] = useState()
     useEffect(() => {
-        setDate(new Date(props.chat.chat.date * 1000).toLocaleDateString())
+        if (props.chat.user.isBot) {
+            setDate(new Date(props.chat.chat.date).toLocaleDateString())
+        } else {
+            setDate(new Date(props.chat.chat.date * 1000).toLocaleDateString())
+        }
+
     }, [])
 
 

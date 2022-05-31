@@ -30,7 +30,7 @@ fs.readdirSync('./router/').forEach(file => {
 //WebHook 
 const HandleWebhook = require('./utils/handleWebhook')
 app.post('/webhook', (req, res) => {
-    handleWebhook.webHook(req.body);
+    handleWebhook.webHook([req.body]);
     res.sendStatus(200)
 })
 
