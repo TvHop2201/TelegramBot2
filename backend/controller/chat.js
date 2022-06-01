@@ -85,7 +85,7 @@ class ChatController {
             const chatId = req.body.chatId
             const fromId = 11111111
             const text = req.body.text
-            const date = new Date()
+            const date = Date.now()
 
             const textEncode = encodeURI(text)
 

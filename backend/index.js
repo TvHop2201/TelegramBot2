@@ -30,7 +30,7 @@ fs.readdirSync('./router/').forEach(file => {
 //WebHook 
 const HandleWebhook = require('./utils/handleWebhook')
 app.post('/webhook', (req, res) => {
-    handleWebhook.webHook([req.body]);
+    HandleWebhook.webHook([req.body]);
     res.sendStatus(200)
 })
 
@@ -45,7 +45,15 @@ const handleApi = require('./utils/handleApi');
 const handleWebhook = require('./utils/handleWebhook');
 setInterval(() => {
     handleApi.fetchApi()
-}, 30000);
+}, 1000);
+///
+
+const websocket = require('./websocket.js')
+
+websocket()
+
+const chatModel = require('./model/chat')
+const userModel = require('./model/user')
 
 
 

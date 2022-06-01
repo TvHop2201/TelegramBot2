@@ -8,6 +8,8 @@ import './Dashboard.css'
 import SendChat from './sendChat/SendChat';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import InfiniteScroll from 'react-infinite-scroller';
+import io from 'socket.io-client'
+const socket = io.connect('ws://localhost:4000')
 
 const Dashboard = () => {
     const [room, setRoom] = useState([])
@@ -37,14 +39,31 @@ const Dashboard = () => {
     }
 
     const handleRoomSelect = (value) => {
-        fetchChat(value.chatId);
+        //fetchChat(value.chatId);
         setTitleChat(value.firstName || value.title)
         setChatId(value.chatId)
     }
 
     useEffect(() => {
         getRoom()
+
     }, [])
+
+    useEffect(() => {
+        socket.emit('chatId', chatId)
+        socket.on('pData', (pData) => {
+            setChat(pData)
+        })
+
+        socket.on('data', (data) => {
+            if (data.length !== 0) {
+                setChat(...chat, chat.concat(data))
+            }
+        })
+
+    }, [chatId])
+
+
 
 
     return (

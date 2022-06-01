@@ -20,7 +20,7 @@ exports.fetchApi = async () => {
                 const fromId = data.message.from.id
                 const isBot = data.message.from.is_bot
                 const text = data.message.text
-                const date = data.message.date
+                const date = data.message.date * 1000
 
                 const firstName = data.message.chat.first_name
                 const lastName = data.message.chat.last_name
