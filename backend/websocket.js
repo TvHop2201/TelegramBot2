@@ -18,7 +18,7 @@ function websocket() {
                 const chatData = await chatModel.find({
                     chatId: data,
                     date: {
-                        $gte: time - 3000 + (time - timeDau),
+                        $gte: time - (3000 + (time - timeDau)),
                         $lte: time
                     }
                 }).sort({ date: -1 })
