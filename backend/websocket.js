@@ -11,12 +11,14 @@ function websocket() {
     io.on('connection', async (socket) => {
         socket.on('chatId', async (data) => {
             console.log('User connect : ', socket.id)
+            var time = 0
+
             setInterval(async () => {
                 const chatData = await chatModel.find({
                     chatId: data,
                     date: {
-                        $gte: Date.now() - 3000,
-                        $lte: Date.now()
+                        $gte: time - 3000,
+                        $lte: time
                     }
                 }).sort({ date: -1 })
                 var result = []
@@ -25,6 +27,7 @@ function websocket() {
                     result.push({ chat: chatData[i], user: chatUser })
                 }
                 socket.emit('data', result)
+                time = Date.now()
             }, 3000);
 
         })

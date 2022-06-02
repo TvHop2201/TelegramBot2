@@ -52,9 +52,3 @@ setInterval(() => {
 
 //test
 const chatModel = require('./model/chat')
-
-const ok = async () => {
-    const aa = await chatModel.find().sort({ date: -1 }).limit(15)
-    console.log(aa)
-}
-ok()

@@ -69,7 +69,7 @@ const Dashboard = () => {
         socket.emit('chatId', chatId)
         socket.on('data', (data) => {
             if (data.length !== 0) {
-                setChat(chat.concat(data))
+                setChat(data.concat(chat))
             }
         })
 
@@ -111,7 +111,6 @@ const Dashboard = () => {
                                         {
                                             chatId ?
                                                 <li className=''>
-
                                                     <button className='btn mx-auto' onClick={() => setPageChat(pageChat + 1)} >Tải thêm ...</button>
                                                     {loadDing ? <img src={loadDingGif} width='30px' /> : ''}
                                                 </li>
