@@ -14,10 +14,11 @@ function websocket() {
             var time = 0
 
             setInterval(async () => {
+                const timeDau = Date.now()
                 const chatData = await chatModel.find({
                     chatId: data,
                     date: {
-                        $gte: time - 3000,
+                        $gte: time - 3000 + (time - timeDau),
                         $lte: time
                     }
                 }).sort({ date: -1 })
