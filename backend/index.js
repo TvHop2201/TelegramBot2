@@ -48,6 +48,13 @@ app.listen(process.env.PORT || 8000, () => {
 const handleApi = require('./utils/handleApi');
 setInterval(() => {
     handleApi.fetchApi()
-}, 2000);
+}, 1000);
 
 //test
+const chatModel = require('./model/chat')
+
+const ok = async () => {
+    const aa = await chatModel.find().sort({ date: -1 }).limit(15)
+    console.log(aa)
+}
+ok()

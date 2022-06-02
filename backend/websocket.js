@@ -15,17 +15,17 @@ function websocket() {
                 const chatData = await chatModel.find({
                     chatId: data,
                     date: {
-                        $gte: Date.now() - 5000,
+                        $gte: Date.now() - 3000,
                         $lte: Date.now()
                     }
-                }).sort({ date: -1 }).limit(1)
+                }).sort({ date: -1 })
                 var result = []
                 for (let i = 0; i < chatData.length; i++) {
                     const chatUser = await userModel.findOne({ fromId: chatData[i].fromId })
                     result.push({ chat: chatData[i], user: chatUser })
                 }
                 socket.emit('data', result)
-            }, 5000);
+            }, 3000);
 
         })
 

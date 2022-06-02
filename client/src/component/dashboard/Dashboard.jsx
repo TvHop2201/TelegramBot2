@@ -69,7 +69,7 @@ const Dashboard = () => {
         socket.emit('chatId', chatId)
         socket.on('data', (data) => {
             if (data.length !== 0) {
-                setChat(...chat, chat.concat(data))
+                setChat(chat.concat(data))
             }
         })
 
