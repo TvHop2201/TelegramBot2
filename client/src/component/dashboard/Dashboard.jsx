@@ -5,9 +5,9 @@ import Navbar from './navbar/Navbar';
 import Room from './room/Room';
 import Chat from './chat/Chat';
 import './Dashboard.css'
+import loadDingGif from './aa.gif'
 import SendChat from './sendChat/SendChat';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import InfiniteScroll from 'react-infinite-scroller';
 import io from 'socket.io-client'
 const socket = io.connect('ws://localhost:4000')
 
@@ -20,6 +20,7 @@ const Dashboard = () => {
 
 
     const [roomPage, setRoomPage] = useState(1)
+    const [loadDing, setLoadDing] = useState(false)
 
     const url = process.env.REACT_APP_API
 
@@ -46,10 +47,11 @@ const Dashboard = () => {
     }
 
     const handleUpdateChat = async () => {
+        setLoadDing(true)
         const chatData = await axios.get(`${url}/chat/getChatUserById/${chatId}/${pageChat}`)
         const result = (chatData.data.data).reverse()
         setChat((result.concat(chat)))
-
+        setLoadDing(false)
     }
 
     useEffect(() => {
@@ -109,7 +111,9 @@ const Dashboard = () => {
                                         {
                                             chatId ?
                                                 <li className=''>
+
                                                     <button className='btn mx-auto' onClick={() => setPageChat(pageChat + 1)} >Tải thêm ...</button>
+                                                    {loadDing ? <img src={loadDingGif} width='30px' /> : ''}
                                                 </li>
                                                 : ''
                                         }

@@ -18,7 +18,7 @@ function websocket() {
                         $gte: Date.now() - 5000,
                         $lte: Date.now()
                     }
-                })
+                }).sort({ date: -1 }).limit(1)
                 var result = []
                 for (let i = 0; i < chatData.length; i++) {
                     const chatUser = await userModel.findOne({ fromId: chatData[i].fromId })
