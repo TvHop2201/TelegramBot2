@@ -15,7 +15,7 @@ router.post('/sendChat', ChatController.sendChat)
 
 router.get('/getUserById/:id', ChatController.getUserById)
 
-router.get('/getChatUserById/:id', ChatController.getChatUserById)
+router.get('/getChatUserById/:id/:page', ChatController.getChatUserById)
 
 
 

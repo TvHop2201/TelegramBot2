@@ -34,26 +34,28 @@ app.post('/webhook', (req, res) => {
     res.sendStatus(200)
 })
 
+//webSocket
+const websocket = require('./websocket.js')
+websocket()
+
 
 //Listen
 app.listen(process.env.PORT || 8000, () => {
     console.log(`App listening on port ${process.env.PORT || 8000}`);
 });
 
-//test
+// check telegram local
 const handleApi = require('./utils/handleApi');
-const handleWebhook = require('./utils/handleWebhook');
 setInterval(() => {
     handleApi.fetchApi()
-}, 1000);
-///
+}, 2000);
 
-const websocket = require('./websocket.js')
+//test
 
-websocket()
 
-const chatModel = require('./model/chat')
-const userModel = require('./model/user')
+
+
+
 
 
 

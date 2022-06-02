@@ -5,9 +5,9 @@ const Chat = (props) => {
     const [date, setDate] = useState()
     useEffect(() => {
         if (props.chat.user.isBot) {
-            setDate(new Date(props.chat.chat.date).toLocaleString())
+            setDate(new Date((props.chat.chat.date * 1000) / 1000).toDateString())
         } else {
-            setDate(new Date(props.chat.chat.date * 1000).toLocaleDateString())
+            setDate(new Date((props.chat.chat.date * 1000) / 1000).toDateString())
         }
 
     }, [])

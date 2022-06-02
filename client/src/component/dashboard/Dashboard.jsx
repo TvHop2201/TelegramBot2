@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from "axios";
 import Navbar from './navbar/Navbar';
 import Room from './room/Room';
@@ -16,6 +16,7 @@ const Dashboard = () => {
     const [titleChat, setTitleChat] = useState()
     const [chat, setChat] = useState([])
     const [chatId, setChatId] = useState()
+    const [pageChat, setPageChat] = useState(1)
 
 
     const [roomPage, setRoomPage] = useState(1)
@@ -32,29 +33,38 @@ const Dashboard = () => {
         }
     }
 
-    const fetchChat = async (chatId) => {
-        const chatData = await axios.get(`${url}/chat/getChatUserById/${chatId}`)
-        setChat(chatData.data.data)
-
+    const fetchChat = async (value) => {
+        setChat([])
+        const chatData = await axios.get(`${url}/chat/getChatUserById/${value}/1`)
+        setChat((chatData.data.data).reverse())
+        setPageChat(1)
     }
-
     const handleRoomSelect = (value) => {
-        //fetchChat(value.chatId);
+        fetchChat(value.chatId);
         setTitleChat(value.firstName || value.title)
         setChatId(value.chatId)
     }
 
+    const handleUpdateChat = async () => {
+        const chatData = await axios.get(`${url}/chat/getChatUserById/${chatId}/${pageChat}`)
+        const result = (chatData.data.data).reverse()
+        setChat((result.concat(chat)))
+
+    }
+
+    useEffect(() => {
+        if (pageChat > 1) {
+            handleUpdateChat()
+        }
+    }, [pageChat])
+
     useEffect(() => {
         getRoom()
-
     }, [])
+
 
     useEffect(() => {
         socket.emit('chatId', chatId)
-        socket.on('pData', (pData) => {
-            setChat(pData)
-        })
-
         socket.on('data', (data) => {
             if (data.length !== 0) {
                 setChat(...chat, chat.concat(data))
@@ -62,6 +72,8 @@ const Dashboard = () => {
         })
 
     }, [chatId])
+
+    const scrollRef = useRef()
 
 
 
@@ -91,13 +103,22 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <hr />
-                            <div className="chat-history">
-                                <ul className="m-b-0 ">
+                            <div className="chat-history" id='scroll_id' ref={scrollRef}>
+                                <ul className="m-b-0 "  >
                                     <ScrollToBottom className='scroll'>
+                                        {
+                                            chatId ?
+                                                <li className=''>
+                                                    <button className='btn mx-auto' onClick={() => setPageChat(pageChat + 1)} >Tải thêm ...</button>
+                                                </li>
+                                                : ''
+                                        }
                                         {chat.map(data => (
                                             <Chat chat={data} key={data.chat._id} />
                                         ))}
+
                                     </ScrollToBottom>
+
                                 </ul>
                             </div>
                             <div className="chat-message clearfix">
@@ -106,7 +127,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </div >
     )
 }

@@ -9,23 +9,13 @@ const io = new Server(4000, {
 console.log("websocket Start")
 function websocket() {
     io.on('connection', async (socket) => {
-
         socket.on('chatId', async (data) => {
-            const chatData = await chatModel.find({
-                chatId: data,
-            })
-            var result = []
-            for (let i = 0; i < chatData.length; i++) {
-                const chatUser = await userModel.findOne({ fromId: chatData[i].fromId })
-                result.push({ chat: chatData[i], user: chatUser })
-            }
-            socket.emit('pData', result)
-
+            console.log('User connect : ', socket.id)
             setInterval(async () => {
                 const chatData = await chatModel.find({
                     chatId: data,
                     date: {
-                        $gte: Date.now() - 10000,
+                        $gte: Date.now() - 5000,
                         $lte: Date.now()
                     }
                 })
@@ -37,6 +27,10 @@ function websocket() {
                 socket.emit('data', result)
             }, 5000);
 
+        })
+
+        socket.on('disconnect', () => {
+            console.log(`User disconnect : ${socket.id}`)
         })
     })
 }

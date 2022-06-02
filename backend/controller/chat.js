@@ -63,7 +63,11 @@ class ChatController {
 
     async getChatUserById(req, res, next) {
         try {
-            const chatData = await chatModel.find({ chatId: req.params.id })
+            let perPage = 6
+            let page = req.params.page
+
+            const chatData = await chatModel.find({ chatId: req.params.id }).skip((perPage * page) - perPage)
+                .sort({ date: -1 }).limit(perPage)
             var result = []
             for (let i = 0; i < chatData.length; i++) {
                 const chatUser = await userModel.findOne({ fromId: chatData[i].fromId })
