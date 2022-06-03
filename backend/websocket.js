@@ -8,28 +8,31 @@ const io = new Server(4000, {
 })
 console.log("websocket Start")
 function websocket() {
+    const autoEmit = (socket, data, lastTime = Date.now()) => {
+        let timeNow = Date.now();
+        setTimeout(async () => {
+            const chatData = await chatModel.find({
+                chatId: data,
+                date: {
+                    $gte: lastTime ? lastTime : 5000,
+                    $lte: Date.now()
+                }
+            }).sort({ date: -1 })
+            var result = []
+            for (let i = 0; i < chatData.length; i++) {
+                const chatUser = await userModel.findOne({ fromId: chatData[i].fromId })
+                result.push({ chat: chatData[i], user: chatUser })
+            }
+            socket.emit('data', result)
+            autoEmit(socket, data, timeNow);
+        }, 5000);
+
+    }
+
     io.on('connection', async (socket) => {
         socket.on('chatId', async (data) => {
             console.log('User connect : ', socket.id)
-            var time = 0
-
-            setInterval(async () => {
-                const timeDau = Date.now()
-                const chatData = await chatModel.find({
-                    chatId: data,
-                    date: {
-                        $gte: time - (3000 + (time - timeDau)),
-                        $lte: time
-                    }
-                }).sort({ date: -1 })
-                var result = []
-                for (let i = 0; i < chatData.length; i++) {
-                    const chatUser = await userModel.findOne({ fromId: chatData[i].fromId })
-                    result.push({ chat: chatData[i], user: chatUser })
-                }
-                socket.emit('data', result)
-                time = Date.now()
-            }, 3000);
+            autoEmit(socket, data)
 
         })
 
