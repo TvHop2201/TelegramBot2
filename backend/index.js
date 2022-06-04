@@ -28,14 +28,17 @@ fs.readdirSync('./router/').forEach(file => {
 });
 
 //WebHook 
-const HandleWebhook = require('./utils/handleWebhook')
+const HandleWebhook = require('./service/handleWebhook')
 app.post('/webhook', (req, res) => {
     HandleWebhook.webHook([req.body]);
-    res.sendStatus(200)
+    res.json(true)
+})
+app.get('/webhook', (req, res) => {
+    res.json(true)
 })
 
 //webSocket
-const websocket = require('./websocket.js')
+const websocket = require('./service/websocket.js')
 websocket()
 
 
@@ -48,7 +51,6 @@ app.listen(process.env.PORT || 8000, () => {
 const handleApi = require('./utils/handleApi');
 setInterval(() => {
     handleApi.fetchApi()
-}, 1000);
+}, 3000);
 
 //test
-const chatModel = require('./model/chat')
