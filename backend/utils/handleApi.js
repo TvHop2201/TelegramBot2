@@ -5,6 +5,8 @@ const chatModel = require('../model/chat')
 const userModel = require('../model/user')
 const roomModel = require('../model/room')
 
+const handleCommand = require('./handleCommand')
+
 
 const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates`
 
@@ -26,7 +28,6 @@ exports.fetchApi = async () => {
                 const lastName = data.message.chat.last_name
 
                 const type = data.message.chat.type
-
                 const title = data.message.chat.title ? data.message.chat.title : null
 
                 const data1 = await chatModel.findOne({ messageId: messageId })
@@ -38,7 +39,6 @@ exports.fetchApi = async () => {
                         date: date,
                         text: text
                     })
-
                     const data2 = await roomModel.findOne({ chatId: chatId })
                     if (!data2) {
                         await roomModel.create({
@@ -49,7 +49,6 @@ exports.fetchApi = async () => {
                             type: type
                         })
                     }
-
                     const data3 = await userModel.findOne({ fromId: fromId })
                     if (!data3) {
                         await userModel.create({
@@ -58,6 +57,10 @@ exports.fetchApi = async () => {
                             firstName: firstName,
                             lastName: lastName
                         })
+                    }
+
+                    if (text.charAt(0) === '/') {
+                        handleCommand.Command(text, chatId)
                     }
                 }
 

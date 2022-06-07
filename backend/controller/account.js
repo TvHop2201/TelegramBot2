@@ -6,6 +6,8 @@ const accountError = require('./error')
 const salt = bcrypt.genSaltSync(10)
 const accountModel = require('../model/account')
 
+const tryCatch = require('../utils/handleTryCatch').handle
+
 class AccountController {
     async login(req, res) {
         const username = req.body.username
@@ -28,34 +30,27 @@ class AccountController {
         }
     }
     async register(req, res) {
-        try {
-            const username = req.body.username
-            const email = req.body.email
-            const phone = req.body.phone
-            const password = bcrypt.hashSync(`${req.body.password}`, salt)
+        const username = req.body.username
+        const email = req.body.email
+        const phone = req.body.phone
+        const password = bcrypt.hashSync(`${req.body.password}`, salt)
 
-            const data = await accountModel.create({
+        let [err, data] = await tryCatch(
+            accountModel.create({
                 username: username,
                 email: email,
                 phone: phone,
                 password: password
             })
-            res.json({
-                status: true,
-                data: data
-            })
-        } catch (error) {
+        )
+        if (err) {
             res.status(500).json(accountError.error(101, error))
         }
-
-
-
-
-
-
-
+        res.json({
+            status: true,
+            data: data
+        })
     }
-
 }
 
 module.exports = new AccountController()

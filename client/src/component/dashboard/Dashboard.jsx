@@ -69,11 +69,12 @@ const Dashboard = () => {
         socket.emit('chatId', chatId)
         socket.on('data', (data) => {
             if (data.length !== 0) {
-                setChat(data.concat(chat))
+                setChat(data)
             }
         })
 
     }, [chatId])
+
 
     const scrollRef = useRef()
 

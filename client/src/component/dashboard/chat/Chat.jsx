@@ -12,8 +12,6 @@ const Chat = (props) => {
 
     }, [])
 
-
-
     if (!props.chat) {
         return (
             <img src={gip} className="mx-auto" width='100%' height='150px' alt="" />

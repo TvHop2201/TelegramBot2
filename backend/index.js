@@ -8,13 +8,11 @@ require('dotenv').config();
 
 const app = express();
 
-
 //Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors())
 app.use(morgan('dev'))
-
 
 //Mongoose
 mongoose.connect(process.env.MONGOOSE)
@@ -41,16 +39,17 @@ app.get('/webhook', (req, res) => {
 const websocket = require('./service/websocket.js')
 websocket()
 
-
 //Listen
 app.listen(process.env.PORT || 8000, () => {
     console.log(`App listening on port ${process.env.PORT || 8000}`);
 });
 
-// check telegram local
+// check telegram api
 const handleApi = require('./utils/handleApi');
 setInterval(() => {
     handleApi.fetchApi()
 }, 3000);
 
 //test
+
+
