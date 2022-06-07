@@ -51,5 +51,4 @@ setInterval(() => {
 }, 3000);
 
 //test
-
-
+const { pointModel, pointMessageModel } = require('./model/point')
