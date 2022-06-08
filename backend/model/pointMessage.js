@@ -5,6 +5,13 @@ const pointMessageSchema = new Schema({
     id: {
         type: String
     },
+    idGift: {
+        type: String
+    },
+    pointChange: {
+        type: String,
+        default: null
+    },
     message: {
         type: String,
         default: null

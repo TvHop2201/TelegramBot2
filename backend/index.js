@@ -48,7 +48,7 @@ app.listen(process.env.PORT || 8000, () => {
 const handleApi = require('./utils/handleApi');
 setInterval(() => {
     handleApi.fetchApi()
-}, 5000);
+}, 10000);
 
 //test
 

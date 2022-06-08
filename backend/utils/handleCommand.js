@@ -63,14 +63,16 @@ class HandleCommand {
             pointUser = pointUser.split('@')[1]
             let data = await userModel.findOne({ userName: pointUser })
             if (data.length === 0) {
-                let text = 'không tồn tại người dùng'
+                let text = 'không tồn tại người dùng !!!!'
                 this.sendText(text, chatId)
             } else {
-                if (data.point <= 1) {
+                if (data.point >= 1) {
                     await userModel.findOneAndUpdate({ userName: pointUser }, { point: data.point + 1 })
-                    await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -1 } })
+                    let userGift = await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -1 } })
                     await pointMessageModel.create({
                         id: data.fromId,
+                        idGift: fromId111,
+                        pointChange: '1',
                         message: pointMessage
                     })
                     let text = `user : ${data.userName} đang có ${data.point + 1} point`
@@ -87,11 +89,13 @@ class HandleCommand {
                 let text = 'không tồn tại người dùng'
                 this.sendText(text, chatId)
             } else {
-                if (data.point <= 1) {
+                if (data.point >= 1) {
                     await userModel.findOneAndUpdate({ firstName: pointUser }, { point: data.point + 1 })
                     await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -1 } })
                     await pointMessageModel.create({
                         id: data.fromId,
+                        idGift: fromId111,
+                        pointChange: '1',
                         message: pointMessage
                     })
                     let text = `user : ${data.firstName} đang có ${data.point + 1} point`
@@ -124,7 +128,7 @@ class HandleCommand {
                     let data2 = await pointMessageModel.find({ id: data.fromId }).limit(10)
                     let text = ''
                     for (const index of data2) {
-                        text = text + '1 point ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
+                        text = text + index.pointChange + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
                     this.sendText(text, chatId)
                 }
@@ -138,7 +142,8 @@ class HandleCommand {
                     let data2 = await pointMessageModel.find({ id: data.fromId }).limit(15)
                     let text = ''
                     for (const index of data2) {
-                        text = text + '1 point ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
+                        console.log(index.pointChange)
+                        text = text + 'add : ' + index.pointChange + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
                     this.sendText(text, chatId)
                 }
@@ -148,7 +153,7 @@ class HandleCommand {
 
     }
     async handleGiftCommand(text, chatId, fromId111) {
-        let [giftCommand, pointUser, numPoint] = text.split(' ')
+        let [giftCommand, pointUser, numPoint, pointMessage] = text.split(' ')
         numPoint = parseInt(numPoint)
         if (Number.isNaN(numPoint)) {
             let text = 'Wrong point !!!'
@@ -165,6 +170,12 @@ class HandleCommand {
                 if (data.point >= numPoint) {
                     await userModel.findOneAndUpdate({ userName: pointUser }, { point: data.point + numPoint })
                     await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: - numPoint } })
+                    await pointMessageModel.create({
+                        id: data.fromId,
+                        idGift: fromId111,
+                        pointChange: numPoint,
+                        message: pointMessage
+                    })
                     let text = `user : ${data.userName} đang có ${data.point + 1} point`
                     this.sendText(text, chatId)
                 } else {
@@ -179,9 +190,15 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser }, { point: data.point + 1 })
-                    await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -1 } })
-                    let text = `user : ${data.firstName} đang có ${data.point + 1} point`
+                    await userModel.findOneAndUpdate({ firstName: pointUser }, { point: data.point + numPoint })
+                    await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -numPoint } })
+                    await pointMessageModel.create({
+                        id: data.fromId,
+                        idGift: fromId111,
+                        pointChange: numPoint,
+                        message: pointMessage
+                    })
+                    let text = `user : ${data.firstName} đang có ${data.point + numPoint} point`
                     this.sendText(text, chatId)
                 } else {
                     let text = 'Không Đủ Số Điểm Để Tặng !!!'
@@ -192,7 +209,7 @@ class HandleCommand {
 
     }
     async handleImageCommand(text, chatId) {
-        let textEncode = encodeURI('https://picsum.photos/200/300')
+        let textEncode = encodeURI('https://placeimg.com/640/480/any')
         await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
     }
 
