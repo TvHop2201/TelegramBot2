@@ -28,8 +28,6 @@ class HandleCommand {
             },
 
         ]
-        const date = Date.now()
-
         commands.forEach(async (index) => {
             if (text === index.command) {
                 let textEncode = encodeURI(index.description)
@@ -38,7 +36,7 @@ class HandleCommand {
                     fromId: 11111111,
                     chatId: chatId,
                     text: index.description,
-                    date: date
+                    date: Date.now()
                 })
             }
         })
@@ -51,6 +49,9 @@ class HandleCommand {
         }
         if (text.split(' ')[0] === 'gift') {
             this.handleGiftCommand(text, chatId, fromId)
+        }
+        if (text.split(' ')[0] === 'image') {
+            this.handleImageCommand(text, chatId)
         }
     }
 
@@ -75,7 +76,7 @@ class HandleCommand {
                     let text = `user : ${data.userName} đang có ${data.point + 1} point`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng'
+                    let text = 'Không Đủ Số Điểm Để Tặng !!!'
                     this.sendText(text, chatId)
                 }
             }
@@ -96,7 +97,7 @@ class HandleCommand {
                     let text = `user : ${data.firstName} đang có ${data.point + 1} point`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng'
+                    let text = 'Không Đủ Số Điểm Để Tặng !!!!'
                     this.sendText(text, chatId)
                 }
             }
@@ -167,14 +168,14 @@ class HandleCommand {
                     let text = `user : ${data.userName} đang có ${data.point + 1} point`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng'
+                    let text = 'Không Đủ Số Điểm Để Tặng !!!!'
                     this.sendText(text, chatId)
                 }
             }
         } else {
             let data = await userModel.findOne({ firstName: pointUser })
             if (!data) {
-                let text = 'không tồn tại người dùng'
+                let text = 'không tồn tại người dùng !!!!'
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
@@ -183,12 +184,16 @@ class HandleCommand {
                     let text = `user : ${data.firstName} đang có ${data.point + 1} point`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng'
+                    let text = 'Không Đủ Số Điểm Để Tặng !!!'
                     this.sendText(text, chatId)
                 }
             }
         }
 
+    }
+    async handleImageCommand(text, chatId) {
+        let textEncode = encodeURI('https://picsum.photos/200/300')
+        await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
     }
 
 
