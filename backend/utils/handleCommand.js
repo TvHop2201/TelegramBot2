@@ -9,7 +9,7 @@ const { urlencoded } = require('express')
 const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}`
 
 class HandleCommand {
-    async command(text, chatId) {
+    async command(text, chatId, fromId) {
         let commands = [
             {
                 "command": 'start',
@@ -45,14 +45,14 @@ class HandleCommand {
         })
 
         if (text.split(' ')[0] === 'thank') {
-            this.handleThankCommand(text, chatId)
+            this.handleThankCommand(text, chatId, fromId)
         }
         if (text.split(' ')[0] === 'point') {
             this.handleListCommand(text, chatId)
         }
     }
 
-    async handleThankCommand(text, chatId) {
+    async handleThankCommand(text, chatId, fromId111) {
         let [thankCommand, pointUser, ...pointMessage] = text.split(' ')
         pointMessage = pointMessage.join(' ')
 
@@ -73,6 +73,7 @@ class HandleCommand {
                 })
             } else {
                 await userModel.findOneAndUpdate({ userName: pointUser }, { point: data.point + 1 })
+                await userModel.findOneAndUpdate({ fromId: fromId111 }, { point: point - 1 })
                 await pointMessageModel.create({
                     id: data.fromId,
                     message: pointMessage
@@ -102,6 +103,7 @@ class HandleCommand {
                 })
             } else {
                 await userModel.findOneAndUpdate({ firstName: pointUser }, { point: data.point + 1 })
+                await userModel.findOneAndUpdate({ fromId: fromId111 }, { point: point - 1 })
                 await pointMessage.create({
                     id: data.fromId,
                     message: pointMessage
@@ -120,8 +122,22 @@ class HandleCommand {
 
     }
     async handlePointCommand(text, chatId) {
-        let [point, pointUser] = text.split(' ')
-
+        let [pointCommand, pointUser] = text.split(' ')
+        if (!pointUser) {
+            let pData = await (await userModel.find().sort({ point: -1 })).limit(10)
+            let textOut = ''
+            for (const index of pData) {
+                textOut = textOut + index.userName + index.firstName + " : " + index.point + "\n"
+            }
+            let textEncode = encodeURI(textOut)
+            await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+            await chatModel.create({
+                fromId: 11111111,
+                chatId: chatId,
+                text: textOut,
+                date: date
+            })
+        }
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
             let data = await userModel.findOne({ userName: pointUser })
