@@ -3,7 +3,8 @@ require('dotenv').config()
 
 const chatModel = require('../model/chat')
 const userModel = require('../model/user')
-const { pointModel, pointMessageModel } = require('../model/point')
+const pointMessageModel = require('../model/pointMessage')
+const { urlencoded } = require('express')
 
 const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}`
 
@@ -28,8 +29,6 @@ class HandleCommand {
             },
 
         ]
-
-        const fromId = 11111111
         const date = Date.now()
 
         commands.forEach(async (index) => {
@@ -37,7 +36,7 @@ class HandleCommand {
                 let textEncode = encodeURI(index.description)
                 await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
                 await chatModel.create({
-                    fromId: fromId,
+                    fromId: 11111111,
                     chatId: chatId,
                     text: index.description,
                     date: date
@@ -48,47 +47,138 @@ class HandleCommand {
         if (text.split(' ')[0] === 'thank') {
             this.handleThankCommand(text, chatId)
         }
+        if (text.split(' ')[0] === 'point') {
+            this.handleListCommand(text, chatId)
+        }
     }
 
     async handleThankCommand(text, chatId) {
-        let [thank, pointUser, ...pointMessage] = text.split(' ')
+        let [thankCommand, pointUser, ...pointMessage] = text.split(' ')
         pointMessage = pointMessage.join(' ')
 
-        let data = await pointModel.findOne({ user: pointUser })
-        if (!data) {
-            let pointCreate = await pointModel.create({
-                username: pointUser
-            })
-            await pointMessageModel.create({
-                id: pointCreate._id,
-                message: pointMessage
-            })
+        const date = Date.now()
+
+        if (pointUser.charAt(0) === '@') {
+            pointUser = pointUser.split('@')[1]
+            let data = await userModel.findOne({ userName: pointUser })
+            if (data.length === 0) {
+                let text = 'không tồn tại người dùng'
+                let textEncode = encodeURI(text)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: text,
+                    date: date
+                })
+            } else {
+                await userModel.findOneAndUpdate({ userName: pointUser }, { point: data.point + 1 })
+                await pointMessageModel.create({
+                    id: data.fromId,
+                    message: pointMessage
+                })
+                let text = `user : ${data.userName} đang có ${data.point + 1}`
+                let textEncode = encodeURI(text)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: text,
+                    date: date
+                })
+            }
+
         } else {
-            await pointModel.findOneAndUpdate({ username: pointUser }, { point: (data.point + 1) })
-            await pointMessageModel.create({
-                id: data._id,
-                message: pointMessage
-            })
+            let data = await userModel.findOne({ firstName: pointUser })
+            if (!data) {
+                let text = 'không tồn tại người dùng'
+                let textEncode = encodeURI(text)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: text,
+                    date: date
+                })
+            } else {
+                await userModel.findOneAndUpdate({ firstName: pointUser }, { point: data.point + 1 })
+                await pointMessage.create({
+                    id: data.fromId,
+                    message: pointMessage
+                })
+                let text = `user : ${data.firstName} đang có ${data.point + 1}`
+                let textEncode = encodeURI(text)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: text,
+                    date: date
+                })
+            }
         }
 
-        let data2 = await pointModel.findOne({ user: pointUser })
-        let data3 = await pointMessageModel.find({ id: data2._id }).sort({ _id: -1 }).limit(5)
-        let dataOut = ''
-        let fromId = 11111111
-        let date = Date.now()
-        for (const index of data3) {
-            dataOut = dataOut + '++1Point  ' + new Date(index.Date).toDateString() + " : " + index.message + '\n';
-        }
+    }
+    async handlePointCommand(text, chatId) {
+        let [point, pointUser] = text.split(' ')
 
-        dataOut = dataOut + `\n\n Người dùng : ${data2.username} \n Điểm : ${data2.point}`
-        let textEncode = encodeURI(dataOut)
-        await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
-        await chatModel.create({
-            fromId: fromId,
-            chatId: chatId,
-            text: dataOut,
-            date: date
-        })
+        if (pointUser.charAt(0) === '@') {
+            pointUser = pointUser.split('@')[1]
+            let data = await userModel.findOne({ userName: pointUser })
+            if (!data) {
+                let text = 'không tồn tại người dùng'
+                let textEncode = encodeURI(text)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: text,
+                    date: date
+                })
+            } else {
+                let data2 = pointMessageModel.find({ id: data.fromId })
+                let textOut = ''
+                for (const index of data2) {
+                    textOut = textOut + '1 point ' + new Date(index.Date).toDateString() + ' : ' + index.message + "\n"
+                }
+                let textEncode = encodeURI(textOut)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: textOut,
+                    date: date
+                })
+            }
+
+        } else {
+            let data = await userModel.findOne({ firstName: pointUser })
+            if (!data) {
+                let text = 'không tồn tại người dùng'
+                let textEncode = encodeURI(text)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: text,
+                    date: date
+                })
+            } else {
+                let data2 = pointMessageModel.find({ id: data.fromId })
+                let textOut = ''
+                for (const index of data2) {
+                    textOut = textOut + '1 point ' + new Date(index.Date).toDateString() + ' : ' + index.message + "\n"
+                }
+                let textEncode = encodeURI(textOut)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await chatModel.create({
+                    fromId: 11111111,
+                    chatId: chatId,
+                    text: textOut,
+                    date: date
+                })
+            }
+        }
     }
 }
 
