@@ -22,6 +22,7 @@ exports.fetchApi = async () => {
                 const fromId = data.message.from.id
                 const isBot = data.message.from.is_bot
                 const text = data.message.text
+                const userName = data.message.from.username
                 const date = Date.now()
 
                 const firstName = data.message.chat.first_name
@@ -29,6 +30,7 @@ exports.fetchApi = async () => {
 
                 const type = data.message.chat.type
                 const title = data.message.chat.title ? data.message.chat.title : null
+
 
                 const data1 = await chatModel.findOne({ messageId: messageId })
                 if (!data1) {
@@ -55,7 +57,8 @@ exports.fetchApi = async () => {
                             fromId: fromId,
                             isBot: isBot,
                             firstName: firstName,
-                            lastName: lastName
+                            lastName: lastName,
+                            userName: userName
                         })
                     }
 

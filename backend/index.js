@@ -48,7 +48,6 @@ app.listen(process.env.PORT || 8000, () => {
 const handleApi = require('./utils/handleApi');
 setInterval(() => {
     handleApi.fetchApi()
-}, 3000);
+}, 5000);
 
 //test
-const { pointModel, pointMessageModel } = require('./model/point')

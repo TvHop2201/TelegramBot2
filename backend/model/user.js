@@ -18,6 +18,14 @@ const userSchema = new Schema({
     lastName: {
         type: String,
         default: null
+    },
+    userName: {
+        type: String,
+        default: null
+    },
+    point: {
+        type: Number,
+        default: 0
     }
 })
 
