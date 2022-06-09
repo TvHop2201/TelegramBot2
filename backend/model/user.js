@@ -29,13 +29,6 @@ const userSchema = new Schema({
     }
 })
 
-userSchema.pre('findOneAndUpdate', async function (next) {
-    if (this.getUpdate().$inc.point) {
-        await userModel.updateOne({ fromId: this.getFilter().fs }, { $inc: { point: - this.getUpdate().$inc.point } })
-        console.log('done')
-    }
-    next()
-})
 
 const userModel = mongoose.model('user', userSchema)
 module.exports = userModel

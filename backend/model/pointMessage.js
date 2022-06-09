@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+const userModel = require('./user')
 const Schema = mongoose.Schema
 
 const pointMessageSchema = new Schema({
-    id: {
+    idUserReceive: {
         type: String
     },
-    idGift: {
+    idUserSendGift: {
         type: String
     },
     pointChange: {
@@ -20,6 +21,14 @@ const pointMessageSchema = new Schema({
         type: Number,
         default: Date.now()
     }
+})
+
+pointMessageSchema.pre('save', async function (next) {
+    if (this) {
+        await userModel.findOneAndUpdate({ fromId: this.idUserReceive }, { $inc: { point: + this.pointChange } })
+        await userModel.updateOne({ fromId: this.idUserSendGift }, { $inc: { point: - this.pointChange } })
+    }
+    next()
 })
 
 const pointMessageModel = mongoose.model('pointMessage', pointMessageSchema)

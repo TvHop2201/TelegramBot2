@@ -66,10 +66,9 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= 1) {
-                    await userModel.findOneAndUpdate({ userName: pointUser, fs: fromId111 }, { $inc: { point: +1 } })
                     await pointMessageModel.create({
-                        id: data.fromId,
-                        idGift: fromId111,
+                        idUserReceive: data.fromId,
+                        idUserSendGift: fromId111,
                         pointChange: '1',
                         message: pointMessage
                     })
@@ -88,10 +87,9 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= 1) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + 1 } })
                     await pointMessageModel.create({
-                        id: data.fromId,
-                        idGift: fromId111,
+                        idUserReceive: data.fromId,
+                        idUserSendGift: fromId111,
                         pointChange: '1',
                         message: pointMessage
                     })
@@ -122,7 +120,7 @@ class HandleCommand {
                     let text = 'không tồn tại người dùng'
                     this.sendText(text, chatId)
                 } else {
-                    let data2 = await pointMessageModel.find({ id: data.fromId }).limit(10)
+                    let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(10)
                     let text = ''
                     for (const index of data2) {
                         text = text + index.pointChange + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
@@ -136,7 +134,7 @@ class HandleCommand {
                     let text = 'không tồn tại người dùng'
                     this.sendText(text, chatId)
                 } else {
-                    let data2 = await pointMessageModel.find({ id: data.fromId }).limit(15)
+                    let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(15)
                     let text = ''
                     for (const index of data2) {
                         console.log(index.pointChange)
@@ -165,10 +163,9 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + numPoint } })
                     await pointMessageModel.create({
-                        id: data.fromId,
-                        idGift: fromId111,
+                        idUserReceive: data.fromId,
+                        idUserSendGift: fromId111,
                         pointChange: numPoint,
                         message: pointMessage
                     })
@@ -186,10 +183,9 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + numPoint } })
                     await pointMessageModel.create({
-                        id: data.fromId,
-                        idGift: fromId111,
+                        idUserReceive: data.fromId,
+                        idUserSendGift: fromId111,
                         pointChange: numPoint,
                         message: pointMessage
                     })
@@ -217,15 +213,13 @@ class HandleCommand {
                 let textOut = 'Không có dữ liệu về địa chỉ này'
                 this.sendText(textOut, chatId)
             } else {
-                let textOut = `Thời Tiết Tại : ${data.name} \n Nhiệt Dộ : ${Math.round(data.main.temp)} \n Tình Trạng : ${data.weather[0].description}
-                \n Tốc Độ Gió : ${(data.wind.speed * 3.6).toFixed(2)} `
+                let textOut = `Thời Tiết Tại : ${data.data.name} \nNhiệt Dộ : ${Math.round(data.data.main.temp)}  \nTình Trạng : ${data.data.weather[0].description} \nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
                 this.sendText(textOut, chatId)
             }
 
         } else {
             let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=vinh&appid=${weatherAppid}&lang=vi&units=metric`)
-            let textOut = `Thời Tiết Tại : ${data.name} \n Nhiệt Dộ : ${Math.round(data.main.temp)} \n Tình Trạng : ${data.weather[0].description}
-            \n Tốc Độ Gió : ${(data.wind.speed * 3.6).toFixed(2)} `
+            let textOut = `Thời Tiết Tại : ${data.data.name} \nNhiệt Dộ : ${Math.round(data.data.main.temp)}  \nTình Trạng : ${data.data.weather[0].description} \nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
             this.sendText(textOut, chatId)
         }
     }
