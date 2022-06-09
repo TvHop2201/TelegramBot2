@@ -22,10 +22,6 @@ class HandleCommand {
                 "command": 'time',
                 "description": new Date().toString()
             },
-            {
-                "command": 'weather',
-                "description": 'thời tiết hôm nay : '
-            },
 
         ]
         commands.forEach(async (index) => {
@@ -52,6 +48,9 @@ class HandleCommand {
         }
         if (text.split(' ')[0] === 'image') {
             this.handleImageCommand(text, chatId)
+        }
+        if (text.split(' ')[0] === 'weather') {
+            this.handleWeatherCommand(text, chatId)
         }
     }
 
@@ -166,7 +165,7 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + 1 } })
+                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + numPoint } })
                     await pointMessageModel.create({
                         id: data.fromId,
                         idGift: fromId111,
@@ -187,7 +186,7 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + 1 } })
+                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + numPoint } })
                     await pointMessageModel.create({
                         id: data.fromId,
                         idGift: fromId111,
@@ -205,8 +204,30 @@ class HandleCommand {
 
     }
     async handleImageCommand(text, chatId) {
-        let textEncode = encodeURI('https://placeimg.com/640/480/any')
+        let textEncode = encodeURI('https://placeimg.com/640/480')
         await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+    }
+    async handleWeatherCommand(text, chatId) {
+        let [weatherCommand, ...location] = text.split(' ')
+        const weatherAppid = 'b1ac492954c5e04bdb2ff86ca85b8de7';
+        if (location.length !== 0) {
+            location = encodeURI(location.join(' '));
+            let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${weatherAppid}&lang=vi&units=metric`)
+            if (data.cod === 404) {
+                let textOut = 'Không có dữ liệu về địa chỉ này'
+                this.sendText(textOut, chatId)
+            } else {
+                let textOut = `Thời Tiết Tại : ${data.name} \n Nhiệt Dộ : ${Math.round(data.main.temp)} \n Tình Trạng : ${data.weather[0].description}
+                \n Tốc Độ Gió : ${(data.wind.speed * 3.6).toFixed(2)} `
+                this.sendText(textOut, chatId)
+            }
+
+        } else {
+            let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=vinh&appid=${weatherAppid}&lang=vi&units=metric`)
+            let textOut = `Thời Tiết Tại : ${data.name} \n Nhiệt Dộ : ${Math.round(data.main.temp)} \n Tình Trạng : ${data.weather[0].description}
+            \n Tốc Độ Gió : ${(data.wind.speed * 3.6).toFixed(2)} `
+            this.sendText(textOut, chatId)
+        }
     }
 
 

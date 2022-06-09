@@ -30,11 +30,9 @@ const userSchema = new Schema({
 })
 
 userSchema.pre('findOneAndUpdate', async function (next) {
-    if (this.getUpdate().point) {
-        await userModel.updateOne({ fromId: this.getFilter().fs }, { $inc: { point: -1 } })
+    if (this.getUpdate().$inc.point) {
+        await userModel.updateOne({ fromId: this.getFilter().fs }, { $inc: { point: - this.getUpdate().$inc.point } })
         console.log('done')
-    } else {
-        console.log('aaa')
     }
     next()
 })
