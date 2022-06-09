@@ -80,7 +80,6 @@
 .chat .chat-history {
     overflow: auto;
     height: 570px;
-    border: 1px solid red;
 }
 
 

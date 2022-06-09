@@ -19,14 +19,13 @@ const Dashboard = () => {
     const [pageChat, setPageChat] = useState(1)
 
 
-    const [roomPage, setRoomPage] = useState(1)
+    //const [roomPage, setRoomPage] = useState(1)
     const [loadDing, setLoadDing] = useState(false)
-    const [heightChat, setHeightChat] = useState(0)
 
     const url = process.env.REACT_APP_API
 
     const getRoom = async () => {
-        const RoomData = await axios.get(`${url}/chat/getRoom/${roomPage}`)
+        const RoomData = await axios.get(`${url}/chat/getRoom/1`)
         if (RoomData.data) {
             setRoom(RoomData.data.data)
         }
@@ -39,7 +38,6 @@ const Dashboard = () => {
         setChat([])
         const chatData = await axios.get(`${url}/chat/getChatUserById/${value}/1`)
         setChat((chatData.data.data).reverse())
-        setPageChat(1)
     }
     const handleRoomSelect = (value) => {
         fetchChat(value.chatId);
@@ -49,7 +47,7 @@ const Dashboard = () => {
 
     const handleUpdateChat = async () => {
         setLoadDing(true)
-        const chatData = await axios.get(`${url}/chat/getChatUserById/${chatId}/${pageChat}`)
+        const chatData = await axios.get(`${url}/chat/getChatUserById/${chatId}/${pageChat + 1}`)
         const result = (chatData.data.data).reverse()
         setChat((result.concat(chat)))
         setLoadDing(false)
@@ -62,35 +60,29 @@ const Dashboard = () => {
 
     useEffect(() => {
         socket.emit('chatId', chatId)
-        socket.on('data', (data) => {
-            if (data.length !== 0) {
-                setChat(data)
-            }
-        })
 
     }, [chatId])
-
     useEffect(() => {
-        if (pageChat > 1) {
-            handleUpdateChat()
-        }
-    }, [pageChat])
+        socket.on('data', (data) => {
+            if (data.length !== 0) {
+                console.log(chat);
+                setChat(chat.concat(data))
+            }
+        })
+    }, [])
 
 
     useEffect(() => {
         const aaa = document.getElementById('scroll_id')
-        aaa.scrollTop = aaa.scrollHeight
-    }, [heightChat])
+        aaa.scrollTop = 821
+    }, [chat])
 
     const handleScroll = (e) => {
         const scrollMessage = document.getElementById('scroll_id')
         if (scrollMessage.scrollTop === 0) {
-            setPageChat(chat + 1)
-            setHeightChat(scrollMessage.scrollHeight)
+            setPageChat(pageChat + 1)
             handleUpdateChat()
-
         }
-
     }
     const scrollRef = useRef()
 
