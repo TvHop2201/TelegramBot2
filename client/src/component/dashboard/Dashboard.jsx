@@ -21,6 +21,7 @@ const Dashboard = () => {
 
     const [roomPage, setRoomPage] = useState(1)
     const [loadDing, setLoadDing] = useState(false)
+    const [heightChat, setHeightChat] = useState(0)
 
     const url = process.env.REACT_APP_API
 
@@ -55,12 +56,6 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        if (pageChat > 1) {
-            handleUpdateChat()
-        }
-    }, [pageChat])
-
-    useEffect(() => {
         getRoom()
     }, [])
 
@@ -75,11 +70,29 @@ const Dashboard = () => {
 
     }, [chatId])
 
+    useEffect(() => {
+        if (pageChat > 1) {
+            handleUpdateChat()
+        }
+    }, [pageChat])
 
+
+    useEffect(() => {
+        const aaa = document.getElementById('scroll_id')
+        aaa.scrollTop = aaa.scrollHeight
+    }, [heightChat])
+
+    const handleScroll = (e) => {
+        const scrollMessage = document.getElementById('scroll_id')
+        if (scrollMessage.scrollTop === 0) {
+            setPageChat(chat + 1)
+            setHeightChat(scrollMessage.scrollHeight)
+            handleUpdateChat()
+
+        }
+
+    }
     const scrollRef = useRef()
-
-
-
 
     return (
         <div className="">
@@ -106,22 +119,19 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <hr />
-                            <div className="chat-history" id='scroll_id' ref={scrollRef}>
-                                <ul className="m-b-0 "  >
-                                    <ScrollToBottom className='scroll'>
-                                        {
-                                            chatId ?
-                                                <li className=''>
-                                                    <button className='btn mx-auto' onClick={() => setPageChat(pageChat + 1)} >Tải thêm ...</button>
-                                                    {loadDing ? <img src={loadDingGif} width='30px' /> : ''}
-                                                </li>
-                                                : ''
-                                        }
-                                        {chat.map(data => (
-                                            <Chat chat={data} key={data.chat._id} />
-                                        ))}
-
-                                    </ScrollToBottom>
+                            <div className="chat-history" id='scroll_id' onScroll={e => handleScroll(e)}>
+                                <ul className="m-b-0 " ref={scrollRef}>
+                                    {
+                                        chatId ?
+                                            <li className=''>
+                                                <button className='btn mx-auto' onClick={() => setPageChat(pageChat + 1)} >Tải thêm ...</button>
+                                                {loadDing ? <img src={loadDingGif} width='30px' /> : ''}
+                                            </li>
+                                            : ''
+                                    }
+                                    {chat.map(data => (
+                                        <Chat chat={data} key={data.chat._id} />
+                                    ))}
 
                                 </ul>
                             </div>

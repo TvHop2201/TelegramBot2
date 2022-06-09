@@ -79,7 +79,8 @@
 
 .chat .chat-history {
     overflow: auto;
-    height: 600px;
+    height: 570px;
+    border: 1px solid red;
 }
 
 

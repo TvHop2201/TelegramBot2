@@ -12,6 +12,7 @@ const Chat = (props) => {
 
     }, [])
 
+
     if (!props.chat) {
         return (
             <img src={gip} className="mx-auto" width='100%' height='150px' alt="" />
@@ -26,7 +27,7 @@ const Chat = (props) => {
 
                     <div className="message my-message shadow-lg">
                         <h5>Bot</h5>
-                        <p>{props.chat.chat.text}</p>
+                        <p dangerouslySetInnerHTML={{ __html: props.chat.chat.text }} />
                     </div>
                     <span className="message-data-time">{date}</span>
                 </div>
@@ -40,7 +41,7 @@ const Chat = (props) => {
                             {props.chat.user.firstName ? props.chat.user.firstName : ''}
                             {props.chat.user.lastName ? props.chat.user.lastName : ''}
                         </h6>
-                        <p>{props.chat.chat.text}</p>
+                        <p dangerouslySetInnerHTML={{ __html: props.chat.chat.text }} />
                     </div>
                     <img src="https://images.pexels.com/photos/12240136/pexels-photo-12240136.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" className="rounded-circle mx-3" width='50px' height='50px' alt="" />
 
