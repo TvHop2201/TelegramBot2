@@ -67,8 +67,7 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= 1) {
-                    await userModel.findOneAndUpdate({ userName: pointUser }, { point: data.point + 1 })
-                    let userGift = await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -1 } })
+                    await userModel.findOneAndUpdate({ userName: pointUser, fs: fromId111 }, { $inc: { point: +1 } })
                     await pointMessageModel.create({
                         id: data.fromId,
                         idGift: fromId111,
@@ -90,8 +89,7 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= 1) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser }, { point: data.point + 1 })
-                    await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -1 } })
+                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + 1 } })
                     await pointMessageModel.create({
                         id: data.fromId,
                         idGift: fromId111,
@@ -168,8 +166,7 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
-                    await userModel.findOneAndUpdate({ userName: pointUser }, { point: data.point + numPoint })
-                    await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: - numPoint } })
+                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + 1 } })
                     await pointMessageModel.create({
                         id: data.fromId,
                         idGift: fromId111,
@@ -190,8 +187,7 @@ class HandleCommand {
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
-                    await userModel.findOneAndUpdate({ firstName: pointUser }, { point: data.point + numPoint })
-                    await userModel.findOneAndUpdate({ fromId: fromId111 }, { $inc: { point: -numPoint } })
+                    await userModel.findOneAndUpdate({ firstName: pointUser, fs: fromId111 }, { $inc: { point: + 1 } })
                     await pointMessageModel.create({
                         id: data.fromId,
                         idGift: fromId111,
