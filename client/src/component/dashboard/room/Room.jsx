@@ -4,6 +4,7 @@ const Room = (props) => {
 
 
     return (
+
         <li className="clearfix mt-2 mb-4" onClick={() => props.callback(props.rData)}>
             <img src="https://cdn-icons-png.flaticon.com/512/426/426327.png" alt="avatar" />
             <div className="about">

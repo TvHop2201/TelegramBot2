@@ -91,9 +91,9 @@ const Dashboard = () => {
             <Navbar />
             <div className="row clearfix container mx-auto">
                 <div className="col-lg-12">
-                    <div className="card chat-app">
+                    <div className="card chat-app shadow-lg">
                         <div id="plist" className="people-list my-3">
-                            <ul className="list-unstyled chat-list" >
+                            <ul className="list-unstyled chat-list " >
                                 {room.map(data => (
                                     <Room rData={data} key={data._id} callback={(value) => handleRoomSelect(value)} />
                                 ))}

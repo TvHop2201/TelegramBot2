@@ -1,0 +1,24 @@
+.sidebar_customer {
+    background-color: #d1d5db;
+    border-radius: 1em;
+}
+
+.sidebar_ok {
+    background-color: #fef08a;
+}
+
+.avatar {
+    border-radius: 1em;
+}
+
+.admin_name {
+    background-color: #d1d5db;
+    border-radius: 1em;
+}
+
+.nav-link:hover {
+    background-color: black;
+    text-shadow: #d1d5db;
+    color: white;
+    border-radius: 1em;
+}

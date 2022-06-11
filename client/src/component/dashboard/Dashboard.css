@@ -8,6 +8,11 @@
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
 }
 
+.chat-app {
+    background: linear-gradient(to bottom, #f5f7fa, #c3cfe2);
+    border-radius: 1em;
+}
+
 .chat-app .people-list {
     width: 280px;
     position: absolute;
@@ -26,7 +31,8 @@
     -moz-transition: .5s;
     -o-transition: .5s;
     -webkit-transition: .5s;
-    transition: .5s
+    transition: .5s;
+
 }
 
 .people-list .chat-list li {
@@ -36,6 +42,7 @@
 
 .people-list .chat-list li:hover {
     background: #e5e7eb;
+    border-radius: 1em;
     cursor: pointer;
 }
 
@@ -289,4 +296,9 @@
         height: calc(100vh - 350px);
         overflow-x: auto
     }
+}
+
+#scroll_id::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
 }
