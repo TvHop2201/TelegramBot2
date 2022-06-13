@@ -1,64 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Chart as ChartJS } from 'chart.js/auto'
 import { Bar, Radar, Doughnut, PolarArea, Bubble, Pie, Scatter } from 'react-chartjs-2'
+import axios from 'axios'
 
 const ChartPoint = () => {
-    const data = [
-        {
-            "id": 1,
-            "name": 'TvHop',
-            "point": 20,
-            "date": '02/06'
-        },
-        {
-            "id": 2,
-            "name": 'TvHop2',
-            "point": 15,
-            "date": '03/06'
-        },
-        {
-            "id": 3,
-            "name": 'TvHop',
-            "point": 20,
-            "date": '04/06'
-        },
-        {
-            "id": 4,
-            "name": 'TvHop2',
-            "point": 15,
-            "date": '05/06'
-        },
-        {
-            "id": 5,
-            "name": 'TvHop',
-            "point": 10,
-            "date": '06/06'
-        },
-        {
-            "id": 6,
-            "name": 'TvHop2',
-            "point": 30,
-            "date": '07/06'
-        },
-        {
-            "id": 7,
-            "name": 'TvHop',
-            "point": 37,
-            "date": '08/06'
-        },
-        {
-            "id": 8,
-            "name": 'TvHop2',
-            "point": 16,
-            "date": '09/06'
-        },
-
-    ]
-
+    const [data, setData] = useState([])
+    const url = process.env.REACT_APP_API
     const [chartData, setChartData] = useState({
-        labels: data.map(data => data.name),
+        labels: data.map(data => data.userName),
         datasets: [{
-            label: 'point',
+            label: 'Điểm',
             data: data.map(data => data.point),
             backgroundColor: [
                 "#bef264",
@@ -73,6 +24,37 @@ const ChartPoint = () => {
             borderColor: 'black'
         }]
     })
+    const fetchData = async () => {
+        const data = await axios.get(`${url}/admin/getChartPoint`)
+        setData(data.data.data)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    useEffect(() => {
+        setChartData({
+            labels: data.map(data => data.userName),
+            datasets: [{
+                label: 'Điểm',
+                data: data.map(data => data.point),
+                backgroundColor: [
+                    "#bef264",
+                    '#86efac',
+                    "#fcd34d",
+                    "#fca5a5",
+                    "#d4d4d4",
+                    "#a5b4fc",
+                    "#fda4af",
+                    "#fdba74"
+                ],
+                borderColor: 'black'
+            }]
+        })
+    }, [data])
+
+
     return (
         <div style={{ width: 1200 }} className=' mt-5 mx-auto'>
             <Bar data={chartData} />

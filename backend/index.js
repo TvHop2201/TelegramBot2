@@ -51,4 +51,8 @@ setInterval(() => {
 }, 5000);
 
 //test
+const userModel = require('./model/user')
+const pointMessageModel = require('./model/pointMessage')
+
+
 

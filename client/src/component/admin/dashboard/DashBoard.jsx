@@ -1,137 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
+import ChartPoint from '../point/ChartPoint'
+import ChartUser from '../user/ChartUser'
+import { Link } from 'react-router-dom'
 
 const DashBoard = () => {
+    const [chartUserShow, setChartUserShow] = useState(true)
+    const [chartPointShow, setChartPointShow] = useState(false)
+
+    const handleUserShow = () => {
+        setChartUserShow(true)
+        setChartPointShow(false)
+    }
+    const handlePointShow = () => {
+        setChartUserShow(false)
+        setChartPointShow(true)
+    }
     return (
-        <div>
-            <h2>DashBoard</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Header</th>
-                            <th scope="col">Header</th>
-                            <th scope="col">Header</th>
-                            <th scope="col">Header</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1,001</td>
-                            <td>random</td>
-                            <td>data</td>
-                            <td>placeholder</td>
-                            <td>text</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>placeholder</td>
-                            <td>irrelevant</td>
-                            <td>visual</td>
-                            <td>layout</td>
-                        </tr>
-                        <tr>
-                            <td>1,003</td>
-                            <td>data</td>
-                            <td>rich</td>
-                            <td>dashboard</td>
-                            <td>tabular</td>
-                        </tr>
-                        <tr>
-                            <td>1,003</td>
-                            <td>information</td>
-                            <td>placeholder</td>
-                            <td>illustrative</td>
-                            <td>data</td>
-                        </tr>
-                        <tr>
-                            <td>1,004</td>
-                            <td>text</td>
-                            <td>random</td>
-                            <td>layout</td>
-                            <td>dashboard</td>
-                        </tr>
-                        <tr>
-                            <td>1,005</td>
-                            <td>dashboard</td>
-                            <td>irrelevant</td>
-                            <td>text</td>
-                            <td>placeholder</td>
-                        </tr>
-                        <tr>
-                            <td>1,006</td>
-                            <td>dashboard</td>
-                            <td>illustrative</td>
-                            <td>rich</td>
-                            <td>data</td>
-                        </tr>
-                        <tr>
-                            <td>1,007</td>
-                            <td>placeholder</td>
-                            <td>tabular</td>
-                            <td>information</td>
-                            <td>irrelevant</td>
-                        </tr>
-                        <tr>
-                            <td>1,008</td>
-                            <td>random</td>
-                            <td>data</td>
-                            <td>placeholder</td>
-                            <td>text</td>
-                        </tr>
-                        <tr>
-                            <td>1,009</td>
-                            <td>placeholder</td>
-                            <td>irrelevant</td>
-                            <td>visual</td>
-                            <td>layout</td>
-                        </tr>
-                        <tr>
-                            <td>1,010</td>
-                            <td>data</td>
-                            <td>rich</td>
-                            <td>dashboard</td>
-                            <td>tabular</td>
-                        </tr>
-                        <tr>
-                            <td>1,011</td>
-                            <td>information</td>
-                            <td>placeholder</td>
-                            <td>illustrative</td>
-                            <td>data</td>
-                        </tr>
-                        <tr>
-                            <td>1,012</td>
-                            <td>text</td>
-                            <td>placeholder</td>
-                            <td>layout</td>
-                            <td>dashboard</td>
-                        </tr>
-                        <tr>
-                            <td>1,013</td>
-                            <td>dashboard</td>
-                            <td>irrelevant</td>
-                            <td>text</td>
-                            <td>visual</td>
-                        </tr>
-                        <tr>
-                            <td>1,014</td>
-                            <td>dashboard</td>
-                            <td>illustrative</td>
-                            <td>rich</td>
-                            <td>data</td>
-                        </tr>
-                        <tr>
-                            <td>1,015</td>
-                            <td>random</td>
-                            <td>tabular</td>
-                            <td>information</td>
-                            <td>text</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <>
+            <div className='text-center'>
+                <button className='btn btn-outline-success mx-5 px-5' onClick={() => handleUserShow()} >
+                    ChartUser
+                </button>
+                <button className='btn btn-outline-success mx-5 px-5' onClick={() => handlePointShow()}>
+                    ChartPoint
+                </button>
+                <Link to='user' className='btn btn-outline-success mx-5 px-5'>
+                    USER
+                </Link>
+                <Link to='point' className='btn btn-outline-success mx-5 px-5'>
+                    POINT
+                </Link>
+
             </div>
-        </div>
+            {chartUserShow ? <ChartUser /> : null}
+            <br /><br />
+            {chartPointShow ? <ChartPoint /> : null}
+
+
+        </>
     )
 }
 

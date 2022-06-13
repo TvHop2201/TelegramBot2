@@ -1,57 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Deatail from './Deatail'
 
 const TableUser = () => {
     const [deatailShow, setDeatailShow] = useState(false)
-    const [idDeatail, setIdDeatail] = useState(0)
-    const data = [
-        {
-            id: 1,
-            UserName: "tvHop",
-            FirstName: 'muc',
-            LastName: 'okok',
-            point: 500,
-            create_at: '5/5'
-        },
-        {
-            id: 2,
-            UserName: "tvHop2",
-            FirstName: 'muc2',
-            LastName: 'okok2',
-            point: 500,
-            create_at: '5/5'
-        },
-        {
-            id: 3,
-            UserName: "tvHop3",
-            FirstName: 'muc3',
-            LastName: 'okok3',
-            point: 500,
-            create_at: '5/5'
-        },
-        {
-            id: 4,
-            UserName: "tvHop4",
-            FirstName: 'muc4',
-            LastName: 'okok4',
-            point: 500,
-            create_at: '5/5'
-        },
-        {
-            id: 5,
-            UserName: "tvHop5",
-            FirstName: 'muc5',
-            LastName: 'okok5',
-            point: 500,
-            create_at: '5/5'
-        },
-    ]
+    const [idDeatail, setIdDeatail] = useState()
+    const [data, setData] = useState([])
+    const [page, setPage] = useState(1)
 
+    const url = process.env.REACT_APP_API
+
+    const fecthData = async () => {
+        const data = await axios.get(`${url}/admin/getUser/${page}`)
+        setData(data.data.data)
+    }
     const handleDetail = (e) => {
-        console.log(e.target.value);
         setIdDeatail(e.target.value);
         setDeatailShow(true)
     }
+    useEffect(() => {
+        fecthData()
+    }, [])
+    useEffect(() => {
+        fecthData()
+    }, [page])
+
+
 
     return (
         <div className='container mt-5'>
@@ -70,15 +44,15 @@ const TableUser = () => {
                 <tbody>
                     {
                         data.map(index => (
-                            <tr key={index.id}>
-                                <td>{index.id}</td>
-                                <td>{index.UserName}</td>
-                                <td>{index.FirstName}</td>
-                                <td>{index.LastName}</td>
+                            <tr key={index._id}>
+                                <td>{index._id}</td>
+                                <td>{index.userName}</td>
+                                <td>{index.firstName}</td>
+                                <td>{index.lastName}</td>
                                 <td>{index.point}</td>
-                                <td>{index.create_at}</td>
+                                <td>{index.create_at ? new Date(index.create_at).toDateString() : null}</td>
                                 <td>
-                                    <button className='btn btn-outline-success' value={index.id} onClick={(e) => handleDetail(e)}>Chi Tiết</button>
+                                    <button className='btn btn-outline-success' value={index._id} onClick={(e) => handleDetail(e)}>Chi Tiết</button>
                                 </td>
                             </tr>
                         ))
@@ -86,6 +60,13 @@ const TableUser = () => {
 
                 </tbody>
             </table>
+            <div className=' text-center '>
+                <div className='btn-group'>
+                    <button className='btn btn-outline-primary' onClick={() => setPage(page > 1 ? page - 1 : page)}>&lt;&lt;</button>
+                    <span className='btn btn-outline-success'>{page}</span>
+                    <button className='btn btn-outline-primary' onClick={() => setPage(page + 1)}>&gt;&gt;</button>
+                </div>
+            </div>
             {
                 deatailShow ? <Deatail id={idDeatail} callback={() => setDeatailShow(false)} /> : null
             }

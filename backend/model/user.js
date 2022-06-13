@@ -26,6 +26,10 @@ const userSchema = new Schema({
     point: {
         type: Number,
         default: 0
+    },
+    create_at: {
+        type: Number,
+        default: Date.now()
     }
 })
 

@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import Deatail from './Deatail'
 const Find = () => {
@@ -8,26 +9,42 @@ const Find = () => {
         setIdDeatail(e.target.value);
         setDeatailShow(true)
     }
-    const data = [
-        {
-            id: 1,
-            UserName: "tvHop",
-            FirstName: 'muc',
-            LastName: 'okok',
-            point: 500,
-            create_at: '5/5'
-        },
-    ]
+
+    const [data, setData] = useState([])
+    const [formData, setFormData] = useState('')
+
+    const url = process.env.REACT_APP_API
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            fetchData()
+        }
+    }
+
+    const fetchData = async () => {
+        const data = await axios.get(`${url}/admin/getOneUserByUserName/${formData}`)
+        if (data.data.success) {
+            setData(data.data.data)
+            setFormData('')
+        } else {
+            alert('Không tìm thấy kết quả !!!')
+        }
+    }
+
+
     return (
         <div className='container'>
-            <form className='row mt-5'>
+            <div className='row mt-5'>
                 <div className='col-md-3'></div>
                 <div className='form-group col-md-6'>
                     <h4 className='text-center'>Tìm Kiếm User</h4>
-                    <input className='form-control' type="text" />
+                    <input className='form-control' type="text" value={formData} onChange={(e) => setFormData(e.target.value)} onKeyPress={(e) => handleKeyPress(e)} />
+                    <div className='text-center mt-3'>
+                        <button className='btn btn-outline-success' onClick={() => fetchData()}>Tìm Kiếm</button>
+                    </div>
                 </div>
                 <div className='col-md-3'></div>
-            </form>
+            </div>
             <table className='table mt-5'>
                 <thead>
                     <tr>
@@ -42,19 +59,19 @@ const Find = () => {
                 </thead>
                 <tbody>
                     {data ?
-                        data.map(index => (
-                            <tr key={index.id}>
-                                <td>{index.id}</td>
-                                <td>{index.UserName}</td>
-                                <td>{index.FirstName}</td>
-                                <td>{index.LastName}</td>
-                                <td>{index.point}</td>
-                                <td>{index.create_at}</td>
-                                <td>
-                                    <button className='btn btn-outline-success' value={index.id} onClick={(e) => handleDetail(e)}>Chi Tiết</button>
-                                </td>
-                            </tr>
-                        ))
+
+                        <tr>
+                            <td>{data._id}</td>
+                            <td>{data.userName}</td>
+                            <td>{data.firstName}</td>
+                            <td>{data.lastName}</td>
+                            <td>{data.point}</td>
+                            <td>{data.create_at}</td>
+                            <td>
+                                <button className='btn btn-outline-success' value={data._id} onClick={(e) => handleDetail(e)}>Chi Tiết</button>
+                            </td>
+                        </tr>
+
                         : null
                     }
 
