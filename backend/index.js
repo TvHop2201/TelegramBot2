@@ -54,5 +54,51 @@ setInterval(() => {
 const userModel = require('./model/user')
 const pointMessageModel = require('./model/pointMessage')
 
+const aa = async () => {
 
 
+    const data = await userModel.aggregate([
+        { $match: { "create_at": { $gte: Date.now() - 604800000, $lt: Date.now() } } },
+        {
+            "$group": {
+                "_id": {
+                    "$dateToString": {
+                        "format": "%d-%m-%Y",
+                        "date": {
+                            "$toDate": "$create_at"
+                        }
+                    }
+                },
+                "count": { "$sum": 1 }
+            }
+        }
+    ])
+    console.log(data)
+}
+//aa()
+
+const bb = async () => {
+    let month = 6
+    let first = new Date(2022, month - 1, 01).getTime()
+    let last = new Date(2022, month, 01).getTime()
+
+    const data = await userModel.aggregate([
+        { $match: { "create_at": { $gte: first, $lt: last } } },
+        {
+            "$group": {
+                "_id": {
+                    "$dateToString": {
+                        "format": "%d-%m-%Y",
+                        "date": {
+                            "$toDate": "$create_at"
+                        }
+                    }
+                },
+                "count": { "$sum": 1 }
+            }
+        }
+    ])
+    console.log(data)
+}
+
+//bb()

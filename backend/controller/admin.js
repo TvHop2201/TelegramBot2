@@ -2,6 +2,7 @@ const userModel = require('../model/user')
 const pointMessageModel = require('../model/pointMessage')
 const tryCatch = require('../utils/handleTryCatch').handle
 class Admin {
+    //user
     async getUser(req, res) {
         let perPage = 2
         let page = req.params.page
@@ -102,11 +103,11 @@ class Admin {
     }
 
     async createUser(req, res) {
-        let fromId = 222222225
-        let firstName = 'test 04'
-        let lastName = 'test 04'
-        let userName = 'test04'
-        let point = 150
+        let fromId = 222222226
+        let firstName = 'test 05'
+        let lastName = 'test 05'
+        let userName = 'test05'
+        let point = 110
         const data = await userModel.create({
             fromId: fromId,
             firstName: firstName,
@@ -127,54 +128,26 @@ class Admin {
     }
 
     async getCharUser(req, res) {
-        const data = await userModel.find({}, { create_at: 1 })
-        let date1 = {
-            id: 1,
-            total: 0,
-            date: new Date().getDate()
-        }
-        let date2 = {
-            id: 2,
-            total: 0,
-            date: (new Date().getDate()) - 1
-        }
-        let date3 = {
-            id: 3,
-            total: 0,
-            date: (new Date().getDate()) - 2
-        }
-        let date4 = {
-            id: 4,
-            total: 0,
-            date: (new Date().getDate()) - 3
-        }
-        let date5 = {
-            id: 5,
-            total: 0,
-            date: (new Date().getDate()) - 4
-        }
-        for (const index of data) {
-            if (new Date(index.create_at).getDate() === new Date().getDate()) {
-                date1.total += 1
+        const data = await userModel.aggregate([
+            { $match: { "create_at": { $gte: Date.now() - 604800000, $lt: Date.now() } } },
+            {
+                "$group": {
+                    "_id": {
+                        "$dateToString": {
+                            "format": "%d-%m-%Y",
+                            "date": {
+                                "$toDate": "$create_at"
+                            }
+                        }
+                    },
+                    "count": { "$sum": 1 }
+                }
             }
-            if (new Date(index.create_at).getDate() === new Date().getDate() - 1) {
-                date2.total += 1
-            }
-            if (new Date(index.create_at).getDate() === new Date().getDate() - 2) {
-                date3.total += 1
-            }
-            if (new Date(index.create_at).getDate() === new Date().getDate() - 3) {
-                date4.total += 1
-            }
-            if (new Date(index.create_at).getDate() === new Date().getDate() - 4) {
-                date5.total += 1
-            }
-        }
-        let date = [{ ...date5 }, { ...date4 }, { ...date3 }, { ...date2 }, { ...date1 },]
-        if (date) {
+        ])
+        if (data) {
             res.json({
                 success: true,
-                data: date
+                data: data
             })
         } else {
             res.json({
@@ -205,6 +178,7 @@ class Admin {
         }
     }
 
+    //point
     async getChartPoint(req, res) {
         const data = await userModel.find({}, {
             firstName: 1,
@@ -262,6 +236,45 @@ class Admin {
             })
         }
     }
+
+    //dashboard
+    async getChartUserWithMonth(req, res) {
+        let month = req.params.month
+        let first = new Date(2022, month - 1, 1).getTime()
+        let last = new Date(2022, month, 1).getTime()
+        console.log(first)
+
+        const data = await userModel.aggregate([
+            { $match: { "create_at": { $gte: first, $lt: last } } },
+            {
+                "$group": {
+                    "_id": {
+                        "$dateToString": {
+                            "format": "%d-%m-%Y",
+                            "date": {
+                                "$toDate": "$create_at"
+                            }
+                        }
+                    },
+                    "count": { "$sum": 1 }
+                }
+            }
+        ])
+        if (data) {
+            res.json({
+                success: true,
+                data: data
+            })
+        } else {
+            res.json({
+                success: false,
+            })
+        }
+    }
+
+
+
+
 
 }
 
