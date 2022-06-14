@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Chart as ChartJS } from 'chart.js/auto'
-import { Bar, Radar, Doughnut, PolarArea, Bubble, Pie, Scatter } from 'react-chartjs-2'
+import { Bar } from 'react-chartjs-2'
 import axios from 'axios'
 const ChartUser = (props) => {
     const [chartData, setChartData] = useState([])
@@ -25,12 +25,12 @@ const ChartUser = (props) => {
     const url = process.env.REACT_APP_API
 
     const fecthData = async () => {
-        const data = await axios.get(`${url}/admin/getChartUserWithMonth/${props.month}`)
+        const data = await axios.get(`${url}/admin/getChartUserWithTime/${props.time}`)
         setChartData(data.data.data)
     }
     useEffect(() => {
         fecthData()
-    }, [props.month])
+    }, [props.time])
 
     useEffect(() => {
         setChartData2({
@@ -52,8 +52,6 @@ const ChartUser = (props) => {
             }]
         })
     }, [chartData])
-
-    console.log(chartData);
 
 
     return (

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Deatail from './Deatail'
 import TableUserFind from './TableUserFind'
+import Pagination from '../layout/Pagination'
 
 const TableUser = () => {
     const [deatailShow, setDeatailShow] = useState(false)
@@ -9,30 +10,48 @@ const TableUser = () => {
     const [tableUserFindShow, setTableUserFindShow] = useState(false)
     const [findMode, setFindMode] = useState('')
     const [data, setData] = useState([])
+    const [total, setTotal] = useState(0)
     const [page, setPage] = useState(1)
+    const [lastNameFilter, setLastNameFilter] = useState('LastName')
+    const [firstNameFilter, setFirstNameFilter] = useState('firstName')
+    const [userNameFilter, setUserNameFilter] = useState('userName')
 
     const url = process.env.REACT_APP_API
 
     const fecthData = async () => {
-        const data = await axios.get(`${url}/admin/getUser/${page}`)
+        const data = await axios.get(`${url}/admin/getUser/${page}/3`)
         setData(data.data.data)
+        setTotal(Math.ceil(data.data.total / 3))
     }
     const handleDetail = (e) => {
         setIdDeatail(e.target.value);
         setDeatailShow(true)
     }
-    const handleFindUserName = () => {
-        setTableUserFindShow(true)
-        setFindMode('userName')
+    const handleFindUserName = (e) => {
+        if (e.key === 'Enter') {
+            let result = data.filter(index => {
+                return index.userName === userNameFilter
+            })
+            setData(result);
+        }
     }
-    const handleFindFirstName = () => {
-        setTableUserFindShow(true)
-        setFindMode('firsName')
+    const handleFindFirstName = (e) => {
+        if (e.key === 'Enter') {
+            let result = data.filter(index => {
+                return index.firstName === firstNameFilter
+            })
+            setData(result);
+        }
     }
-    const handleFindLastName = () => {
-        setTableUserFindShow(true)
-        setFindMode('lastName')
+    const handleFindLastName = (e) => {
+        if (e.key === 'Enter') {
+            let result = data.filter(index => {
+                return index.lastName === lastNameFilter
+            })
+            setData(result);
+        }
     }
+
 
     useEffect(() => {
         fecthData()
@@ -42,16 +61,33 @@ const TableUser = () => {
     }, [page])
 
 
-
     return (
         <div className='container mt-5'>
             <table className='table'>
                 <thead>
                     <tr>
                         <th scope='col'>#</th>
-                        <th scope='col' onClick={() => handleFindUserName()}>UserName</th>
-                        <th scope='col' onClick={() => handleFindFirstName()}>FirstName</th>
-                        <th scope='col' onClick={() => handleFindLastName()}>LastName</th>
+                        <th scope='col'>
+                            <input type='text' className='border-0'
+                                value={userNameFilter}
+                                onChange={(e) => setUserNameFilter(e.target.value)}
+                                onKeyDown={(e) => handleFindUserName(e)}
+                            />
+                        </th>
+                        <th scope='col'>
+                            <input type='text' className='border-0'
+                                value={firstNameFilter}
+                                onChange={(e) => setFirstNameFilter(e.target.value)}
+                                onKeyDown={(e) => handleFindFirstName(e)}
+                            />
+                        </th>
+                        <th scope='col'>
+                            <input type='text' className='border-0'
+                                value={lastNameFilter}
+                                onChange={(e) => setLastNameFilter(e.target.value)}
+                                onKeyDown={(e) => handleFindLastName(e)}
+                            />
+                        </th>
                         <th scope='col'>Point</th>
                         <th scope='col'>create_at</th>
                         <th scope='col'>Action</th>
@@ -79,13 +115,13 @@ const TableUser = () => {
             <div className=' text-center '>
                 <div className='btn-group'>
                     <button className='btn btn-outline-primary' onClick={() => setPage(page > 1 ? page - 1 : page)}>&lt;&lt;</button>
-                    <span className='btn btn-outline-success'>{page}</span>
+                    <Pagination total={total} callback={(data) => setPage(data)} />
                     <button className='btn btn-outline-primary' onClick={() => setPage(page + 1)}>&gt;&gt;</button>
                 </div>
             </div>
             {deatailShow ? <Deatail id={idDeatail} callback={() => setDeatailShow(false)} /> : null}
             {tableUserFindShow ? < TableUserFind mode={findMode} callback={() => setTableUserFindShow(false)} /> : null}
-        </div>
+        </div >
     )
 }
 

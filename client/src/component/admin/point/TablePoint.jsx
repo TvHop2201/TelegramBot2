@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import Deatail from './Deatail'
 import axios from 'axios'
+import Pagination from '../layout/Pagination'
 const TablePoint = () => {
     const [deatailShow, setDeatailShow] = useState(false)
     const [idDeatail, setIdDeatail] = useState()
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
+    const [total, setTotal] = useState(0)
 
     const handleDetail = (e) => {
         setIdDeatail(e.target.value);
@@ -16,8 +18,9 @@ const TablePoint = () => {
 
     const fetchData = async () => {
         console.log(url);
-        const data = await axios.get(`${url}/admin/getPointMessage/${page}`)
+        const data = await axios.get(`${url}/admin/getPointMessage/${page}/3`)
         setData(data.data.data)
+        setTotal(Math.ceil(data.data.total / 3))
     }
 
     useEffect(() => {
@@ -65,7 +68,7 @@ const TablePoint = () => {
                 <div className=' text-center '>
                     <div className='btn-group'>
                         <button className='btn btn-outline-primary' onClick={() => setPage(page > 1 ? page - 1 : page)}>&lt;&lt;</button>
-                        <span className='btn btn-outline-success'>{page}</span>
+                        <Pagination total={total} callback={(data) => setPage(data)} />
                         <button className='btn btn-outline-primary' onClick={() => setPage(page + 1)}>&gt;&gt;</button>
                     </div>
                 </div>

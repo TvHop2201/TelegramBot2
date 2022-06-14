@@ -4,14 +4,16 @@ const tryCatch = require('../utils/handleTryCatch').handle
 class Admin {
     //user
     async getUser(req, res) {
-        let perPage = 2
+        let limit = req.params.limit
         let page = req.params.page
 
-        const data = await userModel.find().skip((perPage * page) - perPage).limit(perPage)
+        const data = await userModel.find().skip((limit * page) - limit).limit(limit)
+        const total = await userModel.find().count()
         if (data) {
             res.json({
                 success: true,
-                data: data
+                data: data,
+                total: total
             })
         } else {
             res.json({
@@ -199,7 +201,7 @@ class Admin {
     }
 
     async getPointMessage(req, res) {
-        let perPage = 2
+        let perPage = req.params.limit
         let page = req.params.page
         const datas = await pointMessageModel.find().skip((perPage * page) - perPage).sort({ date: -1 }).limit(perPage)
 
@@ -209,11 +211,12 @@ class Admin {
             let userSend = await userModel.findOne({ fromId: data.idUserSendGift }, { userName: 1, _id: -1, firstName: 1 })
             result.push({ data, userReceive, userSend })
         }
-
+        const total = await pointMessageModel.find().count()
         if (result) {
             res.json({
                 success: true,
-                data: result
+                data: result,
+                total: total
             })
         } else {
             res.json({
@@ -238,11 +241,15 @@ class Admin {
     }
 
     //dashboard
-    async getChartUserWithMonth(req, res) {
-        let month = req.params.month
-        let first = new Date(2022, month - 1, 1).getTime()
-        let last = new Date(2022, month, 1).getTime()
-        console.log(first)
+    async getChartUserWithTime(req, res) {
+        let time = req.params.time
+        let [firstDay, firstMonth, lastDay, lastMonth] = time.split('-')
+        let year = 2022
+        if (firstMonth > lastMonth) {
+            year = year + 1
+        }
+        let first = new Date(2022, firstMonth, lastDay).getTime()
+        let last = new Date(year, lastMonth, lastDay).getTime()
 
         const data = await userModel.aggregate([
             { $match: { "create_at": { $gte: first, $lt: last } } },
