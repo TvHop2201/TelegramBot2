@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Deatail from './Deatail'
+import TableUserFind from './TableUserFind'
 
 const TableUser = () => {
     const [deatailShow, setDeatailShow] = useState(false)
     const [idDeatail, setIdDeatail] = useState()
+    const [tableUserFindShow, setTableUserFindShow] = useState(false)
+    const [findMode, setFindMode] = useState('')
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
 
@@ -18,6 +21,19 @@ const TableUser = () => {
         setIdDeatail(e.target.value);
         setDeatailShow(true)
     }
+    const handleFindUserName = () => {
+        setTableUserFindShow(true)
+        setFindMode('userName')
+    }
+    const handleFindFirstName = () => {
+        setTableUserFindShow(true)
+        setFindMode('firsName')
+    }
+    const handleFindLastName = () => {
+        setTableUserFindShow(true)
+        setFindMode('lastName')
+    }
+
     useEffect(() => {
         fecthData()
     }, [])
@@ -33,9 +49,9 @@ const TableUser = () => {
                 <thead>
                     <tr>
                         <th scope='col'>#</th>
-                        <th scope='col'>UserName</th>
-                        <th scope='col'>FirstName</th>
-                        <th scope='col'>LastName</th>
+                        <th scope='col' onClick={() => handleFindUserName()}>UserName</th>
+                        <th scope='col' onClick={() => handleFindFirstName()}>FirstName</th>
+                        <th scope='col' onClick={() => handleFindLastName()}>LastName</th>
                         <th scope='col'>Point</th>
                         <th scope='col'>create_at</th>
                         <th scope='col'>Action</th>
@@ -67,9 +83,8 @@ const TableUser = () => {
                     <button className='btn btn-outline-primary' onClick={() => setPage(page + 1)}>&gt;&gt;</button>
                 </div>
             </div>
-            {
-                deatailShow ? <Deatail id={idDeatail} callback={() => setDeatailShow(false)} /> : null
-            }
+            {deatailShow ? <Deatail id={idDeatail} callback={() => setDeatailShow(false)} /> : null}
+            {tableUserFindShow ? < TableUserFind mode={findMode} callback={() => setTableUserFindShow(false)} /> : null}
         </div>
     )
 }

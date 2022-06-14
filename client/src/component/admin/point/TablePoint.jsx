@@ -20,7 +20,6 @@ const TablePoint = () => {
         setData(data.data.data)
     }
 
-    console.log(deatailShow);
     useEffect(() => {
         fetchData()
     }, [])

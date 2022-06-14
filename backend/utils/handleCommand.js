@@ -16,18 +16,18 @@ class HandleCommand {
             },
             {
                 "command": 'hop',
-                "description": "Hop command"
+                "description": "<code> hop</code> "
             },
             {
                 "command": 'time',
-                "description": new Date().toString()
+                "description": new Date().toDateString()
             },
 
         ]
         commands.forEach(async (index) => {
             if (text === index.command) {
                 let textEncode = encodeURI(index.description)
-                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
                 await chatModel.create({
                     fromId: 11111111,
                     chatId: chatId,
@@ -62,7 +62,7 @@ class HandleCommand {
             pointUser = pointUser.split('@')[1]
             let data = await userModel.findOne({ userName: pointUser })
             if (data.length === 0) {
-                let text = 'không tồn tại người dùng !!!!'
+                let text = '<b>không tồn tại người dùng !!!!</b>'
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= 1) {
@@ -72,10 +72,10 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    let text = `user : ${data.userName} đang có ${data.point + 1} point`
+                    let text = `<b>user : ${data.userName} đang có ${data.point + 1} point</b>`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng !!!'
+                    let text = '<b>Không Đủ Số Điểm Để Tặng !!!</b>'
                     this.sendText(text, chatId)
                 }
             }
@@ -83,7 +83,7 @@ class HandleCommand {
         } else {
             let data = await userModel.findOne({ firstName: pointUser })
             if (!data) {
-                let text = 'không tồn tại người dùng'
+                let text = '<b>không tồn tại người dùng !!!!</b>'
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= 1) {
@@ -93,10 +93,10 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    let text = `user : ${data.firstName} đang có ${data.point + 1} point`
+                    let text = `<b>user : ${data.firstName} đang có ${data.point + 1} point</b>`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng !!!!'
+                    let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
                     this.sendText(text, chatId)
                 }
             }
@@ -107,9 +107,9 @@ class HandleCommand {
         let [pointCommand, pointUser] = text.split(' ')
         if (!pointUser) {
             let pData = await userModel.find().sort({ point: -1 }).limit(10)
-            let text = ''
+            let text = '<b>Danh Sách Điểm Các Thành Viên</b>\n '
             for (const index of pData) {
-                text = text + index.userName + " - " + index.firstName + " : " + index.point + "\n"
+                text = text + `<b>${index.userName}</b>` + " - " + index.firstName + " : " + index.point + "\n"
             }
             this.sendText(text, chatId)
         } else {
@@ -117,11 +117,11 @@ class HandleCommand {
                 pointUser = pointUser.split('@')[1]
                 let data = await userModel.findOne({ userName: pointUser })
                 if (!data) {
-                    let text = 'không tồn tại người dùng'
+                    let text = '<b>không tồn tại người dùng !!! </b>'
                     this.sendText(text, chatId)
                 } else {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(10)
-                    let text = ''
+                    let text = '<b>message</b></br>'
                     for (const index of data2) {
                         text = text + index.pointChange + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
@@ -131,13 +131,12 @@ class HandleCommand {
             } else {
                 let data = await userModel.findOne({ firstName: pointUser })
                 if (!data) {
-                    let text = 'không tồn tại người dùng'
+                    let text = '<b>không tồn tại người dùng !!! </b>'
                     this.sendText(text, chatId)
                 } else {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(15)
-                    let text = ''
+                    let text = '<b>message</b></br>'
                     for (const index of data2) {
-                        console.log(index.pointChange)
                         text = text + 'add : ' + index.pointChange + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
                     this.sendText(text, chatId)
@@ -151,7 +150,7 @@ class HandleCommand {
         let [giftCommand, pointUser, numPoint, pointMessage] = text.split(' ')
         numPoint = parseInt(numPoint)
         if (Number.isNaN(numPoint)) {
-            let text = 'Wrong point !!!'
+            let text = '<b>Wrong point !!!</b>'
             this.sendText(text, chatId)
             return 0;
         }
@@ -159,7 +158,7 @@ class HandleCommand {
             pointUser = pointUser.split('@')[1]
             let data = await userModel.findOne({ userName: pointUser })
             if (!data) {
-                let text = 'không tồn tại người dùng !!!'
+                let text = '<b>không tồn tại người dùng !!! </b>'
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
@@ -169,17 +168,17 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    let text = `user : ${data.userName} đang có ${data.point + 1} point`
+                    let text = `<b>user : ${data.userName} đang có ${data.point + 1} point <b/>`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng !!!!'
+                    let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
                     this.sendText(text, chatId)
                 }
             }
         } else {
             let data = await userModel.findOne({ firstName: pointUser })
             if (!data) {
-                let text = 'không tồn tại người dùng !!!!'
+                let text = '<b>không tồn tại người dùng !!! </b>'
                 this.sendText(text, chatId)
             } else {
                 if (data.point >= numPoint) {
@@ -189,10 +188,10 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    let text = `user : ${data.firstName} đang có ${data.point + numPoint} point`
+                    let text = `<b>user : ${data.firstName} đang có ${data.point + numPoint} point</b>`
                     this.sendText(text, chatId)
                 } else {
-                    let text = 'Không Đủ Số Điểm Để Tặng !!!'
+                    let text = '<b>Không Đủ Số Điểm Để Tặng !!! </b>'
                     this.sendText(text, chatId)
                 }
             }
@@ -200,8 +199,8 @@ class HandleCommand {
 
     }
     async handleImageCommand(text, chatId) {
-        let textEncode = encodeURI('https://placeimg.com/640/480')
-        await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+        let textEncode = encodeURI('aaa\nhttps://placeimg.com/640/480')
+        await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
     }
     async handleWeatherCommand(text, chatId) {
         let [weatherCommand, ...location] = text.split(' ')
@@ -210,10 +209,10 @@ class HandleCommand {
             location = encodeURI(location.join(' '));
             let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${weatherAppid}&lang=vi&units=metric`)
             if (data.cod === 404) {
-                let textOut = 'Không có dữ liệu về địa chỉ này'
+                let textOut = '<b>Không có dữ liệu về địa chỉ này </b>'
                 this.sendText(textOut, chatId)
             } else {
-                let textOut = `Thời Tiết Tại : ${data.data.name} \nNhiệt Dộ : ${Math.round(data.data.main.temp)}  \nTình Trạng : ${data.data.weather[0].description} \nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
+                let textOut = `Thời Tiết Tại :<i> ${data.data.name}</i> </br> Nhiệt Dộ : ${Math.round(data.data.main.temp)}</br>Tình Trạng : ${data.data.weather[0].description}</br>Tốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
                 this.sendText(textOut, chatId)
             }
 
@@ -228,7 +227,7 @@ class HandleCommand {
     async sendText(text, chatId) {
         let textEncode = encodeURI(text)
         let textBr = text.replaceAll('\n', '<br/>')
-        await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}`)
+        await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
         await chatModel.create({
             fromId: 11111111,
             chatId: chatId,

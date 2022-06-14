@@ -101,7 +101,6 @@ class Admin {
         })
     }
 
-
     async createUser(req, res) {
         let fromId = 222222225
         let firstName = 'test 04'
@@ -171,11 +170,33 @@ class Admin {
                 date5.total += 1
             }
         }
-        let date = [{ ...date1 }, { ...date2 }, { ...date3 }, { ...date4 }, { ...date5 },]
+        let date = [{ ...date5 }, { ...date4 }, { ...date3 }, { ...date2 }, { ...date1 },]
         if (date) {
             res.json({
                 success: true,
                 data: date
+            })
+        } else {
+            res.json({
+                success: false,
+            })
+        }
+    }
+
+    async findModeTableUser(req, res) {
+        let key = new RegExp(`.*${req.params.key}.*`, "i")
+        console.log(key)
+        let data = await userModel.find({
+            $or: [
+                { userName: key },
+                { firstName: key },
+                { lastName: key }
+            ]
+        })
+        if (data) {
+            res.json({
+                success: true,
+                data: data
             })
         } else {
             res.json({
