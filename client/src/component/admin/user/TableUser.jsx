@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import Deatail from './Deatail'
 import TableUserFind from './TableUserFind'
@@ -19,7 +19,7 @@ const TableUser = () => {
     const url = process.env.REACT_APP_API
 
     const fecthData = async () => {
-        const data = await axios.get(`${url}/admin/getUser/${page}/3`)
+        const data = await axios.get(`${url}/admin/getUser/?page=${page}&limit=3`)
         setData(data.data.data)
         setTotal(Math.ceil(data.data.total / 3))
     }
@@ -27,28 +27,30 @@ const TableUser = () => {
         setIdDeatail(e.target.value);
         setDeatailShow(true)
     }
-    const handleFindUserName = (e) => {
-        if (e.key === 'Enter') {
-            let result = data.filter(index => {
-                return index.userName === userNameFilter
-            })
-            setData(result);
+
+    const fetchDataFilter = async (filter) => {
+        const data = await axios.get(`${url}/admin/findModeTableUser/${filter}`)
+        if (data.data.success) {
+            setData(data.data.data)
+        } else {
+            alert('Không tìm thấy kết quả !!!')
         }
     }
+
+    const handleFindUserName = (e) => {
+        if (e.key === 'Enter') {
+            fetchDataFilter(userNameFilter)
+        }
+    }
+
     const handleFindFirstName = (e) => {
         if (e.key === 'Enter') {
-            let result = data.filter(index => {
-                return index.firstName === firstNameFilter
-            })
-            setData(result);
+            fetchDataFilter(firstNameFilter)
         }
     }
     const handleFindLastName = (e) => {
         if (e.key === 'Enter') {
-            let result = data.filter(index => {
-                return index.lastName === lastNameFilter
-            })
-            setData(result);
+            fetchDataFilter(lastNameFilter)
         }
     }
 
@@ -115,7 +117,7 @@ const TableUser = () => {
             <div className=' text-center '>
                 <div className='btn-group'>
                     <button className='btn btn-outline-primary' onClick={() => setPage(page > 1 ? page - 1 : page)}>&lt;&lt;</button>
-                    <Pagination total={total} callback={(data) => setPage(data)} />
+                    <Pagination total={total} page={page} callback={(data) => setPage(data)} />
                     <button className='btn btn-outline-primary' onClick={() => setPage(page + 1)}>&gt;&gt;</button>
                 </div>
             </div>

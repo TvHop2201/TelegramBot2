@@ -4,8 +4,7 @@ const tryCatch = require('../utils/handleTryCatch').handle
 class Admin {
     //user
     async getUser(req, res) {
-        let limit = req.params.limit
-        let page = req.params.page
+        let { page, limit } = req.query
 
         const data = await userModel.find().skip((limit * page) - limit).limit(limit)
         const total = await userModel.find().count()
@@ -105,11 +104,11 @@ class Admin {
     }
 
     async createUser(req, res) {
-        let fromId = 222222226
-        let firstName = 'test 05'
-        let lastName = 'test 05'
-        let userName = 'test05'
-        let point = 110
+        let fromId = 222222228
+        let firstName = 'test 08'
+        let lastName = 'test 08'
+        let userName = 'test08'
+        let point = 10
         const data = await userModel.create({
             fromId: fromId,
             firstName: firstName,

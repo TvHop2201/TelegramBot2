@@ -22,6 +22,12 @@ class HandleCommand {
                 "command": 'time',
                 "description": new Date().toDateString()
             },
+            {
+                "command": 'help',
+                "description": `<b>Danh Sách Command</b>\n <b>/thank <i> _user _message </i> : Tặng 1 điểm</b>\n <b>/gift <i>_user _point _message </i>: Tặng nhiều điểm</b>`
+                    + `\n<b>/point<i> _user</i> : Xem nhật ký cập nhật điểm và message của user</b> \n<b>/point : Xem điểm của top user điểm cao</b>`
+                    + `\n<b>/weather : xem thời tiết tại Vinh</b> \n<b>/weather <i>_location</i>: Xem thời tiết tại location</b>`
+            }
 
         ]
         commands.forEach(async (index) => {
@@ -107,9 +113,9 @@ class HandleCommand {
         let [pointCommand, pointUser] = text.split(' ')
         if (!pointUser) {
             let pData = await userModel.find().sort({ point: -1 }).limit(10)
-            let text = '<b>Danh Sách Điểm Các Thành Viên</b>\n '
+            let text = '<b>Danh Sách Điểm Các Thành Viên</b>\n\n '
             for (const index of pData) {
-                text = text + `<b>${index.userName}</b>` + " - " + index.firstName + " : " + index.point + "\n"
+                text = text + `<b><i>${index.userName}</i></b>` + " - " + index.firstName + " : <b>" + index.point + "</b>\n"
             }
             this.sendText(text, chatId)
         } else {
@@ -121,9 +127,9 @@ class HandleCommand {
                     this.sendText(text, chatId)
                 } else {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(10)
-                    let text = '<b>message</b></br>'
+                    let text = '<b>message</b>\n'
                     for (const index of data2) {
-                        text = text + index.pointChange + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
+                        text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
                     this.sendText(text, chatId)
                 }
@@ -135,9 +141,9 @@ class HandleCommand {
                     this.sendText(text, chatId)
                 } else {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(15)
-                    let text = '<b>message</b></br>'
+                    let text = '<b>message</b>\n'
                     for (const index of data2) {
-                        text = text + 'add : ' + index.pointChange + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
+                        text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
                     this.sendText(text, chatId)
                 }
@@ -168,7 +174,7 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    let text = `<b>user : ${data.userName} đang có ${data.point + 1} point <b/>`
+                    let text = `<b>user : ${data.userName} đang có ${data.point + 1} point </b>`
                     this.sendText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
@@ -204,6 +210,7 @@ class HandleCommand {
     }
     async handleWeatherCommand(text, chatId) {
         let [weatherCommand, ...location] = text.split(' ')
+        console.log(location)
         const weatherAppid = 'b1ac492954c5e04bdb2ff86ca85b8de7';
         if (location.length !== 0) {
             location = encodeURI(location.join(' '));
@@ -212,7 +219,7 @@ class HandleCommand {
                 let textOut = '<b>Không có dữ liệu về địa chỉ này </b>'
                 this.sendText(textOut, chatId)
             } else {
-                let textOut = `Thời Tiết Tại :<i> ${data.data.name}</i> </br> Nhiệt Dộ : ${Math.round(data.data.main.temp)}</br>Tình Trạng : ${data.data.weather[0].description}</br>Tốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
+                let textOut = `Thời Tiết Tại :<i> ${data.data.name}</i> \n Nhiệt Dộ : ${Math.round(data.data.main.temp)}\nTình Trạng : ${data.data.weather[0].description}\nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
                 this.sendText(textOut, chatId)
             }
 
@@ -222,7 +229,6 @@ class HandleCommand {
             this.sendText(textOut, chatId)
         }
     }
-
 
     async sendText(text, chatId) {
         let textEncode = encodeURI(text)
