@@ -17,10 +17,9 @@ class Photo {
             path = [...path, temp]
         })
         let check = path.includes(`${fromId}`)
-
-        if (!check) {
+        if (check === false) {
             const data = await axios.get(`${url1}?user_id=${fromId}`)
-            if (!data.data.result.photos[0]) {
+            if (data.data.result.photos.length == 0) {
                 this.cropPhoto('profile', fromId)
             } else {
                 let fileId
@@ -67,43 +66,63 @@ class Photo {
         })
         let checkSend = path.includes(`${fromIdSend}`)
         let checkReceive = path.includes(`${fromIdReceive}`)
-
         if (!checkSend) {
-            this.getProfilePhotoId(fromIdSend)
+            await this.getProfilePhotoId(fromIdSend)
         }
         if (!checkReceive) {
-            this.getProfilePhotoId(fromIdReceive)
+            await this.getProfilePhotoId(fromIdReceive)
+        }
+        if (checkReceive === true && checkSend === true) {
+            let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
+            let text = Buffer.from(
+                `<svg width="1000" height="950">
+                    <style>
+                        .title { fill: #fbbf89; font-size: 75px; font-weight: bold;}
+                        .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
+                    </style>
+                    <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
+                    <text x="0%" y="90%" class="title2">${ok}</text>
+                    <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
+                </svg>`);
+
+            sharp('./public/image/body.jpg')
+                .composite([
+                    { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
+                    { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
+                    { input: text }
+                ])
+                .toFile(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
+        } else {
+            setTimeout(async () => {
+                let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
+                let text = Buffer.from(
+                    `<svg width="1000" height="950">
+                    <style>
+                        .title { fill: #fbbf89; font-size: 75px; font-weight: bold;}
+                        .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
+                    </style>
+                    <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
+                    <text x="0%" y="90%" class="title2">${ok}</text>
+                    <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
+                </svg>`);
+
+                sharp('./public/image/body.jpg')
+                    .composite([
+                        { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
+                        { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
+                        { input: text }
+                    ])
+                    .toFile(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
+                console.log('run')
+            }, 500);
         }
 
-        let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
-        let text = Buffer.from(
-            `<svg width="1000" height="950">
-                <style>
-                    .title { fill: #fbbf24; font-size: 75px; font-weight: bold;}
-                    .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
-                </style>
-                <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
-                <text x="0%" y="90%" class="title2">${ok}</text>
-                <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
-            </svg>`);
-
-        await sharp('./public/image/body.jpg')
-            .composite([
-                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 600 },
-                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 600 },
-                { input: text }
-            ])
-            .toFile(`./public/image/saveImage/${fromIdSend}_${fromIdReceive}.jpg`)
-
     }
 
-    async sendProfilePhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
-        //this.compoundPhoto( fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
+    async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
+        this.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
+        await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
     }
-
-
 
 }
-
-
 module.exports = new Photo()

@@ -58,8 +58,9 @@ const pointMessageModel = require('./model/pointMessage')
 
 const handlePhoto = require('./utils/handlePhoto');
 
-//handlePhoto.getProfilePhotoId(546610082)
-handlePhoto.sendProfilePhoto(1232185869)
+handlePhoto.compoundPhoto(1232185869, 1892614559, 'tvHop2201', 50, 'ok anh hợp')
+//handlePhoto.getProfilePhotoId(1892614559)
+//handlePhoto.sendProfilePhoto(1232185869)
 
 
 
