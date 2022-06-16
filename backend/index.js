@@ -13,6 +13,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors())
 app.use(morgan('dev'))
+app.use(express.static('public'))
+
 
 //Mongoose
 mongoose.connect(process.env.MONGOOSE)
@@ -45,24 +47,20 @@ app.listen(process.env.PORT || 8000, () => {
 });
 
 // check telegram api
-// const handleApi = require('./utils/handleApi');
-// setInterval(() => {
-//     handleApi.fetchApi()
-// }, 5000);
+const handleApi = require('./utils/handleApi');
+setInterval(() => {
+    handleApi.fetchApi()
+}, 5000);
 
 //test
 const userModel = require('./model/user')
 const pointMessageModel = require('./model/pointMessage')
 
-const handlePhoto = require('./utils/handlePhoto')
-//handlePhoto.getProfilePhotoId(546610082)
-handlePhoto.compoundPhoto(546610082, 565650125)
+const handlePhoto = require('./utils/handlePhoto');
 
-// let path = []
-// fs.readdirSync('./public/image').forEach(index => {
-//     let temp = index.split('.jpg')[0]
-//     path = [...path, temp]
-// })
+//handlePhoto.getProfilePhotoId(546610082)
+handlePhoto.sendProfilePhoto(1232185869)
+
 
 
 

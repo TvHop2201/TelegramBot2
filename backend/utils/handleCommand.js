@@ -78,6 +78,7 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
+                    let userNameSendGift = await userModel.findOne({ fromId: fromId111 }, { userName: 1 })
                     let text = `<b>user : ${data.userName} đang có ${data.point + 1} point</b>`
                     this.sendText(text, chatId)
                 } else {

@@ -25,8 +25,8 @@ exports.fetchApi = async () => {
                 const userName = data.message.from.username
                 const date = Date.now()
 
-                const firstName = data.message.chat.first_name
-                const lastName = data.message.chat.last_name
+                const firstName = data.message.from.first_name
+                const lastName = data.message.from.last_name
 
                 const type = data.message.chat.type
                 const title = data.message.chat.title ? data.message.chat.title : null

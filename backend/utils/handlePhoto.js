@@ -1,13 +1,13 @@
 const axios = require('axios')
 const { once } = require('events')
 const fs = require('fs')
-const merge = require('merge-images')
-const { createCanvas, Canvas, Image } = require('canvas')
-const decode = require('node-base64-image').decode
 const sharp = require('sharp')
+const userModel = require('../model/user')
+const FormData = require('form-data')
 const url1 = `http://api.telegram.org/bot${process.env.BOT_TOKEN}/getUserProfilePhotos`
 const url2 = `http://api.telegram.org/bot${process.env.BOT_TOKEN}/getFile?file_id=`
 const url3 = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
+const url4 = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 
 class Photo {
     async getProfilePhotoId(fromId) {
@@ -59,7 +59,7 @@ class Photo {
             .toFile(`public/image/crop/${fromId}.jpg`)
     }
 
-    async compoundPhoto(fromIdSend, fromIdReceive) {
+    async compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
         let path = []
         fs.readdirSync('./public/image/crop').forEach(index => {
             let temp = index.split('.jpg')[0]
@@ -75,13 +75,32 @@ class Photo {
             this.getProfilePhotoId(fromIdReceive)
         }
 
+        let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
+        let text = Buffer.from(
+            `<svg width="1000" height="950">
+                <style>
+                    .title { fill: #fbbf24; font-size: 75px; font-weight: bold;}
+                    .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
+                </style>
+                <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
+                <text x="0%" y="90%" class="title2">${ok}</text>
+                <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
+            </svg>`);
 
+        await sharp('./public/image/body.jpg')
+            .composite([
+                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 600 },
+                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 600 },
+                { input: text }
+            ])
+            .toFile(`./public/image/saveImage/${fromIdSend}_${fromIdReceive}.jpg`)
 
     }
 
-    async sendProfilePhoto(fileId) {
-        await axios.get(`${url2}`)
+    async sendProfilePhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
+        //this.compoundPhoto( fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
     }
+
 
 
 }
