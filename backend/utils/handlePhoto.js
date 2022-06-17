@@ -59,6 +59,7 @@ class Photo {
     }
 
     async compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
+        console.log(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
         let path = []
         fs.readdirSync('./public/image/crop').forEach(index => {
             let temp = index.split('.jpg')[0]
@@ -119,10 +120,7 @@ class Photo {
 
     }
 
-    async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
-        this.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
-        await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
-    }
+
 
 }
 module.exports = new Photo()

@@ -5,6 +5,8 @@ const chatModel = require('../model/chat')
 const userModel = require('../model/user')
 const pointMessageModel = require('../model/pointMessage')
 
+const handlePhoto = require('./handlePhoto')
+
 const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}`
 
 class HandleCommand {
@@ -78,9 +80,8 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    let userNameSendGift = await userModel.findOne({ fromId: fromId111 }, { userName: 1 })
-                    let text = `<b>user : ${data.userName} đang có ${data.point + 1} point</b>`
-                    this.sendText(text, chatId)
+                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.userName, 1, pointMessage)
+                    this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!</b>'
                     this.sendText(text, chatId)
@@ -100,8 +101,8 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    let text = `<b>user : ${data.firstName} đang có ${data.point + 1} point</b>`
-                    this.sendText(text, chatId)
+                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.firstName, 1, pointMessage)
+                    this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
                     this.sendText(text, chatId)
@@ -175,8 +176,8 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    let text = `<b>user : ${data.userName} đang có ${data.point + 1} point </b>`
-                    this.sendText(text, chatId)
+                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.userName, numPoint, pointMessage)
+                    this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
                     this.sendText(text, chatId)
@@ -195,8 +196,8 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    let text = `<b>user : ${data.firstName} đang có ${data.point + numPoint} point</b>`
-                    this.sendText(text, chatId)
+                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.firstName, numPoint, pointMessage)
+                    this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!! </b>'
                     this.sendText(text, chatId)
@@ -241,6 +242,23 @@ class HandleCommand {
             text: textBr,
             date: Date.now()
         })
+    }
+
+    async saveText(text, chatId) {
+        let textBr = text.replaceAll('\n', '<br/>')
+        await chatModel.create({
+            fromId: 11111111,
+            chatId: chatId,
+            text: textBr,
+            date: Date.now()
+        })
+    }
+
+    async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
+        await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
+        //await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
+        await axios.get(`${telegramBot}/sendPhoto?chat_id=${chatId}&photo=https://telepublic.herokuapp.com/image/body.jpg`)
+
     }
 }
 
