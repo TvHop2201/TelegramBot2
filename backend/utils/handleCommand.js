@@ -1,5 +1,6 @@
 const axios = require('axios')
 require('dotenv').config()
+const fs = require('fs')
 
 const chatModel = require('../model/chat')
 const userModel = require('../model/user')
@@ -80,7 +81,7 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.userName, 1, pointMessage)
+                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.userName, 1, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!</b>'
@@ -101,7 +102,7 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.firstName, 1, pointMessage)
+                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.firstName, 1, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
@@ -176,7 +177,7 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.userName, numPoint, pointMessage)
+                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.userName, numPoint, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
@@ -196,7 +197,7 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, data.fromId, fromId111, data.firstName, numPoint, pointMessage)
+                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.firstName, numPoint, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!! </b>'
@@ -255,10 +256,13 @@ class HandleCommand {
     }
 
     async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
-        await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
-        //await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
-        await axios.get(`${telegramBot}/sendPhoto?chat_id=${chatId}&photo=https://telepublic.herokuapp.com/image/body.jpg`)
 
+        await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
+        await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
+        //await axios.get(`${telegramBot}/sendPhoto?chat_id=${chatId}&photo=https://telepublic.herokuapp.com/image/body.jpg`)
+        setTimeout(() => {
+            fs.unlink(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`, () => (console.log('first')))
+        }, 2000);
     }
 }
 

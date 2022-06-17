@@ -65,7 +65,7 @@ class Admin {
         }
     }
 
-    async postUser(req, res) {
+    async updateUser(req, res) {
         let id = req.body._id
         let fromId = req.body.fromId
         let firstName = req.body.firstName ? req.body.firstName : null
@@ -73,7 +73,7 @@ class Admin {
         let userName = req.body.userName ? req.body.userName : null
         let point = req.body.point
 
-        const data = userModel.updateOne({
+        const data = await userModel.updateOne({
             _id: id
         }, {
             fromId: fromId,

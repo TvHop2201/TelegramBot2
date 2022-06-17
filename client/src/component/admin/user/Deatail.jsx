@@ -10,6 +10,27 @@ const Deatail = (props) => {
         const data = await axios.get(`${url}/admin/getOneUser/${props.id}`)
         setFormData(data.data.data)
     }
+
+    function handleChange(e) {
+        const value = e.target.value;
+        setFormData({
+            ...formData,
+            [e.target.name]: value
+        });
+    }
+    const handleUpdate = async () => {
+        let data = await axios.post(`${url}/admin/updateUser`, {
+            _id: formData._id,
+            fromId: formData.fromId,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            userName: formData.userName,
+            point: formData.point
+        })
+        if (data.data.data) {
+            alert('Thành Công')
+        }
+    }
     useEffect(() => {
         fetchData()
     }, [])
@@ -38,14 +59,10 @@ const Deatail = (props) => {
                         </div>
                         <div class="form-group m-2">
                             <label>Point : </label>
-                            <input class="form-control" placeholder="point" value={formData.point ? formData.point : null} />
-                        </div>
-                        <div class="form-group m-2">
-                            <label>Create_At : </label>
-                            <input class="form-control" placeholder="Create_At" value={formData.create_at ? new Date(formData.create_at).getDate() : null} />
+                            <input class="form-control" placeholder="point" name='point' value={formData.point ? formData.point : null} onChange={(e) => handleChange(e)} />
                         </div>
                         <div className='mx-auto col text-center mt-5'>
-                            <button type="button" className='btn btn-outline-success mx-5 px-5'>Cập Nhật</button>
+                            <button type="button" className='btn btn-outline-success mx-5 px-5' onClick={() => handleUpdate()}>Cập Nhật</button>
                             <button type="button" className='btn btn-outline-warning mx-5 px-5'>Xóa</button>
                         </div>
                     </form>

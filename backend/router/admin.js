@@ -9,6 +9,7 @@ Route.get('/getOneUserByUserName/:userName', adminController.getOneUserByUserNam
 Route.get('/getAllUser', adminController.getAllUser)
 Route.get('/getChartUser', adminController.getCharUser)
 Route.get('/findModeTableUser/:key', adminController.findModeTableUser)
+Route.post('/updateUser', adminController.updateUser)
 //point
 Route.get('/getChartPoint', adminController.getChartPoint)
 Route.get('/getPointMessage/:page/:limit', adminController.getPointMessage)
