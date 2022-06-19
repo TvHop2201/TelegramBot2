@@ -157,8 +157,9 @@ class HandleCommand {
 
     }
     async handleGiftCommand(text, chatId, fromId111) {
-        let [giftCommand, pointUser, numPoint, pointMessage] = text.split(' ')
+        let [giftCommand, pointUser, numPoint, ...pointMessage] = text.split(' ')
         numPoint = parseInt(numPoint)
+        pointMessage = pointMessage.join(' ')
         if (Number.isNaN(numPoint)) {
             let text = '<b>Wrong point !!!</b>'
             this.sendText(text, chatId)
@@ -257,13 +258,19 @@ class HandleCommand {
     }
 
     async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
-
-        await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
-        await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
+        let date = Date.now()
+        await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
+        setTimeout(async () => {
+            try {
+                await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+            } catch (error) {
+                console.log(error)
+            }
+        }, 3000);
         //await axios.get(`${telegramBot}/sendPhoto?chat_id=${chatId}&photo=https://telepublic.herokuapp.com/image/body.jpg`)
         setTimeout(() => {
-            fs.unlink(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`, () => (console.log('')))
-        }, 2000);
+            fs.unlink(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`, () => (console.log('')))
+        }, 4000);
     }
 }
 

@@ -58,8 +58,8 @@ class Photo {
             .toFile(`public/image/crop/${fromId}.jpg`)
     }
 
-    async compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
-        console.log(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
+    async compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
+        console.log(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         let path = []
         fs.readdirSync('./public/image/crop').forEach(index => {
             let temp = index.split('.jpg')[0]
@@ -68,9 +68,11 @@ class Photo {
         let checkSend = path.includes(`${fromIdSend}`)
         let checkReceive = path.includes(`${fromIdReceive}`)
         if (!checkSend) {
+            console.log('send crop photo notfourd')
             await this.getProfilePhotoId(fromIdSend)
         }
         if (!checkReceive) {
+            console.log('receive crop photo notfourd')
             await this.getProfilePhotoId(fromIdReceive)
         }
         if (checkReceive === true && checkSend === true) {
@@ -86,15 +88,16 @@ class Photo {
                     <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
                 </svg>`);
 
-            sharp('./public/image/body.jpg')
+            await sharp('./public/image/body.jpg')
                 .composite([
                     { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
                     { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
                     { input: text }
                 ])
-                .toFile(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
+                .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
         } else {
             setTimeout(async () => {
+                console.log('gép ảnh khi false send receive')
                 let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
                 let text = Buffer.from(
                     `<svg width="1000" height="950">
@@ -113,8 +116,7 @@ class Photo {
                         { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
                         { input: text }
                     ])
-                    .toFile(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
-                console.log('run')
+                    .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
             }, 500);
         }
 

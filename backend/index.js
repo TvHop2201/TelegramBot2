@@ -53,7 +53,7 @@ app.listen(process.env.PORT || 8000, () => {
 const handleApi = require('./utils/handleApi');
 setInterval(() => {
     handleApi.fetchApi()
-}, 5000);
+}, 3000);
 
 //test
 const userModel = require('./model/user')
@@ -65,6 +65,7 @@ const handlePhoto = require('./utils/handlePhoto');
 //handlePhoto.getProfilePhotoId(1892614559)
 //handlePhoto.sendProfilePhoto(1232185869)
 //handlePhoto.cropPhoto(11111111, 11111111)
+
 
 
 
