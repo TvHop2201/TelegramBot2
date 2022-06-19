@@ -26,6 +26,9 @@ fs.readdirSync('./router/').forEach(file => {
     const path = file.split('.js')[0]
     app.use(`/${path}`, require(`./router/${path}`))
 });
+app.get("/", (req, res) => {
+    res.json("okok")
+})
 
 //WebHook 
 const HandleWebhook = require('./service/handleWebhook')
