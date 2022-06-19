@@ -258,10 +258,10 @@ class HandleCommand {
     async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
 
         await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage)
-        await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
-        //await axios.get(`${telegramBot}/sendPhoto?chat_id=${chatId}&photo=https://telepublic.herokuapp.com/image/body.jpg`)
+        //await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}/image/merge/${fromIdSend}_${fromIdReceive}.jpg`)
+        await axios.get(`${telegramBot}/sendPhoto?chat_id=${chatId}&photo=https://telepublic.herokuapp.com/image/body.jpg`)
         setTimeout(() => {
-            fs.unlink(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`, () => (console.log('first')))
+            fs.unlink(`./public/image/merge/${fromIdSend}_${fromIdReceive}.jpg`, () => (console.log('')))
         }, 2000);
     }
 }
