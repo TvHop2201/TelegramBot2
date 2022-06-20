@@ -248,11 +248,11 @@ class HandleCommand {
     }
 
     async saveText(text, chatId) {
-        let textBr = text.replaceAll('\n', '<br/>')
+        //let textBr = text.replaceAll('\n', '<br/>')
         await chatModel.create({
             fromId: 11111111,
             chatId: chatId,
-            text: textBr,
+            text: text,
             date: Date.now()
         })
     }
