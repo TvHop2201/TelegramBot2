@@ -263,7 +263,7 @@ class HandleCommand {
             .then(
                 axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
                     .then(
-                        fs.unlink(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`, () => (console.log('')))
+                        fs.unlink(`${__dirname}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`, () => (console.log('')))
                     )
             )
             .catch(err => console.log(err))
