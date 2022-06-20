@@ -259,18 +259,22 @@ class HandleCommand {
 
     async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
         let date = Date.now()
-        await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
-        setTimeout(async () => {
-            try {
+        handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
+            .then(
                 await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-            } catch (error) {
-                console.log(error)
-            }
-        }, 3000);
+            )
+            .catch(err => console.log(err))
+        // setTimeout(async () => {
+        //     try {
+        //         await axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // }, 2000);
         //await axios.get(`${telegramBot}/sendPhoto?chat_id=${chatId}&photo=https://telepublic.herokuapp.com/image/body.jpg`)
         setTimeout(() => {
             fs.unlink(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`, () => (console.log('')))
-        }, 4000);
+        }, 2500);
     }
 }
 
