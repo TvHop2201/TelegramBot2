@@ -68,12 +68,54 @@ class Photo {
         let checkSend = path.includes(`${fromIdSend}`)
         let checkReceive = path.includes(`${fromIdReceive}`)
         if (!checkSend) {
-            console.log('send crop photo notfourd')
-            await this.getProfilePhotoId(fromIdSend)
+            this.getProfilePhotoId(fromIdSend)
+                .then(() => {
+                    let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
+                    let text = Buffer.from(
+                        `<svg width="1000" height="950">
+                    <style>
+                        .title { fill: #fbbf89; font-size: 75px; font-weight: bold;}
+                        .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
+                    </style>
+                    <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
+                    <text x="0%" y="90%" class="title2">${ok}</text>
+                    <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
+                </svg>`);
+
+                    sharp('./public/image/body.jpg')
+                        .composite([
+                            { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
+                            { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
+                            { input: text }
+                        ])
+                        .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+                })
+                .catch(err => console.log(err))
         }
         if (!checkReceive) {
-            console.log('receive crop photo notfourd')
-            await this.getProfilePhotoId(fromIdReceive)
+            this.getProfilePhotoId(fromIdReceive)
+                .then(() => {
+                    let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
+                    let text = Buffer.from(
+                        `<svg width="1000" height="950">
+                <style>
+                    .title { fill: #fbbf89; font-size: 75px; font-weight: bold;}
+                    .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
+                </style>
+                <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
+                <text x="0%" y="90%" class="title2">${ok}</text>
+                <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
+            </svg>`);
+
+                    sharp('./public/image/body.jpg')
+                        .composite([
+                            { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
+                            { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
+                            { input: text }
+                        ])
+                        .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+                })
+                .catch(err => console.log(err))
         }
         if (checkReceive === true && checkSend === true) {
             let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
@@ -95,31 +137,7 @@ class Photo {
                     { input: text }
                 ])
                 .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-        } else {
-            setTimeout(async () => {
-                console.log('gép ảnh khi false send receive')
-                let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
-                let text = Buffer.from(
-                    `<svg width="1000" height="950">
-                    <style>
-                        .title { fill: #fbbf89; font-size: 75px; font-weight: bold;}
-                        .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
-                    </style>
-                    <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
-                    <text x="0%" y="90%" class="title2">${ok}</text>
-                    <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
-                </svg>`);
-
-                sharp('./public/image/body.jpg')
-                    .composite([
-                        { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
-                        { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
-                        { input: text }
-                    ])
-                    .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-            }, 500);
         }
-
     }
 
 

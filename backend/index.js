@@ -55,15 +55,6 @@ app.listen(process.env.PORT || 8000, () => {
 // }, 3000);
 
 //test
-const userModel = require('./model/user')
-const pointMessageModel = require('./model/pointMessage')
-
-const handlePhoto = require('./utils/handlePhoto');
-
-//handlePhoto.compoundPhoto(11111111, 565650125, 'tvHop2201', 50, 'ok anh hợp')
-//handlePhoto.getProfilePhotoId(1892614559)
-//handlePhoto.sendProfilePhoto(1232185869)
-//handlePhoto.cropPhoto(11111111, 11111111)
 
 
 
