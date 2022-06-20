@@ -237,12 +237,12 @@ class HandleCommand {
 
     async sendText(text, chatId) {
         let textEncode = encodeURI(text)
-        let textBr = text.replaceAll('\n', '<br/>')
+        //let textBr = text.replaceAll('\n', '<br/>')
         await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
         await chatModel.create({
             fromId: 11111111,
             chatId: chatId,
-            text: textBr,
+            text: text,
             date: Date.now()
         })
     }
