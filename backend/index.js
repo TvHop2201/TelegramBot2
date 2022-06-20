@@ -26,18 +26,17 @@ fs.readdirSync('./router/').forEach(file => {
     const path = file.split('.js')[0]
     app.use(`/${path}`, require(`./router/${path}`))
 });
-app.get("/", (req, res) => {
-    res.json("okok")
-})
+app.get('/', (req, res) => { res.json('Ok') })
+
 
 //WebHook 
 const HandleWebhook = require('./service/handleWebhook')
 app.post('/webhook', (req, res) => {
     HandleWebhook.webHook([req.body]);
-    res.json(true)
+    res.json('dd')
 })
 app.get('/webhook', (req, res) => {
-    res.json(true)
+    res.json('webhook')
 })
 
 //webSocket
@@ -50,10 +49,10 @@ app.listen(process.env.PORT || 8000, () => {
 });
 
 //check telegram api
-const handleApi = require('./utils/handleApi');
-setInterval(() => {
-    handleApi.fetchApi()
-}, 3000);
+// const handleApi = require('./utils/handleApi');
+// setInterval(() => {
+//     handleApi.fetchApi()
+// }, 3000);
 
 //test
 const userModel = require('./model/user')

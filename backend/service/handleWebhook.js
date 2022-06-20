@@ -4,6 +4,8 @@ const chatModel = require('../model/chat')
 const userModel = require('../model/user')
 const roomModel = require('../model/room')
 
+const handleCommand = require('../utils/handleCommand')
+
 class HandleWebhook {
     async webHook(datas) {
         for (const data of datas) {
@@ -13,13 +15,13 @@ class HandleWebhook {
                 const fromId = data.message.from.id
                 const isBot = data.message.from.is_bot
                 const text = data.message.text
-                const date = data.message.date
+                const userName = data.message.from.username
+                const date = Date.now()
 
-                const firstName = data.message.chat.first_name
-                const lastName = data.message.chat.last_name
+                const firstName = data.message.from.first_name
+                const lastName = data.message.from.last_name
 
                 const type = data.message.chat.type
-
                 const title = data.message.chat.title ? data.message.chat.title : null
 
                 const data1 = await chatModel.findOne({ messageId: messageId })
@@ -31,7 +33,6 @@ class HandleWebhook {
                         date: date,
                         text: text
                     })
-
                     const data2 = await roomModel.findOne({ chatId: chatId })
                     if (!data2) {
                         await roomModel.create({
@@ -42,15 +43,20 @@ class HandleWebhook {
                             type: type
                         })
                     }
-
                     const data3 = await userModel.findOne({ fromId: fromId })
                     if (!data3) {
                         await userModel.create({
                             fromId: fromId,
                             isBot: isBot,
                             firstName: firstName,
-                            lastName: lastName
+                            lastName: lastName,
+                            userName: userName
                         })
+                    }
+
+                    if (text.charAt(0) === '/') {
+                        let textNew = text.split('/')
+                        handleCommand.command(textNew[1], chatId, fromId)
                     }
                 }
             } else {
