@@ -237,18 +237,18 @@ class HandleCommand {
 
     async sendText(text, chatId) {
         let textEncode = encodeURI(text)
-        //let textBr = text.replaceAll('\n', '<br/>')
+        let textBr = text.replace(/\n/, '<br/>')
         await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
         await chatModel.create({
             fromId: 11111111,
             chatId: chatId,
-            text: text,
+            text: textBr,
             date: Date.now()
         })
     }
 
     async saveText(text, chatId) {
-        //let textBr = text.replaceAll('\n', '<br/>')
+        let textBr = text.replace(/\n/, '<br/>')
         await chatModel.create({
             fromId: 11111111,
             chatId: chatId,
@@ -263,8 +263,9 @@ class HandleCommand {
             .then(
                 axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
                     .then(
-                        fs.unlink(`${__dirname}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`, () => (console.log('')))
+                        fs.unlinkSync(`${__dirname}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
                     )
+                    .catch(err => console.log(err))
             )
             .catch(err => console.log(err))
     }

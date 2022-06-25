@@ -59,7 +59,7 @@ class Photo {
     }
 
     async compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
-        console.log(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
+        //console.log(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         let path = []
         fs.readdirSync('./public/image/crop').forEach(index => {
             let temp = index.split('.jpg')[0]
