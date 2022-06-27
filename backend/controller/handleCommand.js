@@ -71,7 +71,7 @@ class HandleCommand {
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
             let data = await userModel.findOne({ userName: pointUser })
-            if (data.length === 0) {
+            if (!data) {
                 let text = '<b>không tồn tại người dùng !!!!</b>'
                 this.sendText(text, chatId)
             } else {
@@ -230,7 +230,6 @@ class HandleCommand {
                 let textOut = `Thời Tiết Tại :<i> ${data.data.name}</i> \n Nhiệt Dộ : ${Math.round(data.data.main.temp)}\nTình Trạng : ${data.data.weather[0].description}\nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
                 this.sendText(textOut, chatId)
             }
-
         } else {
             let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=vinh&appid=${weatherAppid}&lang=vi&units=metric`)
             let textOut = `Thời Tiết Tại : ${data.data.name} \nNhiệt Dộ : ${Math.round(data.data.main.temp)}  \nTình Trạng : ${data.data.weather[0].description} \nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
@@ -266,7 +265,7 @@ class HandleCommand {
             .then(
                 axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
                     .then(
-                        fs.unlinkSync(`${__dirname}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+                        fs.unlinkSync(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
                     )
                     .catch(err => console.log(err))
             )
