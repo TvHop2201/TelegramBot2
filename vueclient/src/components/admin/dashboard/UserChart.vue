@@ -2,8 +2,8 @@
   <div>
     <Bar
     :chart-data="chartData"
-    :width="200"
-    :height="200"
+    :width="2"
+    :height="2"
     />
   </div>
 </template>

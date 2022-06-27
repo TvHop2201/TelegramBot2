@@ -5,9 +5,12 @@
       <button class="btn btn-outline-success mx-3" @click="showTable()">TABLE</button>
       <button class="btn btn-outline-success mx-3" @click="showFind()">FIND</button>
     </div>
-    <PointChart v-show="chartShow"/>
     <PointFind v-show="findShow"/>
-    <PointTable v-show="tableShow"/>
+      <PointTable v-show="tableShow" />
+    <div height="500">
+      <PointChart v-show="chartShow" :height="500"/>
+
+    </div>
   </div>
 </template>
 
