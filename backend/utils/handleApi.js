@@ -5,7 +5,7 @@ const chatModel = require('../model/chat')
 const userModel = require('../model/user')
 const roomModel = require('../model/room')
 
-const handleCommand = require('./handleCommand')
+const handleCommand = require('../controller/handleCommand')
 
 
 const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates`

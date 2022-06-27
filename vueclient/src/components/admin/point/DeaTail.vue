@@ -35,9 +35,6 @@
 <script>
 export default {
     props:['okData'],
-    created(){
-        console.log(this.okData)
-    }
 }
 </script>
 

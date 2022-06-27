@@ -3,23 +3,23 @@
         <div class='popup_inner' >
                 <button class='btn btn-outline-danger float-right mt-3 mx-3' @click="$emit('close')">X</button>
                 <div class='container'>
-                    <h1 class='mt-4'></h1>
+                    <h1 class='text-center'>{{okData.userName}}</h1>
                     <form class='mx-5'>
                         <div class="form-group m-2">
-                            <label>idRecivce: </label>
-                            <input class="form-control" placeholder="idUserReceive" />
+                            <label>firstName: </label>
+                            <input class="form-control" placeholder="firstName" :value="okData.firstName"/>
                         </div>
                         <div class="form-group m-2">
-                            <label>idSend : </label>
-                            <input class="form-control" placeholder="idUserSend" />
+                            <label>lastName : </label>
+                            <input class="form-control" placeholder="lastName" :value="okData.lastName" />
                         </div>
                         <div class="form-group m-2">
                             <label>Point : </label>
-                            <input class="form-control" placeholder="point" />
+                            <input class="form-control" placeholder="point" :value="okData.point" />
                         </div>
                         <div class="form-group m-2">
-                            <label>message : </label>
-                            <input class="form-control" placeholder="message"  />
+                            <label>create_at : </label>
+                            <input disabled class="form-control" placeholder="message" :value="new Date(okData.create_at).toLocaleDateString()"  />
                         </div>
                         <div class='mx-auto col text-center mt-5'>
                             <button type="button" class='btn btn-outline-success mx-5 px-5'>Cập Nhật</button>

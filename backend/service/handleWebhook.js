@@ -4,7 +4,7 @@ const chatModel = require('../model/chat')
 const userModel = require('../model/user')
 const roomModel = require('../model/room')
 
-const handleCommand = require('../utils/handleCommand')
+const handleCommand = require('../controller/handleCommand')
 
 class HandleWebhook {
     async webHook(datas) {

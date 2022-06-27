@@ -6,7 +6,7 @@ const chatModel = require('../model/chat')
 const userModel = require('../model/user')
 const pointMessageModel = require('../model/pointMessage')
 
-const handlePhoto = require('./handlePhoto')
+const handlePhoto = require('../utils/handlePhoto')
 
 const telegramBot = `http://api.telegram.org/bot${process.env.BOT_TOKEN}`
 const url4 = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`

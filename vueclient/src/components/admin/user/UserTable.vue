@@ -28,12 +28,12 @@
                         <td>{{new Date(index.create_at).toDateString()}}</td>
                         <td>
                             <button class='btn btn-outline-success' @click="deatailShow = !deatailShow">Chi Tiết</button>
-                            <DeaTail :okData="index" @close="deatailShow = false" v-show="deatailShow"/>
                         </td>
+                        <DeaTail :okData="index" @close="deatailShow = false" v-show="deatailShow"/>
                     </tr>                   
                 </tbody>
             </table>
-            <div class=' text-center '>
+            <div class=' text-center ' v-if="!deatailShow">
                 <div class='btn-group'>
                     <button class='btn btn-outline-primary' @click="page=page-1">&lt;&lt;</button>
                     <input class="btn btn-outline-primary" v-model="page"/>
