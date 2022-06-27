@@ -26,7 +26,7 @@ const pointMessageSchema = new Schema({
 pointMessageSchema.pre('save', async function (next) {
     if (this) {
         await userModel.findOneAndUpdate({ fromId: this.idUserReceive }, { $inc: { point: + this.pointChange } })
-        await userModel.updateOne({ fromId: this.idUserSendGift }, { $inc: { point: - this.pointChange } })
+        await userModel.updateOne({ fromId: 11111111 }, { $inc: { point: - this.pointChange } })
     }
     next()
 })

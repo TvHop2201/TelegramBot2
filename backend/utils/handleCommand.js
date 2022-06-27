@@ -89,7 +89,6 @@ class HandleCommand {
                     this.sendText(text, chatId)
                 }
             }
-
         } else {
             let data = await userModel.findOne({ firstName: pointUser })
             if (!data) {
@@ -165,6 +164,10 @@ class HandleCommand {
             this.sendText(text, chatId)
             return 0;
         }
+        if (numPoint > process.env.MAXPOINT) {
+            let text = `<b>Không thể tặng hơn ${process.env.MAXPOINT} điểm </b>`
+            this.sendText(text, chatId)
+        }
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
             let data = await userModel.findOne({ userName: pointUser })
@@ -220,7 +223,7 @@ class HandleCommand {
         if (location.length !== 0) {
             location = encodeURI(location.join(' '));
             let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${weatherAppid}&lang=vi&units=metric`)
-            if (data.cod === 404) {
+            if (data.code === 404) {
                 let textOut = '<b>Không có dữ liệu về địa chỉ này </b>'
                 this.sendText(textOut, chatId)
             } else {
@@ -237,7 +240,7 @@ class HandleCommand {
 
     async sendText(text, chatId) {
         let textEncode = encodeURI(text)
-        let textBr = text.replace(/\n/, '<br/>')
+        let textBr = text.replace(/\n/g, '<br/>')
         await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
         await chatModel.create({
             fromId: 11111111,
@@ -248,7 +251,7 @@ class HandleCommand {
     }
 
     async saveText(text, chatId) {
-        let textBr = text.replace(/\n/, '<br/>')
+        let textBr = text.replace(/\n/g, '<br/>')
         await chatModel.create({
             fromId: 11111111,
             chatId: chatId,
