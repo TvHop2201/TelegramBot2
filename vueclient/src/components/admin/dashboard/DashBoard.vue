@@ -9,19 +9,19 @@
         </router-link>
     </div>
     <div class='row'>
-        <div class='m-3 col-lg-5'>
+        <div class='mt-3 col-lg-6 text-center'>
             <div class='col-md-3 mx-auto float-left'>
                         <input type="date" v-model="firstDate" >
                     </div>
             </div>
-            <div class='m-3 col-lg-5'>
+            <div class='mt-3 text-center col-lg-6'>
                 <div class='col-md-3 mx-auto float-left'>
                         <input type="date" v-model="lastDate" >
                 </div>
             </div>
     </div>
-    <div class='row float-left mt-5 mx-auto'>
-        <div class='col-lg-6 User ' height="200px" withd="50px">
+    <div class='row float-left mx-auto'>
+        <div class='col-lg-6 User '>
             <UserChart :time="time" />
         </div>
         <div class='col-lg-6'>

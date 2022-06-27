@@ -27,14 +27,14 @@ export default {
   },
   
   async created (){
-    let data =await axios.get(`${this.url}/admin/getChartUserWithTime/${this.time}`)
+    let data =await axios.get(`${this.url}/admin/getChartUserWithTime/?time=${this.time}`)
     this.chartData.labels = data.data.data.map(index=>index._id)
     let data2  = {data :data.data.data.map(index=>index.count),label: 'user',backgroundColor: ["#bef264","#fcd34d","#fca5a5",],}
     this.chartData.datasets = [data2]
   },
   watch:{
     async time(){
-    let data =await axios.get(`${this.url}/admin/getChartUserWithTime/${this.time}`)
+    let data =await axios.get(`${this.url}/admin/getChartUserWithTime/?time=${this.time}`)
     this.chartData.labels = data.data.data.map(index=>index._id)
     let data2  = {data :data.data.data.map(index=>index.count),label: 'user',backgroundColor: ["#bef264","#fcd34d","#fca5a5",],}
     this.chartData.datasets = [data2]

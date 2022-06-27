@@ -25,7 +25,7 @@ const ChartUser = (props) => {
     const url = process.env.REACT_APP_API
 
     const fecthData = async () => {
-        const data = await axios.get(`${url}/admin/getChartUserWithTime/${props.time}`)
+        const data = await axios.get(`${url}/admin/getChartUserWithTime/?time=${props.time}`)
         setChartData(data.data.data)
     }
     useEffect(() => {

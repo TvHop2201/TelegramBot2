@@ -97,26 +97,27 @@ export default {
     },
     watch: {
         async page(){
-            if(this.userName !== ''){
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=3`)
-                this.dataok = data1.data.data
-                return 0
+            if(this.page!==''){
+                if(this.userName !== ''){
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=3`)
+                    this.dataok = data1.data.data
+                    return 0
+                }
+                if(this.firstName!== ''){
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=3`)
+                    this.dataok = data1.data.data
+                    return 0
+                }
+                if(this.lastName !== ''){
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=3`)
+                    this.dataok = data1.data.data
+                    return 0
+                }
+                if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=3`)
+                    this.dataok = data1.data.data
+                }
             }
-            if(this.firstName!== ''){
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=3`)
-                this.dataok = data1.data.data
-                return 0
-            }
-            if(this.lastName !== ''){
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=3`)
-                this.dataok = data1.data.data
-                return 0
-            }
-            if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=3`)
-                this.dataok = data1.data.data
-            }
-
         }
     }
 

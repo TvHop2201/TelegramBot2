@@ -20,20 +20,6 @@ class Admin {
             })
         }
     }
-    async getOneUser(req, res) {
-        let id = req.params.id
-        const data = await userModel.findOne({ _id: id })
-        if (data) {
-            res.json({
-                success: true,
-                data: data
-            })
-        } else {
-            res.json({
-                success: false,
-            })
-        }
-    }
 
     async getOneUserByUserName(req, res) {
         let userName = req.params.userName
@@ -129,8 +115,9 @@ class Admin {
     }
 
     async getCharUser(req, res) {
+
         const data = await userModel.aggregate([
-            { $match: { "create_at": { $gte: Date.now() - 604800000, $lt: Date.now() } } },
+            { $match: { "create_at": { $gte: Date.now() - 10014800000, $lt: Date.now() } } },
             {
                 "$group": {
                     "_id": {
@@ -207,10 +194,9 @@ class Admin {
     }
 
     async getPointMessage(req, res) {
-        let perPage = req.params.limit
-        let page = req.params.page
-        const datas = await pointMessageModel.find().skip((perPage * page) - perPage).sort({ date: -1 }).limit(perPage)
-
+        let { page, limit } = req.query
+        console.log(page, limit)
+        const datas = await pointMessageModel.find().skip((limit * page) - limit).sort({ date: -1 }).limit(limit)
         let result = []
         for (let data of datas) {
             let userReceive = await userModel.findOne({ fromId: data.idUserReceive }, { userName: 1, _id: -1, firstName: 1 })
@@ -230,31 +216,15 @@ class Admin {
             })
         }
     }
-    async getOnePointMessage(req, res) {
-        let id = req.params.id
-        console.log(id)
-        const data = await pointMessageModel.findOne({ _id: id })
-        if (data) {
-            res.json({
-                success: true,
-                data: data
-            })
-        } else {
-            res.json({
-                success: false,
-            })
-        }
-    }
-
     //dashboard
     async getChartUserWithTime(req, res) {
-        let time = req.params.time
+        let { time } = req.query
         let [firstDay, firstMonth, lastDay, lastMonth] = time.split('-')
         let year = 2022
         if (firstMonth > lastMonth) {
             year = year + 1
         }
-        let first = new Date(2022, firstMonth, lastDay).getTime()
+        let first = new Date(2022, firstMonth, firstDay).getTime()
         let last = new Date(year, lastMonth, lastDay).getTime()
 
         const data = await userModel.aggregate([

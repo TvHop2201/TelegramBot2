@@ -53,7 +53,7 @@ export default {
         };
     },
     async created() {
-        let data1 = await axios.get(`${this.url}/admin/getPointMessage/${this.page}/5`);
+        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=5`);
         this.dataok = data1.data.data;
     },
     methods:{
@@ -64,7 +64,7 @@ export default {
     watch: {
         async page() {
             if (this.page !== null) {
-                let data1 = await axios.get(`${this.url}/admin/getPointMessage/${this.page}/5`);
+                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=5`);
                 this.dataok = data1.data.data;
             }
         }
