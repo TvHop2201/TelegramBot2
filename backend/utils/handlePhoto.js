@@ -89,23 +89,26 @@ class Photo {
             let checkReceive = path.includes(`${fromIdReceive}`)
             if (!checkSend) {
                 this.getProfilePhotoId(fromIdSend)
-                    .then(() => {
+                    .then(async () => {
                         let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
                         let text = Buffer.from(
-                            `<svg width="1000" height="950">
-                            <style>
-                                .title { fill: #fbbf89; font-size: 75px; font-weight: bold;}
-                                .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
-                            </style>
-                            <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
-                            <text x="0%" y="90%" class="title2">${ok}</text>
-                            <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
-                        </svg>`);
+                            `<svg width="1280" height="1920">
+                                <style>
+                                    .title1 { fill: #ffff; font-size: 75px; font-weight: bold;}
+                                    .title2 { fill: #a3e635; font-size: 75px; font-weight: bold;}
+                                    .title3 { fill: #ffff; font-size: 60px; font-weight: bold;}
+                                </style>
+                                <text x="200px" y="900px" class="title1">${userNameSend}</text>
+                                <text x="800px" y="900px" class="title1">${userNameReceive}</text>
+                                <text x="400px" y="1300px" class="title2">CHÚC MỪNG</text>
+                                <text x="200px" y="1500px" class="title3">${ok}</text>
+                                <text x="200px" y="1600px" class="title3">message : ${pointMessage}</text>
+                            </svg>`);
 
-                        sharp('./public/image/body.jpg')
+                        await sharp('./public/image/body.jpg')
                             .composite([
-                                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
-                                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
+                                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 100, top: 400 },
+                                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 780, top: 400 },
                                 { input: text }
                             ])
                             .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
@@ -113,23 +116,26 @@ class Photo {
             }
             if (!checkReceive) {
                 this.getProfilePhotoId(fromIdReceive)
-                    .then(() => {
+                    .then(async () => {
                         let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
                         let text = Buffer.from(
-                            `<svg width="1000" height="950">
-                <style>
-                    .title { fill: #fbbf89; font-size: 75px; font-weight: bold;}
-                    .title2 { fill: #ffff; font-size: 60px; font-weight: bold;}
-                </style>
-                <text x="27%" y="80%" class="title">CHÚC MỪNG</text>
-                <text x="0%" y="90%" class="title2">${ok}</text>
-                <text x="0%" y="100%" class="title2">message : ${pointMessage}</text>
-            </svg>`);
+                            `<svg width="1280" height="1920">
+                                <style>
+                                    .title1 { fill: #ffff; font-size: 75px; font-weight: bold;}
+                                    .title2 { fill: #a3e635; font-size: 75px; font-weight: bold;}
+                                    .title3 { fill: #ffff; font-size: 60px; font-weight: bold;}
+                                </style>
+                                <text x="200px" y="900px" class="title1">${userNameSend}</text>
+                                <text x="800px" y="900px" class="title1">${userNameReceive}</text>
+                                <text x="400px" y="1300px" class="title2">CHÚC MỪNG</text>
+                                <text x="200px" y="1500px" class="title3">${ok}</text>
+                                <text x="200px" y="1600px" class="title3">message : ${pointMessage}</text>
+                            </svg>`);
 
-                        sharp('./public/image/body.jpg')
+                        await sharp('./public/image/body.jpg')
                             .composite([
-                                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 124, top: 500 },
-                                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 754, top: 500 },
+                                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 100, top: 400 },
+                                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 780, top: 400 },
                                 { input: text }
                             ])
                             .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)

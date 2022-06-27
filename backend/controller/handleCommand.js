@@ -264,9 +264,11 @@ class HandleCommand {
         handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
             .then(
                 axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-                    .then(
-                        fs.unlinkSync(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-                    )
+                    .then(() => {
+                        let path = __dirname
+                        path.split('/utils').join('')
+                        fs.unlinkSync(`${path}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+                    })
                     .catch(err => console.log(err))
             )
             .catch(err => console.log(err))
