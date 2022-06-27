@@ -266,7 +266,7 @@ class HandleCommand {
                 axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
                     .then(() => {
                         let path = __dirname
-                        path.split('/utils').join('')
+                        path.split('/controller').join('')
                         fs.unlinkSync(`${path}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
                     })
                     .catch(err => console.log(err))
