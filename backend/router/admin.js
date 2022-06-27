@@ -8,7 +8,7 @@ Route.get('/getOneUser/:id', adminController.getOneUser)
 Route.get('/getOneUserByUserName/:userName', adminController.getOneUserByUserName)
 Route.get('/getAllUser', adminController.getAllUser)
 Route.get('/getChartUser', adminController.getCharUser)
-Route.get('/findModeTableUser/:key', adminController.findModeTableUser)
+Route.get('/findModeTableUser/', adminController.findModeTableUser)
 Route.post('/updateUser', adminController.updateUser)
 //point
 Route.get('/getChartPoint', adminController.getChartPoint)

@@ -158,15 +158,22 @@ class Admin {
     }
 
     async findModeTableUser(req, res) {
-        let key = new RegExp(`.*${req.params.key}.*`, "i")
-        console.log(key)
-        let data = await userModel.find({
-            $or: [
-                { userName: key },
-                { firstName: key },
-                { lastName: key }
-            ]
-        })
+        let { key, page, limit } = req.query
+        let data
+        console.log(key, page, limit)
+        if (key == '') {
+            key = new RegExp(`.*${key}.*`, "i")
+            data = await userModel.find().skip((limit * page) - limit).limit(limit)
+        } else {
+            key = new RegExp(`.*${key}.*`, "i")
+            data = await userModel.find({
+                $or: [
+                    { userName: key },
+                    { firstName: key },
+                    { lastName: key }
+                ]
+            }).skip((limit * page) - limit).limit(limit)
+        }
         if (data) {
             res.json({
                 success: true,
