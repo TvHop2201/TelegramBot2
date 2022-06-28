@@ -70,6 +70,13 @@ class HandleCommand {
 
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
+            if (pointUser === 'all' || pointUser === 'All' || pointUser === 'ALL') {
+                let userNameSend = this.getName(fromId111)
+                await userModel.updateMany({}, { $inc: { point: + 1 } })
+                let text = `<b><i>${userNameSend}</i> đã tặng @all 1 điểm </b>`
+                this.sendText(text, chatId)
+                return 0
+            }
             let data = await userModel.findOne({ userName: pointUser })
             if (!data) {
                 let text = '<b>không tồn tại người dùng !!!!</b>'
@@ -170,6 +177,13 @@ class HandleCommand {
         }
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
+            if (pointUser === 'all' || pointUser === 'All' || pointUser === 'ALL') {
+                let userNameSend = this.getName(fromId111)
+                await userModel.updateMany({}, { $inc: { point: + numPoint } })
+                let text = `<b><i>${userNameSend}</i> đã tặng @all ${numPoint} điểm </b>`
+                this.sendText(text, chatId)
+                return 0
+            }
             let data = await userModel.findOne({ userName: pointUser })
             if (!data) {
                 let text = '<b>không tồn tại người dùng !!! </b>'
@@ -272,6 +286,17 @@ class HandleCommand {
                     .catch(err => console.log(err))
             )
             .catch(err => console.log(err))
+    }
+
+    async getName(fromId) {
+        let getName = await userModel.findOne({ fromId: fromId })
+        if (getName.userName) {
+            return getName.userName
+        } else if (getName.firstName) {
+            return getName.firstName
+        } else if (getName.lastName) {
+            return getName.lastName
+        }
     }
 }
 

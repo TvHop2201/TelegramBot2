@@ -3,7 +3,6 @@ const { once } = require('events')
 const fs = require('fs')
 const sharp = require('sharp')
 const userModel = require('../model/user')
-const FormData = require('form-data')
 const url1 = `http://api.telegram.org/bot${process.env.BOT_TOKEN}/getUserProfilePhotos`
 const url2 = `http://api.telegram.org/bot${process.env.BOT_TOKEN}/getFile?file_id=`
 const url3 = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
