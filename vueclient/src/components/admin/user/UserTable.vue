@@ -27,17 +27,24 @@
                         <td>{{index.point}}</td>
                         <td>{{new Date(index.create_at).toDateString()}}</td>
                         <td>
-                            <button class='btn btn-outline-success' @click="deatailShow = !deatailShow">Chi Tiết</button>
+                            <button class='btn btn-outline-success' @click="showDeatail(index)">Chi Tiết</button>
                         </td>
-                        <DeaTail :okData="index" @close="deatailShow = false" v-show="deatailShow"/>
                     </tr>                   
+                        <DeaTail :okData="deatailData" @close="deatailShow = false" v-show="deatailShow"/>
                 </tbody>
             </table>
             <div class=' text-center ' v-if="!deatailShow">
                 <div class='btn-group'>
-                    <button class='btn btn-outline-primary' @click="page=page-1">&lt;&lt;</button>
-                    <input class="btn btn-outline-primary" v-model="page"/>
-                    <button class='btn btn-outline-primary' @click="page= page+1" >&gt;&gt;</button>
+                    <el-pagination
+                            background
+                            layout="prev, pager, next"
+                            :total="total"
+                            :key="total"
+                            :page-size="5"
+                            @prev-click="page = page-1"
+                            @next-click="page=page+1"
+                            >
+                    </el-pagination>
                 </div>
             </div>
         </div >
@@ -54,7 +61,9 @@ export default {
         return {
             url: process.env.VUE_APP_URL,
             dataok: {},
+            deatailData:{},
             page: 1,
+            total :1,
             deatailShow: false,
             userName : '',
             firstName: '',
@@ -62,60 +71,73 @@ export default {
         };
     },
     async created(){
-        let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=3`)
+        let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
         this.dataok = data1.data.data
+        this.total = data1.data.total
     },
     methods:{
+        showDeatail(index){
+            this.deatailData = index
+            this.deatailShow =!this.deatailShow
+        },
         async filter(){
             if(this.userName !== ''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=3`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
+                this.total = data1.data.total
                 return 0
             }
             if(this.firstName!== ''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=3`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
+                this.total = data1.data.total
                 return 0
             }
             if(this.lastName !== ''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=3`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
+                this.total = data1.data.total
                 return 0
             }
             if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=3`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
+                this.total = data1.data.total
+                return 0
             }
         },
-        pageUp(){
-
-        }
+        
     },
     watch: {
         async page(){
             if(this.page!==''){
                 if(this.userName !== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=3`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
+                    this.total = data1.data.total
                     return 0
                 }
                 if(this.firstName!== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=3`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
+                    this.total = data1.data.total
                     return 0
                 }
                 if(this.lastName !== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=3`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
+                    this.total = data1.data.total
                     return 0
                 }
                 if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=3`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
+                    this.total = data1.data.total
+                    return 0
                 }
             }
         }

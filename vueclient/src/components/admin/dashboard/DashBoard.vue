@@ -1,13 +1,5 @@
 <template>
   <div>
-    <div class='text-center'>
-        <router-link to='/admin/user' class='btn btn-outline-success mx-5 px-5'>
-                    USER
-        </router-link>
-        <router-link to='/admin/point' class='btn btn-outline-success mx-5 px-5'>
-                    POINT
-        </router-link>
-    </div>
     <div class='row'>
         <div class='mt-3 col-lg-6 text-center'>
             <div class='col-md-3 mx-auto float-left'>

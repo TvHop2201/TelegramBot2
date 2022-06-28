@@ -29,10 +29,17 @@
                     </tbody>
                 </table>
                 <div class='text-center' v-show="!deatailShow">
-                    <div class='btn-group'>
-                        <button class='btn btn-outline-primary' @click="page=page-1">&lt;&lt;</button>
-                        <input class="btn btn-outline-primary" v-model="page"/>
-                        <button class='btn btn-outline-primary' @click="page= page+1" >&gt;&gt;</button>
+                    <div>
+                        <el-pagination
+                            background
+                            layout="prev, pager, next"
+                            :total="total"
+                            :key="total"
+                            :page-size="10"
+                            @prev-click="page = page-1"
+                            @next-click="page=page+1"
+                            >
+                        </el-pagination>
                     </div>
                 </div>
             </div>
@@ -49,12 +56,14 @@ export default {
             url: process.env.VUE_APP_URL,
             dataok: {},
             page: 1,
+            total:1,
             deatailShow: false
         };
     },
     async created() {
-        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=5`);
+        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=10`);
         this.dataok = data1.data.data;
+        this.total= data1.data.total
     },
     methods:{
       exitDetail (){
@@ -64,7 +73,7 @@ export default {
     watch: {
         async page() {
             if (this.page !== null) {
-                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=5`);
+                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=10`);
                 this.dataok = data1.data.data;
             }
         }

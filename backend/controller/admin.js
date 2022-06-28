@@ -147,10 +147,11 @@ class Admin {
     async findModeTableUser(req, res) {
         let { key, page, limit } = req.query
         let data
-        console.log(key, page, limit)
+        let total
         if (key == '') {
             key = new RegExp(`.*${key}.*`, "i")
             data = await userModel.find().skip((limit * page) - limit).limit(limit)
+            total = await userModel.find().count()
         } else {
             key = new RegExp(`.*${key}.*`, "i")
             data = await userModel.find({
@@ -160,11 +161,19 @@ class Admin {
                     { lastName: key }
                 ]
             }).skip((limit * page) - limit).limit(limit)
+            total = await userModel.find({
+                $or: [
+                    { userName: key },
+                    { firstName: key },
+                    { lastName: key }
+                ]
+            }).count()
         }
         if (data) {
             res.json({
                 success: true,
-                data: data
+                data: data,
+                total
             })
         } else {
             res.json({
@@ -195,7 +204,6 @@ class Admin {
 
     async getPointMessage(req, res) {
         let { page, limit } = req.query
-        console.log(page, limit)
         const datas = await pointMessageModel.find().skip((limit * page) - limit).sort({ date: -1 }).limit(limit)
         let result = []
         for (let data of datas) {

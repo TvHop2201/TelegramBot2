@@ -10,28 +10,14 @@ const url3 = `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}`
 const url4 = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 
 class Photo {
-    getProfilePhotoId(fromId) {
-        return new Promise((resolve, reject) => {
-            let path = []
-            fs.readdirSync('./public/image').forEach(index => {
-                let temp = index.split('.jpg')[0]
-                path = [...path, temp]
-            })
-            let check = path.includes(`${fromId}`)
-            if (check === false) {
-                this.downloadPhoto(fromId)
-            }
-            let totalTime = 0;
-            let checkTime = 2000 / 10
-            const timer = setInterval(function () {
-                totalTime += checkTime;
-                let fileExists = fs.existsSync(`public/image/crop/${fromId}.jpg`);
-                if (fileExists || totalTime >= 2000) {
-                    clearInterval(timer);
-                    resolve(fileExists);
-                }
-            }, checkTime)
-        })
+    async getProfilePhotoId(fromId) {
+        let check = fs.existsSync(`./public/image/${fromId}.jpg`)
+        if (check === false) {
+            await this.downloadPhoto(fromId)
+        } else {
+            await this.cropPhoto(fromId, fromId)
+        }
+
     }
 
     async downloadPhoto(fromId) {
@@ -55,15 +41,15 @@ class Photo {
             })
             let stream = data3.data.pipe(fs.createWriteStream(`public/image/${fromId}.jpg`))
             await once(stream, 'finish');
-            this.cropPhoto(fromId, fromId)
+            await this.cropPhoto(fromId, fromId)
         }
     }
 
-    cropPhoto(photoSource, fromId) {
-        const width = 400,
+    async cropPhoto(photoSource, fromId) {
+        const width = 1070,
             r = width / 2,
             circleShape = Buffer.from(`<svg><circle cx="${r}" cy="${r}" r="${r}" /></svg>`);
-        sharp(`public/image/${photoSource}.jpg`)
+        await sharp(`public/image/${photoSource}.jpg`)
             .resize(width, width)
             .composite([{
                 input: circleShape,
@@ -86,100 +72,54 @@ class Photo {
         }
     }
 
+    async mergeText(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date, userNameSend) {
+        let ok = `${userNameReceive} đã nhận được ${pointChange}`
+        let text = Buffer.from(
+            `<svg width="5000" height="5000">
+                <style>
+                    .title3 { fill: #ffff; font-size: 180px; font-weight: bold;}
+                </style>
+
+                <text x="450px" y="3500px" class="title3">${ok}  điểm từ ${userNameSend}</text>
+                <text x="450px" y="4000px" class="title3">Message : ${pointMessage}</text>
+            </svg>`);
+
+        await sharp('./public/image/body1.png')
+            .composite([
+                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 1195, top: 1870 },
+                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 2730, top: 1870 },
+                { input: text }
+            ])
+            .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+
+    }
+
     async compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
         try {
             console.log(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
             let userNameSend = await this.getName(fromIdSend)
-            let path = []
-            fs.readdirSync('./public/image/crop').forEach(index => {
-                let temp = index.split('.jpg')[0]
-                path = [...path, temp]
-            })
-            let checkSend = path.includes(`${fromIdSend}`)
-            let checkReceive = path.includes(`${fromIdReceive}`)
-            if (!checkSend) {
-                console.log('vào')
-                this.getProfilePhotoId(fromIdSend)
-                    .then((data) => {
-                        if (data) {
-                            console.log('chạy')
-                            let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
-                            let text = Buffer.from(
-                                `<svg width="1280" height="1920">
-                            <style>
-                                .title1 { fill: #ffff; font-size: 75px; font-weight: bold;}
-                                .title2 { fill: #a3e635; font-size: 75px; font-weight: bold;}
-                                .title3 { fill: #ffff; font-size: 60px; font-weight: bold;}
-                            </style>
-                            <text x="200px" y="900px" class="title1">${userNameSend}</text>
-                            <text x="800px" y="900px" class="title1">${userNameReceive}</text>
-                            <text x="400px" y="1300px" class="title2">CHÚC MỪNG</text>
-                            <text x="200px" y="1500px" class="title3">${ok}</text>
-                            <text x="200px" y="1600px" class="title3">message : ${pointMessage}</text>
-                        </svg>`);
+            let checkSend = fs.existsSync(`./public/image/crop/${fromIdSend}.jpg`)
+            let checkReceive = fs.existsSync(`./public/image/crop/${fromIdReceive}.jpg`)
+            console.log(userNameSend, checkSend, checkReceive)
 
-                            sharp('./public/image/body.jpg')
-                                .composite([
-                                    { input: `./public/image/crop/${fromIdSend}.jpg`, left: 100, top: 400 },
-                                    { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 780, top: 400 },
-                                    { input: text }
-                                ])
-                                .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-                        }
-
-                    })
+            if (checkSend === false) {
+                await this.getProfilePhotoId(fromIdSend)
+                if (!checkReceive) {
+                    await this.getProfilePhotoId(fromIdReceive)
+                    await this.mergeText(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date, userNameSend)
+                    return 0
+                }
+                await this.mergeText(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date, userNameSend)
+                return 0
             }
-            if (!checkReceive) {
-                this.getProfilePhotoId(fromIdReceive)
-                    .then(async () => {
-                        let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
-                        let text = Buffer.from(
-                            `<svg width="1280" height="1920">
-                                <style>
-                                    .title1 { fill: #ffff; font-size: 75px; font-weight: bold;}
-                                    .title2 { fill: #a3e635; font-size: 75px; font-weight: bold;}
-                                    .title3 { fill: #ffff; font-size: 60px; font-weight: bold;}
-                                </style>
-                                <text x="200px" y="900px" class="title1">${userNameSend}</text>
-                                <text x="800px" y="900px" class="title1">${userNameReceive}</text>
-                                <text x="400px" y="1300px" class="title2">CHÚC MỪNG</text>
-                                <text x="200px" y="1500px" class="title3">${ok}</text>
-                                <text x="200px" y="1600px" class="title3">message : ${pointMessage}</text>
-                            </svg>`);
-
-                        await sharp('./public/image/body.jpg')
-                            .composite([
-                                { input: `./public/image/crop/${fromIdSend}.jpg`, left: 100, top: 400 },
-                                { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 780, top: 400 },
-                                { input: text }
-                            ])
-                            .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-                    })
-                    .catch(err => console.log(err))
+            if (!checkReceive === false) {
+                await this.getProfilePhotoId(fromIdReceive)
+                await this.mergeText(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date, userNameSend)
+                return 0
             }
             if (checkReceive === true && checkSend === true) {
-                let ok = `${userNameReceive} Đã Nhận Được ${pointChange} Điểm`
-                let text = Buffer.from(
-                    `<svg width="1280" height="1920">
-                        <style>
-                            .title1 { fill: #ffff; font-size: 75px; font-weight: bold;}
-                            .title2 { fill: #a3e635; font-size: 75px; font-weight: bold;}
-                            .title3 { fill: #ffff; font-size: 60px; font-weight: bold;}
-                        </style>
-                        <text x="200px" y="900px" class="title1">${userNameSend}</text>
-                        <text x="800px" y="900px" class="title1">${userNameReceive}</text>
-                        <text x="400px" y="1300px" class="title2">CHÚC MỪNG</text>
-                        <text x="200px" y="1500px" class="title3">${ok}</text>
-                        <text x="200px" y="1600px" class="title3">message : ${pointMessage}</text>
-                    </svg>`);
-
-                await sharp('./public/image/body.jpg')
-                    .composite([
-                        { input: `./public/image/crop/${fromIdSend}.jpg`, left: 100, top: 400 },
-                        { input: `./public/image/crop/${fromIdReceive}.jpg`, left: 780, top: 400 },
-                        { input: text }
-                    ])
-                    .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+                console.log('run')
+                await this.mergeText(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date, userNameSend)
             }
         } catch (err) {
             console.log("err ", err.message)
