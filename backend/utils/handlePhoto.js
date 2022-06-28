@@ -120,6 +120,7 @@ class Photo {
             if (checkReceive === true && checkSend === true) {
                 console.log('run')
                 await this.mergeText(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date, userNameSend)
+                return 0
             }
         } catch (err) {
             console.log("err ", err.message)
