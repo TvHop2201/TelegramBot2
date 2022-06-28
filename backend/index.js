@@ -55,7 +55,5 @@ app.listen(process.env.PORT || 8000, () => {
 // }, 3000);
 
 //test
-const handlePhoto = require('./utils/handlePhoto')
-//handlePhoto.getProfilePhotoId(1232185869)
-handlePhoto.compoundPhoto(546610082, 204262743, 'Hưng Lê', 10, 'tặng điểm ok', Date.now())
+
 
