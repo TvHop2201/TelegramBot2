@@ -147,15 +147,33 @@ class Photo {
             await this.cropPhoto1(fromIdReceive)
         }
         //add text
-        let ok = `${userNameReceive} đã nhận được ${pointChange}`
+        let tspan1 = `<tspan class="tspan1" >${pointChange}</tspan>`
+        let tspan2 = `<tspan class="tspan2" >${userNameSend}</tspan>`
+        let tspan3 = `<tspan class="tspan2" >${userNameReceive}</tspan>`
+        let messageText1 = `"${pointMessage}"`
+        let messageText2 = ``
+        if (pointMessage.length >= 35) {
+            messageText1 = `"${pointMessage.substring(0, 35)}`
+            messageText2 = `${pointMessage.substring(0, 35)}"`
+        }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
                 <style>
-                    .title2 { fill: #ffff; font-size: 200px; font-weight: bold;}
+                    @font-face {
+                        font-family: font;
+                        src: url(public/font/font.tff);
+                    }
+                    svg{
+                        font-family: font, fallBackFonts, sans-serif;
+                    }
+                    .title2 { fill: #ffff; font-size: 200px;}
                     .title3 { fill: #ffff; font-size: 190px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
                 </style>
-                <text x="50%" y="3500px" class="title3" dominant-baseline="middle" text-anchor="middle">${ok}  điểm từ ${userNameSend}</text>
-                <text x="600px" y="4000px" class="title3">"${pointMessage}"</text>
+                <text x="50%" y="3500px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="50%" y="3900px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText1}</text>
+                <text x="50%" y="4100px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText2}</text>
             </svg>`);
 
         await sharp('./public/image/body1.png')
@@ -199,15 +217,33 @@ class Photo {
             await this.cropPhoto22(fromIdReceive)
         }
         //add text
-        let ok = `${userNameReceive} đã nhận được ${pointChange}`
+        let tspan1 = `<tspan class="tspan1" >${pointChange}</tspan>`
+        let tspan2 = `<tspan class="tspan2" >${userNameSend}</tspan>`
+        let tspan3 = `<tspan class="tspan2" >${userNameReceive}</tspan>`
+        let messageText1 = `"${pointMessage}"`
+        let messageText2 = ``
+        if (pointMessage.length >= 35) {
+            messageText1 = `"${pointMessage.substring(0, 35)}`
+            messageText2 = `${pointMessage.substring(0, 35)}"`
+        }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
                 <style>
-                    .title2 { fill: #ffff; font-size: 200px; font-weight: bold;}
+                    @font-face {
+                        font-family: font;
+                        src: url(public/font/font.tff);
+                    }
+                    svg{
+                        font-family: font, fallBackFonts, sans-serif;
+                    }
+                    .title2 { fill: #ffff; font-size: 200px;}
                     .title3 { fill: #ffff; font-size: 190px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
                 </style>
-                <text x="50%" y="4100px" class="title3" dominant-baseline="middle" text-anchor="middle">${ok}  điểm từ ${userNameSend}</text>
-                <text x="600px" y="4400px" class="title3">"${pointMessage}"</text>
+                <text x="50%" y="4100px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="50%" y="4400px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText1}</text>
+                <text x="50%" y="4600px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText2}</text>
             </svg>`);
 
         await sharp('./public/image/body2.png')
@@ -252,20 +288,122 @@ class Photo {
             await this.cropPhoto3(fromIdReceive)
         }
         //add text
-        let ok = `${userNameReceive} đã nhận được ${pointChange}`
+        let tspan1 = `<tspan class="tspan1" >${pointChange}</tspan>`
+        let tspan2 = `<tspan class="tspan2" >${userNameSend}</tspan>`
+        let tspan3 = `<tspan class="tspan2" >${userNameReceive}</tspan>`
+        let messageText = `${pointMessage}`
+        let messageText1 = ``
+        let messageText2 = ``
+        let messageText3 = ``
+        if (pointMessage.length >= 25) {
+            messageText1 = `${pointMessage.substring(0, 25)}`
+            messageText2 = `${pointMessage.substring(25, 50)}`
+            messageText3 = `${pointMessage.substring(50)}`
+        }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
                 <style>
-                    .title2 { fill: #ffff; font-size: 200px; font-weight: bold;}
-                    .title3 { fill: #ffff; font-size: 190px; font-weight: bold;}
+                    @font-face {
+                        font-family: font;
+                        src: url(public/font/font.tff);
+                    }
+                    svg{
+                        font-family: font, fallBackFonts, sans-serif;
+                    }
+                    .title2 { fill: #ffff; font-size: 200px;}
+                    .title3 { fill: #fde047; font-size: 140px; font-weight: bold;}
+                    .title4 { fill: #ffff; font-size: 210px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
                 </style>
-                <text x="50%" y="4200px" class="title3" dominant-baseline="middle" text-anchor="middle">${ok}  điểm từ ${userNameSend}</text>
-                <text x="1710px" y="1300px" class="title3">"${pointMessage}"</text>
-                <text x="520px" y="2200px" class="title3">${userNameSend}</text>
-                <text x="3900px" y="2950px" class="title3">${userNameReceive}</text>
+                <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="2510px" y="1290px" class="title3" text-anchor="middle">${messageText1}</text>
+                <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText2}</text>
+                <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText}</text>
+                <text x="2510px" y="1590px" class="title3" text-anchor="middle">${messageText3}</text>
+                <text x="750px" y="2200px" class="title4" text-anchor="middle">${userNameSend}</text>
+                <text x="4220px" y="2950px" class="title4" text-anchor="middle">${userNameReceive}</text>
             </svg>`);
 
         await sharp('./public/image/body3.png')
+            .composite([
+                { input: `./public/image/crop/${fromIdSend}_3.jpg`, left: 380, top: 1110 },
+                { input: `./public/image/crop/${fromIdReceive}_3.jpg`, left: 3825, top: 1850 },
+                { input: text }
+            ])
+            .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+        //delete crop photo
+        let path = __dirname
+        path = path.split('/utils').join('')
+        fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_3.jpg`)
+        fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_3.jpg`)
+    }
+
+    async mergeText4(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
+        let userNameSend = await this.getName(fromIdSend)
+        //check photo
+        let checkPhotoSend = fs.existsSync(`./public/image/${fromIdSend}.jpg`)
+        let checkPhotoReceive = fs.existsSync(`./public/image/${fromIdReceive}.jpg`)
+        if (checkPhotoSend === false) {
+            await this.downloadPhoto(fromIdSend)
+            if (checkPhotoReceive === false) {
+                await this.downloadPhoto(fromIdReceive)
+            }
+        }
+        if (checkPhotoReceive === false) {
+            await this.downloadPhoto(fromIdReceive)
+        }
+        //check Crop
+        let checkCropSend = fs.existsSync(`./public/image/crop/${fromIdSend}_3.jpg`)
+        let checkCropReceive = fs.existsSync(`./public/image/crop/${fromIdReceive}_3.jpg`)
+        if (checkCropSend === false) {
+            await this.cropPhoto3(fromIdSend)
+            if (checkCropReceive === false) {
+                await this.cropPhoto3(fromIdReceive)
+            }
+        }
+        if (checkCropReceive === false) {
+            await this.cropPhoto3(fromIdReceive)
+        }
+        //add text
+        let tspan1 = `<tspan class="tspan1" >${pointChange}</tspan>`
+        let tspan2 = `<tspan class="tspan2" >${userNameSend}</tspan>`
+        let tspan3 = `<tspan class="tspan2" >${userNameReceive}</tspan>`
+        let messageText = `${pointMessage}`
+        let messageText1 = ''
+        let messageText2 = ``
+        let messageText3 = ``
+        if (pointMessage.length >= 25) {
+            messageText1 = `${pointMessage.substring(0, 25)}`
+            messageText2 = `${pointMessage.substring(25, 50)}`
+            messageText3 = `${pointMessage.substring(50)}`
+        }
+        let text = Buffer.from(
+            `<svg width="5000" height="5000">
+                <style>
+                    @font-face {
+                        font-family: font;
+                        src: url(public/font/font.tff);
+                    }
+                    svg{
+                        font-family: font, fallBackFonts, sans-serif;
+                    }
+                    .title2 { fill: #ffff; font-size: 200px;}
+                    .title3 { fill: #c2410c; font-size: 140px; font-weight: bold;}
+                    .title4 { fill: #ffff; font-size: 210px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                </style>
+                <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="2510px" y="1290px" class="title3" text-anchor="middle">${messageText1}</text>
+                <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText2}</text>
+                <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText}</text>
+                <text x="2510px" y="1590px" class="title3" text-anchor="middle">${messageText3}</text>
+                <text x="750px" y="2200px" class="title4" text-anchor="middle">${userNameSend}</text>
+                <text x="4220px" y="2950px" class="title4" text-anchor="middle">${userNameReceive}</text>
+            </svg>`);
+
+        await sharp('./public/image/body4.png')
             .composite([
                 { input: `./public/image/crop/${fromIdSend}_3.jpg`, left: 380, top: 1110 },
                 { input: `./public/image/crop/${fromIdReceive}_3.jpg`, left: 3825, top: 1850 },
@@ -281,7 +419,7 @@ class Photo {
 
 
     async randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
-        let func = [0, 1, 2, 3]
+        let func = [0, 1, 2, 3, 4]
         let random = Math.floor(Math.random() * func.length)
         console.log(random, func[random])
         if (func[random] === 0) {
@@ -292,6 +430,8 @@ class Photo {
             await this.mergeText2(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         } else if (func[random] === 3) {
             await this.mergeText3(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
+        } else if (func[random] === 4) {
+            await this.mergeText4(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         }
     }
 
