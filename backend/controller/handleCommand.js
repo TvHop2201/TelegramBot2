@@ -13,6 +13,12 @@ const url4 = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 
 class HandleCommand {
     async command(text, chatId, fromId) {
+        let commandFull = ['start', 'hop', 'time', 'help', 'thank', 'point', 'gift', 'image', 'weather']
+        if (commandFull.indexOf(text.split(' ')[0]) === -1) {
+            let text = '<b> Wrong command !!!! </b>'
+            this.saveText(text)
+            return 0
+        }
         let commands = [
             {
                 "command": 'start',
@@ -49,18 +55,21 @@ class HandleCommand {
 
         if (text.split(' ')[0] === 'thank') {
             this.handleThankCommand(text, chatId, fromId)
-        } else if (text.split(' ')[0] === 'point') {
-            this.handlePointCommand(text, chatId)
-        } else if (text.split(' ')[0] === 'gift') {
-            this.handleGiftCommand(text, chatId, fromId)
-        } else if (text.split(' ')[0] === 'image') {
-            this.handleImageCommand(text, chatId)
-        } else if (text.split(' ')[0] === 'weather') {
-            this.handleWeatherCommand(text, chatId)
-        } else {
-            let text = `<b> wrong command </b>`
-            this.sendText(text)
         }
+        if (text.split(' ')[0] === 'point') {
+            this.handlePointCommand(text, chatId)
+        }
+        if (text.split(' ')[0] === 'gift') {
+            this.handleGiftCommand(text, chatId, fromId)
+        }
+        if (text.split(' ')[0] === 'image') {
+            this.handleImageCommand(text, chatId)
+        }
+        if (text.split(' ')[0] === 'weather') {
+            this.handleWeatherCommand(text, chatId)
+        }
+
+
     }
 
     async handleThankCommand(text, chatId, fromId111) {
