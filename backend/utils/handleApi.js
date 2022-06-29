@@ -61,7 +61,6 @@ exports.fetchApi = async () => {
                             userName: userName
                         })
                     }
-
                     if (text.charAt[0] === '/') {
                         let textNew = text.split('/')
                         handleCommand.command(textNew[1], chatId, fromId)

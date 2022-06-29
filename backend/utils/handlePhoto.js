@@ -152,9 +152,10 @@ class Photo {
         let tspan3 = `<tspan class="tspan2" >${userNameReceive}</tspan>`
         let messageText1 = `"${pointMessage}"`
         let messageText2 = ``
-        if (pointMessage.length >= 35) {
-            messageText1 = `"${pointMessage.substring(0, 35)}`
-            messageText2 = `${pointMessage.substring(35)}"`
+        let pointMessageText = pointMessage.split(' ')
+        if (pointMessageText.length >= 9) {
+            messageText1 = `"${pointMessageText.slice(0, 9).join(' ')}`
+            messageText2 = `${pointMessageText.slice(9, pointMessageText.length).join(' ')}"`
         }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
@@ -222,9 +223,10 @@ class Photo {
         let tspan3 = `<tspan class="tspan2" >${userNameReceive}</tspan>`
         let messageText1 = `"${pointMessage}"`
         let messageText2 = ``
-        if (pointMessage.length >= 35) {
-            messageText1 = `"${pointMessage.substring(0, 35)}`
-            messageText2 = `${pointMessage.substring(35)}"`
+        let pointMessageText = pointMessage.split(' ')
+        if (pointMessageText.length >= 9) {
+            messageText1 = `"${pointMessageText.slice(0, 9).join(' ')}`
+            messageText2 = `${pointMessageText.slice(9, pointMessageText.length).join(' ')}"`
         }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
@@ -295,10 +297,11 @@ class Photo {
         let messageText1 = ``
         let messageText2 = ``
         let messageText3 = ``
-        if (pointMessage.length >= 25) {
-            messageText1 = `${pointMessage.substring(0, 25)}`
-            messageText2 = `${pointMessage.substring(25, 50)}`
-            messageText3 = `${pointMessage.substring(50)}`
+        let pointMessageText = pointMessage.split(' ')
+        if (pointMessageText.length >= 5) {
+            messageText1 = pointMessageText.slice(0, 5).join(' ')
+            messageText2 = pointMessageText.slice(5, 10).join(' ')
+            messageText3 = pointMessageText.slice(10, pointMessageText.length).join(' ')
             messageText = ''
         }
         let text = Buffer.from(
@@ -312,7 +315,7 @@ class Photo {
                         font-family: font, fallBackFonts, sans-serif;
                     }
                     .title2 { fill: #ffff; font-size: 170px;}
-                    .title3 { fill: #fde047; font-size: 140px; font-weight: bold;}
+                    .title3 { fill: #fde047; font-size: 120px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
                     .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
@@ -371,15 +374,17 @@ class Photo {
         let tspan2 = `<tspan class="tspan2" >${userNameSend}</tspan>`
         let tspan3 = `<tspan class="tspan2" >${userNameReceive}</tspan>`
         let messageText = `${pointMessage}`
-        let messageText1 = ''
+        let messageText1 = ``
         let messageText2 = ``
         let messageText3 = ``
-        if (pointMessage.length >= 25) {
-            messageText1 = `${pointMessage.substring(0, 25)}`
-            messageText2 = `${pointMessage.substring(25, 50)}`
-            messageText3 = `${pointMessage.substring(50)}`
+        let pointMessageText = pointMessage.split(' ')
+        if (pointMessageText.length >= 5) {
+            messageText1 = pointMessageText.slice(0, 5).join(' ')
+            messageText2 = pointMessageText.slice(5, 10).join(' ')
+            messageText3 = pointMessageText.slice(10, pointMessageText.length).join(' ')
             messageText = ''
         }
+        let resText = '<text x="500px" y="500px">:))</text> '
         let text = Buffer.from(
             `<svg width="5000" height="5000">
                 <style>
@@ -391,7 +396,7 @@ class Photo {
                         font-family: font, fallBackFonts, sans-serif;
                     }
                     .title2 { fill: #ffff; font-size: 170px;}
-                    .title3 { fill: #b91c1c; font-size: 140px; font-weight: bold;}
+                    .title3 { fill: #b91c1c; font-size: 120px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
                     .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
@@ -403,6 +408,7 @@ class Photo {
                 <text x="2510px" y="1590px" class="title3" text-anchor="middle">${messageText3}</text>
                 <text x="750px" y="2200px" class="title4" text-anchor="middle">${userNameSend}</text>
                 <text x="4220px" y="2950px" class="title4" text-anchor="middle">${userNameReceive}</text>
+                ${resText}
             </svg>`);
 
         await sharp('./public/image/body4.png')

@@ -15,9 +15,8 @@ class HandleCommand {
     async command(text, chatId, fromId) {
         let commandFull = ['start', 'hop', 'time', 'help', 'thank', 'point', 'gift', 'image', 'weather']
         if (commandFull.indexOf(text.split(' ')[0]) === -1) {
-            let text = '<b> Wrong command !!!! </b>'
-            this.saveText(text)
-            return 0
+            let textA = '<b> Wrong command !!!! </b>'
+            this.sendText(textA, chatId)
         }
         let commands = [
             {
