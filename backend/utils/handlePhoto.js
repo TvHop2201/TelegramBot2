@@ -168,7 +168,7 @@ class Photo {
                     }
                     .title2 { fill: #ffff; font-size: 170px;}
                     .title3 { fill: #ffff; font-size: 180px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
                 </style>
                 <text x="50%" y="3500px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
@@ -238,7 +238,7 @@ class Photo {
                     }
                     .title2 { fill: #ffff; font-size: 170px;}
                     .title3 { fill: #ffff; font-size: 180px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
                 </style>
                 <text x="50%" y="4100px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
@@ -314,7 +314,7 @@ class Photo {
                     .title2 { fill: #ffff; font-size: 170px;}
                     .title3 { fill: #fde047; font-size: 140px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
                 </style>
                 <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
@@ -393,7 +393,7 @@ class Photo {
                     .title2 { fill: #ffff; font-size: 170px;}
                     .title3 { fill: #b91c1c; font-size: 140px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
                 </style>
                 <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
