@@ -53,7 +53,6 @@ class HandleWebhook {
                             userName: userName
                         })
                     }
-
                     if (text[0] === '/') {
                         let textNew = text.split('/')
                         handleCommand.command(textNew[1], chatId, fromId)

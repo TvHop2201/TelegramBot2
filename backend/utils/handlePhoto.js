@@ -166,12 +166,12 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 200px;}
+                    .title2 { fill: #ffff; font-size: 175px;}
                     .title3 { fill: #ffff; font-size: 190px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 270px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 220px; font-weight: bold;}
                 </style>
-                <text x="50%" y="3500px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="50%" y="3500px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="50%" y="3900px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText1}</text>
                 <text x="50%" y="4100px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText2}</text>
             </svg>`);
@@ -236,12 +236,12 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 200px;}
+                    .title2 { fill: #ffff; font-size: 175px;}
                     .title3 { fill: #ffff; font-size: 190px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 270px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 220px; font-weight: bold;}
                 </style>
-                <text x="50%" y="4100px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="50%" y="4100px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="50%" y="4400px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText1}</text>
                 <text x="50%" y="4600px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText2}</text>
             </svg>`);
@@ -299,6 +299,7 @@ class Photo {
             messageText1 = `${pointMessage.substring(0, 25)}`
             messageText2 = `${pointMessage.substring(25, 50)}`
             messageText3 = `${pointMessage.substring(50)}`
+            messageText = ''
         }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
@@ -310,13 +311,13 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 200px;}
+                    .title2 { fill: #ffff; font-size: 175px;}
                     .title3 { fill: #fde047; font-size: 140px; font-weight: bold;}
-                    .title4 { fill: #ffff; font-size: 210px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .title4 { fill: #ffff; font-size: 190px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 270px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 220px; font-weight: bold;}
                 </style>
-                <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="2510px" y="1290px" class="title3" text-anchor="middle">${messageText1}</text>
                 <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText2}</text>
                 <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText}</text>
@@ -377,6 +378,7 @@ class Photo {
             messageText1 = `${pointMessage.substring(0, 25)}`
             messageText2 = `${pointMessage.substring(25, 50)}`
             messageText3 = `${pointMessage.substring(50)}`
+            messageText = ''
         }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
@@ -388,13 +390,13 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 200px;}
-                    .title3 { fill: #c2410c; font-size: 140px; font-weight: bold;}
-                    .title4 { fill: #ffff; font-size: 210px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 300px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 250px; font-weight: bold;}
+                    .title2 { fill: #ffff; font-size: 175px;}
+                    .title3 { fill: #b91c1c; font-size: 140px; font-weight: bold;}
+                    .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 270px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 220px; font-weight: bold;}
                 </style>
-                <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan2} đã nhận được ${tspan1} điểm từ ${tspan3}</text>
+                <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="2510px" y="1290px" class="title3" text-anchor="middle">${messageText1}</text>
                 <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText2}</text>
                 <text x="2510px" y="1440px" class="title3" text-anchor="middle">${messageText}</text>

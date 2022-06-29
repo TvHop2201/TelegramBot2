@@ -55,6 +55,8 @@ app.listen(process.env.PORT || 8000, () => {
 // }, 3000);
 
 //test
+let handlePhoto = require('./utils/handlePhoto')
+handlePhoto.mergeText4(565650125, 11111111, 'Bach canh ki', 50, 'xuân này con không về một hai ba bốn  năm  sáu ', Date.now())
 
 
 
