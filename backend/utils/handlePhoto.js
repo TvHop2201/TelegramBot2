@@ -154,7 +154,7 @@ class Photo {
         let messageText2 = ``
         if (pointMessage.length >= 35) {
             messageText1 = `"${pointMessage.substring(0, 35)}`
-            messageText2 = `${pointMessage.substring(0, 35)}"`
+            messageText2 = `${pointMessage.substring(35)}"`
         }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
@@ -224,7 +224,7 @@ class Photo {
         let messageText2 = ``
         if (pointMessage.length >= 35) {
             messageText1 = `"${pointMessage.substring(0, 35)}`
-            messageText2 = `${pointMessage.substring(0, 35)}"`
+            messageText2 = `${pointMessage.substring(35)}"`
         }
         let text = Buffer.from(
             `<svg width="5000" height="5000">
