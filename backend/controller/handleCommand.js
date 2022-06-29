@@ -83,7 +83,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!!!</b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.point >= 1) {
+                if (data.fromId === fromId111) {
+                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.point >= 0) {
                     await pointMessageModel.create({
                         idUserReceive: data.fromId,
                         idUserSendGift: fromId111,
@@ -103,7 +107,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!!!</b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.point >= 1) {
+                if (data.fromId === fromId111) {
+                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.point >= 0) {
                     await pointMessageModel.create({
                         idUserReceive: data.fromId,
                         idUserSendGift: fromId111,
@@ -190,7 +198,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!! </b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.point >= numPoint) {
+                if (data.fromId === fromId111) {
+                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.point >= 0) {
                     await pointMessageModel.create({
                         idUserReceive: data.fromId,
                         idUserSendGift: fromId111,
@@ -210,7 +222,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!! </b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.point >= numPoint) {
+                if (data.fromId === fromId111) {
+                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.point >= numPoint) {
                     await pointMessageModel.create({
                         idUserReceive: data.fromId,
                         idUserSendGift: fromId111,
@@ -276,7 +292,7 @@ class HandleCommand {
 
     async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
         let date = Date.now()
-        await handlePhoto.compoundPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
+        await handlePhoto.randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
             .then(() => {
                 let path = __dirname
