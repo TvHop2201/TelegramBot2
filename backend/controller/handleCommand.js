@@ -31,7 +31,6 @@ class HandleCommand {
                 "description": `<b>Danh Sách Command</b>\n <b>/thank <i> _user _message </i> : Tặng 1 điểm</b>\n <b>/gift <i>_user _point _message </i>: Tặng nhiều điểm</b>`
                     + `\n<b>/point<i> _user</i> : Xem nhật ký cập nhật điểm và message của user</b> \n<b>/point : Xem điểm của top user điểm cao</b>`
                     + `\n<b>/weather : xem thời tiết tại Vinh</b> \n<b>/weather <i>_location</i>: Xem thời tiết tại location</b>`
-                    + `\n<b>/thank @all , /gift @all <i>_point</i> : tặng điểm cho tất cả </b>`
             }
 
         ]
@@ -50,18 +49,17 @@ class HandleCommand {
 
         if (text.split(' ')[0] === 'thank') {
             this.handleThankCommand(text, chatId, fromId)
-        }
-        if (text.split(' ')[0] === 'point') {
+        } else if (text.split(' ')[0] === 'point') {
             this.handlePointCommand(text, chatId)
-        }
-        if (text.split(' ')[0] === 'gift') {
+        } else if (text.split(' ')[0] === 'gift') {
             this.handleGiftCommand(text, chatId, fromId)
-        }
-        if (text.split(' ')[0] === 'image') {
+        } else if (text.split(' ')[0] === 'image') {
             this.handleImageCommand(text, chatId)
-        }
-        if (text.split(' ')[0] === 'weather') {
+        } else if (text.split(' ')[0] === 'weather') {
             this.handleWeatherCommand(text, chatId)
+        } else {
+            let text = `<b> wrong command </b>`
+            this.sendText(text)
         }
     }
 
