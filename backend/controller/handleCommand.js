@@ -147,9 +147,10 @@ class HandleCommand {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(10)
                     let text = '<b>message</b>\n'
                     for (const index of data2) {
-                        text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
+                        let message = index.message.replace(/</g, ' ')
+                        message = message.replace(/>/g, ' ')
+                        text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + message + "\n"
                     }
-                    text.replace(/</g, '&lt;')
                     this.sendText(text, chatId)
                 }
 
@@ -162,9 +163,10 @@ class HandleCommand {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(15)
                     let text = '<b>message</b>\n'
                     for (const index of data2) {
-                        text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
+                        let message = index.message.replace(/</g, ' ')
+                        message = message.replace(/>/g, ' ')
+                        text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + message + "\n"
                     }
-                    text.replace(/</g, '&lt;')
                     this.sendText(text, chatId)
                 }
             }
