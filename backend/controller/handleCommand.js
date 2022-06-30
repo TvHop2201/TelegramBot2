@@ -147,8 +147,8 @@ class HandleCommand {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(10)
                     let text = '<b>message</b>\n'
                     for (const index of data2) {
-                        let message = index.message.replace(/</g, ' ')
-                        message = message.replace(/>/g, ' ')
+                        let message = index.message.replace(/(<([^>]+)>)/gi, "")
+                        message = message.replace(/</g, "")
                         text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + message + "\n"
                     }
                     this.sendText(text, chatId)
@@ -163,8 +163,8 @@ class HandleCommand {
                     let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }).limit(15)
                     let text = '<b>message</b>\n'
                     for (const index of data2) {
-                        let message = index.message.replace(/</g, ' ')
-                        message = message.replace(/>/g, ' ')
+                        let message = index.message.replace(/(<([^>]+)>)/gi, "")
+                        message = message.replace(/</g, "")
                         text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + message + "\n"
                     }
                     this.sendText(text, chatId)
@@ -289,7 +289,9 @@ class HandleCommand {
 
     async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
         let date = Date.now()
-        await handlePhoto.randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
+        let fixPointMessage = pointMessage.replace(/(<([^>]+)>)/gi, "")
+        fixPointMessage = fixPointMessage.replace(/</g, "")
+        await handlePhoto.randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, fixPointMessage, date)
         axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
             .then(() => {
                 let path = __dirname
