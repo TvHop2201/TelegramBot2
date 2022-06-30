@@ -149,6 +149,7 @@ class HandleCommand {
                     for (const index of data2) {
                         text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
+                    text.replace(/</g, '&lt;')
                     this.sendText(text, chatId)
                 }
 
@@ -179,9 +180,10 @@ class HandleCommand {
             this.sendText(text, chatId)
             return 0;
         }
-        if (numPoint > process.env.MAXPOINT) {
-            let text = `<b>Không thể tặng hơn ${process.env.MAXPOINT} điểm </b>`
+        if (numPoint > 50) {
+            let text = `<b>Không thể tặng hơn 50 điểm </b>`
             this.sendText(text, chatId)
+            return 0
         }
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
