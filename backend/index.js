@@ -55,22 +55,3 @@ app.listen(process.env.PORT || 8000, () => {
 // }, 3000);
 
 //test
-// let userModel = require('./model/user')
-// let pointMessageModel = require('./model/pointMessage')
-// const aa = async () => {
-//     let data = await userModel.findOne({ userName: 'bachcanhki' })
-//     console.log(data)
-//     if (!data) {
-//         let text = '<b>không tồn tại người dùng !!! </b>'
-//         console.log(text)
-//     } else {
-//         let data2 = await pointMessageModel.find({ idUserReceive: data.fromId }, { array_field: { $slice: -1 } }).limit(10)
-//         let text = '<b>message</b>\n'
-//         for (const index of data2) {
-//             text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
-//         }
-        
-//         console.log(text)
-//     }
-// }
-// aa()
