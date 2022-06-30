@@ -164,6 +164,7 @@ class HandleCommand {
                     for (const index of data2) {
                         text = text + 'add : ' + index.pointChange + ' - ' + new Date(index.Date).toLocaleDateString() + ' : ' + index.message + "\n"
                     }
+                    text.replace(/</g, '&lt;')
                     this.sendText(text, chatId)
                 }
             }
