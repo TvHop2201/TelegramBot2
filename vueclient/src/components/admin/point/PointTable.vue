@@ -36,6 +36,7 @@
                             :total="total"
                             :key="total"
                             :page-size="10"
+                            @current-change="changePage"
                             @prev-click="page = page-1"
                             @next-click="page=page+1"
                             >
@@ -68,6 +69,9 @@ export default {
     methods:{
       exitDetail (){
         this.deatailShow=false
+      },
+      changePage(value){
+           this.page = value
       }
     },
     watch: {

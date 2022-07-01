@@ -38,9 +38,10 @@
                     <el-pagination
                             background
                             layout="prev, pager, next"
-                            :total="total"
-                            :key="total"
+                            :total="10"
+                            :key="total"    
                             :page-size="5"
+                            @current-change="changePage"
                             @prev-click="page = page-1"
                             @next-click="page=page+1"
                             >
@@ -110,6 +111,9 @@ export default {
                 return 0
             }
         },
+        changePage(value){
+           this.page = value
+        }
         
     },
     watch: {

@@ -4,9 +4,9 @@
           <SideBar />
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Admin</h1>
+          <h4 >xin chào <span class="h2">{{admin}}</span></h4>
               <div class="btn-toolbar mb-2 mb-md-0">
-              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">Logout</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" @click="logout()" >Logout</button>
               </div>
         </div>
         <div>
@@ -20,17 +20,29 @@
 
 <script>
 import SideBar from './SideBar.vue'
-//import PointAdmin from './point/PointAdmin.vue'
+import jwtDecode from 'jwt-decode'
 export default {
   components:{
     SideBar,
-    //PointAdmin
+  },
+  data(){
+    return {
+        admin : 'ADMIN'
+    }
   },
   created(){
-    
     if(this.$cookies.get('token') === null){
         alert('Vui Lòng Đăng Nhập !!!')
         window.location.href =process.env.VUE_APP_URL_CLIENT  
+    }else{
+        let token = this.$cookies.get('token')
+        this.admin = jwtDecode(token).username
+    }
+  },
+  methods:{
+    logout(){
+        this.$cookies.remove('token')
+        window.location.href =process.env.VUE_APP_URL_CLIENT 
     }
   }
 }
