@@ -23,9 +23,9 @@
                         </div>
                         <div class='mx-auto col text-center mt-5'>
                             <button type="button" class='btn btn-outline-success mx-5 px-5' @click="update()">Cập Nhật</button>
-                            <button type="button" class='btn btn-outline-warning mx-5 px-5'>Xóa</button>
+                            <button type="button" class='btn btn-outline-warning mx-5 px-5' @click="remove(okData._id)">Xóa</button>
                         </div>
-                        {{point}}
+
                     </form>
                 </div>
             </div >
@@ -55,13 +55,22 @@ export default {
                 lastName: this.lastName,
                 point : this.point,
             })
-            if(data1.data.succes){
+            if(data1.data.success){
                 alert("Cập Nhật Thành Công !!!!")
+                this.$emit('close')
             }else{
                 alert("Thất Bại !!!")
+                this.$emit('close')
             }
+        
+        },
+        async remove(id){
+            confirm(`bạn có muốn xóa ${this.okData.userName ? this.okData.userName: this.okData.firstName}`)
+            console.log(id)
+            this.$emit('close')
         }
     },
+    
     watch : {
         okData (){
             this.id=this.okData._id,
