@@ -25,8 +25,14 @@ export default {
   components:{
     SideBar,
     //PointAdmin
+  },
+  created(){
+    
+    if(this.$cookies.get('token') === null){
+        alert('Vui Lòng Đăng Nhập !!!')
+        window.location.href =process.env.VUE_APP_URL_CLIENT  
+    }
   }
-
 }
 </script>
 

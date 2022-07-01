@@ -29,9 +29,7 @@ function websocket() {
     }
     io.on('connection', async (socket) => {
         socket.on('chatId', async (data) => {
-            console.log('User connect : ', socket.id)
             autoEmit(socket, data)
-
         })
         socket.on('disconnect', () => {
             console.log(`User disconnect : ${socket.id}`)

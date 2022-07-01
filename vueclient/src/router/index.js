@@ -6,14 +6,14 @@ import PointAdmin from '../components/admin/point/PointAdmin.vue'
 import UserAdmin from '../components/admin/user/UserAdmin.vue'
 import DashBoard from '../components/admin/dashboard/DashBoard.vue'
 
-import DashboardCp from '../components/Home/DashboardCp.vue'
+import Login from '../components/login/LoginA.vue'
 
 Vue.use(Router)
 const router = new Router({
     routes: [
         {
             path: '/',
-            component: DashboardCp
+            component: Login
 
         }, {
             path: '/admin',

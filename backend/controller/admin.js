@@ -5,7 +5,6 @@ class Admin {
     //user
     async getUser(req, res) {
         let { page, limit } = req.query
-
         const data = await userModel.find().skip((limit * page) - limit).limit(limit)
         const total = await userModel.find().count()
         if (data) {
@@ -20,37 +19,6 @@ class Admin {
             })
         }
     }
-
-    async getOneUserByUserName(req, res) {
-        let userName = req.params.userName
-        const data = await userModel.findOne({ userName: userName })
-        if (data) {
-            res.json({
-                success: true,
-                data: data
-            })
-        } else {
-            res.json({
-                success: false,
-            })
-        }
-
-    }
-
-    async getAllUser(req, res) {
-        const data = await userModel.find()
-        if (data) {
-            res.json({
-                success: true,
-                data: data
-            })
-        } else {
-            res.json({
-                success: false,
-            })
-        }
-    }
-
     async updateUser(req, res) {
         let id = req.body._id
         let fromId = req.body.fromId
@@ -80,7 +48,6 @@ class Admin {
         }
 
     }
-
     async deleteUser(req, res) {
         let id = req.params.id
         await userModel.deleteOne({ _id: id })
@@ -88,32 +55,6 @@ class Admin {
             success: true
         })
     }
-
-    async createUser(req, res) {
-        let fromId = 222222228
-        let firstName = 'test 08'
-        let lastName = 'test 08'
-        let userName = 'test08'
-        let point = 10
-        const data = await userModel.create({
-            fromId: fromId,
-            firstName: firstName,
-            lastName: lastName,
-            userName: userName,
-            point: point
-        })
-        if (data) {
-            res.json({
-                success: true,
-                data: data
-            })
-        } else {
-            res.json({
-                success: false,
-            })
-        }
-    }
-
     async getCharUser(req, res) {
 
         const data = await userModel.aggregate([
@@ -143,7 +84,6 @@ class Admin {
             })
         }
     }
-
     async findModeTableUser(req, res) {
         let { key, page, limit } = req.query
         let data
@@ -181,7 +121,6 @@ class Admin {
             })
         }
     }
-
     //point
     async getChartPoint(req, res) {
         const data = await userModel.find({}, {
@@ -201,7 +140,6 @@ class Admin {
         }
 
     }
-
     async getPointMessage(req, res) {
         let { page, limit } = req.query
         const datas = await pointMessageModel.find().skip((limit * page) - limit).sort({ date: -1 }).limit(limit)
@@ -262,10 +200,6 @@ class Admin {
             })
         }
     }
-
-
-
-
 
 }
 

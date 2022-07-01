@@ -133,7 +133,10 @@ class HandleCommand {
             let pData = await userModel.find().sort({ point: -1 }).limit(10)
             let text = '<b>Danh Sách Điểm Các Thành Viên</b>\n\n '
             for (const index of pData) {
-                text = text + `<b><i>${index.userName}</i></b>` + " - " + index.firstName + " : <b>" + index.point + "</b>\n"
+                let text1 = index.userName ? ` <b><i>${index.userName}</i></b>` + " - " : ''
+                let text2 = index.firstName ? ` <b><i>${index.firstName}</i></b>` + " - " : ''
+                let text3 = index.lastName ? ` <b><i>${index.lastName}</i></b>` + " - " : ''
+                text = text + text1 + text2 + text3 + " : <b>" + index.point + "</b>\n"
             }
             this.sendText(text, chatId)
         } else {
@@ -246,7 +249,6 @@ class HandleCommand {
     }
     async handleWeatherCommand(text, chatId) {
         let [weatherCommand, ...location] = text.split(' ')
-        console.log(location)
         const weatherAppid = 'b1ac492954c5e04bdb2ff86ca85b8de7';
         if (location.length !== 0) {
             location = encodeURI(location.join(' '));

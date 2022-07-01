@@ -315,7 +315,7 @@ class Photo {
                         font-family: font, fallBackFonts, sans-serif;
                     }
                     .title2 { fill: #ffff; font-size: 170px;}
-                    .title3 { fill: #fde047; font-size: 120px; font-weight: bold;}
+                    .title3 { fill: #FFF810; font-size: 120px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
                     .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
@@ -396,7 +396,7 @@ class Photo {
                         font-family: font, fallBackFonts, sans-serif;
                     }
                     .title2 { fill: #ffff; font-size: 170px;}
-                    .title3 { fill: #b91c1c; font-size: 120px; font-weight: bold;}
+                    .title3 { fill: #BC5404; font-size: 120px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
                     .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
                     .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
@@ -429,7 +429,6 @@ class Photo {
     async randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
         let func = [0, 1, 2, 3, 4]
         let random = Math.floor(Math.random() * func.length)
-        console.log(random, func[random])
         if (func[random] === 0) {
             await this.mergeText1(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         } else if (func[random] === 1) {
