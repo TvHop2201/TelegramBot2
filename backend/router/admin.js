@@ -10,6 +10,8 @@ Route.post('/updateUser', adminController.updateUser)
 //point
 Route.get('/getChartPoint', adminController.getChartPoint)
 Route.get('/getPointMessage/', adminController.getPointMessage)
+Route.post('/updatePointMessage', adminController.updatePointMessage)
+Route.get('/deletePointMessage', adminController.deletePointMessage)
 //dashboard
 Route.get('/getChartUserWithTime/', adminController.getChartUserWithTime)
 

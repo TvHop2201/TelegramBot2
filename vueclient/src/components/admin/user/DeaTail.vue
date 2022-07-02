@@ -1,39 +1,40 @@
 <template>
-  <div class='popup'>
-        <div class='popup_inner' >
-                <button class='btn btn-outline-danger float-right mt-3 mx-3' @click="$emit('close')">X</button>
-                <div class='container'>
-                    <h3 class='text-center'>{{okData.userName||'userName'}}</h3>
-                    <form class='mx-5'>
-                        <div class="form-group m-2">
-                            <label>userName: </label>
-                            <input class="form-control" placeholder="userName" v-model="userName" />
-                        </div>
-                        <div class="form-group m-2">
-                            <label>firstName: </label>
-                            <input class="form-control" placeholder="firstName" v-model="firstName" />
-                        </div>
-                        <div class="form-group m-2">
-                            <label>lastName : </label>
-                            <input class="form-control" placeholder="lastName" v-model="lastName"  />
-                        </div>
-                        <div class="form-group m-2">
-                            <label>Point : </label>
-                            <input class="form-control" placeholder="point" v-model="point" />
-                        </div>
-                        <div class="form-group m-2">
-                            <label>create_at : </label>
-                            <input disabled class="form-control" placeholder="message" :value="new Date(okData.create_at).toLocaleDateString()"  />
-                        </div>
-                        <div class='mx-auto col text-center mt-5'>
-                            <button type="button" class='btn btn-outline-success mx-5 px-5' @click="update()">Cập Nhật</button>
-                            <button type="button" class='btn btn-outline-warning mx-5 px-5' @click="remove(okData._id)">Xóa</button>
-                        </div>
-
-                    </form>
-                </div>
-            </div >
-        </div >
+    <transition name="tr">
+        <div class='popup'>
+              <div class='popup_inner' >
+                      <button class='btn btn-outline-danger float-right mt-3 mx-3' @click="$emit('close')">X</button>
+                      <div class='container'>
+                          <h3 class='text-center'>{{okData.userName||'userName'}}</h3>
+                          <form class='mx-5'>
+                              <div class="form-group m-2">
+                                  <label>userName: </label>
+                                  <input class="form-control" placeholder="userName" v-model="userName" />
+                              </div>
+                              <div class="form-group m-2">
+                                  <label>firstName: </label>
+                                  <input class="form-control" placeholder="firstName" v-model="firstName" />
+                              </div>
+                              <div class="form-group m-2">
+                                  <label>lastName : </label>
+                                  <input class="form-control" placeholder="lastName" v-model="lastName"  />
+                              </div>
+                              <div class="form-group m-2">
+                                  <label>Point : </label>
+                                  <input class="form-control" placeholder="point" v-model="point" />
+                              </div>
+                              <div class="form-group m-2">
+                                  <label>create_at : </label>
+                                  <input disabled class="form-control" placeholder="message" :value="new Date(okData.create_at).toLocaleDateString()"  />
+                              </div>
+                              <div class='mx-auto col text-center mt-5'>
+                                  <button type="button" class='btn btn-outline-success mx-5 px-5' @click="update()">Cập Nhật</button>
+                                  <button type="button" class='btn btn-outline-warning mx-5 px-5' @click="remove(okData._id)">Xóa</button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div >
+    </transition>
 </template>
 
 <script>
@@ -98,6 +99,7 @@ export default {
     bottom: 0;
     margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
+    transition: all 3s;
 }
 
 .popup_inner {
@@ -110,7 +112,18 @@ export default {
     margin: auto;
     background: white;
     overflow-y:auto;
+    transition: all 1s;
 }
+
+
+.tr-enter-active, .tr-leave-active {
+  transition: opacity 1s;
+}
+.tr-enter, .tr-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+  
+
   
 ::-webkit-scrollbar-track
 {

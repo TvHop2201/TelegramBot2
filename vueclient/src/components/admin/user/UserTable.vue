@@ -90,11 +90,11 @@ export default {
             this.deatailShow =!this.deatailShow
         },
         async closeDeatail(){
+            this.deatailShow = false
             this.loading = true
             let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
             this.dataok = data1.data.data
             this.total = data1.data.total
-            this.deatailShow = false
             this.loading = false
         },
         async filter(){

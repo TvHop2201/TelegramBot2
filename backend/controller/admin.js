@@ -162,9 +162,40 @@ class Admin {
             })
         }
     }
+    async updatePointMessage(req, res) {
+        let id = req.body.id
+        let pointChange = req.body.pointChange
+        let message = req.body.message
+        console.log('first', id)
+        let data = await pointMessageModel.updateOne({ _id: id }, {
+            pointChange: pointChange,
+            message: message
+        })
+        console.log(data)
+        if (data) {
+            res.json({
+                success: true,
+                data: data
+            })
+        } else {
+            res.json({
+                success: false
+            })
+        }
+    }
     async deletePointMessage(req, res) {
         let id = req.query.id
-        console.log(id)
+        let data = await pointMessageModel.deleteOne({ _id: id })
+        if (data.acknowledged) {
+            res.json({
+                success: true
+            })
+        } else {
+            res.json({
+                success: false
+            })
+        }
+
     }
     //dashboard
     async getChartUserWithTime(req, res) {

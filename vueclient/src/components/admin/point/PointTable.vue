@@ -28,7 +28,7 @@
                   </tr>
                 </tbody>
             </table>
-                        <DeaTail :okData="deatailData" @close="deatailShow = false" v-show="deatailShow"/>
+                        <DeaTail :okData="deatailData" @close="exitDeatail()" v-if="deatailShow"/>
             <div class='text-center' v-show="!deatailShow">
                 <div>
                     <el-pagination
@@ -75,7 +75,7 @@ export default {
         this.loading = false
     },
     methods:{
-      async exitDetail (){
+      async exitDeatail (){
         this.deatailShow=false
         this.loading = true
         let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=10`);
