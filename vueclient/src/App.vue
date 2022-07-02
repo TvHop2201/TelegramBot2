@@ -15,5 +15,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+body{
+     font-family: 'Quicksand';
+}
 </style>

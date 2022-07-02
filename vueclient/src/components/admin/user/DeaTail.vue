@@ -3,8 +3,12 @@
         <div class='popup_inner' >
                 <button class='btn btn-outline-danger float-right mt-3 mx-3' @click="$emit('close')">X</button>
                 <div class='container'>
-                    <h3 class='text-center'>{{okData.userName}}</h3>
+                    <h3 class='text-center'>{{okData.userName||'userName'}}</h3>
                     <form class='mx-5'>
+                        <div class="form-group m-2">
+                            <label>userName: </label>
+                            <input class="form-control" placeholder="userName" v-model="userName" />
+                        </div>
                         <div class="form-group m-2">
                             <label>firstName: </label>
                             <input class="form-control" placeholder="firstName" v-model="firstName" />
@@ -101,10 +105,32 @@ export default {
     position: absolute;
     left: 35%;
     right: 15%;
-    top: 25%;
-    bottom: 25%;
+    top: 15%;
+    bottom: 15%;
     margin: auto;
     background: white;
+    overflow-y:auto;
 }
+  
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 8px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 8px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: greenyellow;
+}
+
 
 </style>

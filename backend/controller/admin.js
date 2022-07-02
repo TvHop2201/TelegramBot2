@@ -90,7 +90,7 @@ class Admin {
         let total
         if (key == '') {
             key = new RegExp(`.*${key}.*`, "i")
-            data = await userModel.find().skip((limit * page) - limit).limit(limit)
+            data = await userModel.find().skip((limit * page) - limit).limit(limit).sort({ _id: -1 })
             total = await userModel.find().count()
         } else {
             key = new RegExp(`.*${key}.*`, "i")
@@ -142,7 +142,7 @@ class Admin {
     }
     async getPointMessage(req, res) {
         let { page, limit } = req.query
-        const datas = await pointMessageModel.find().skip((limit * page) - limit).sort({ date: -1 }).limit(limit)
+        const datas = await pointMessageModel.find().skip((limit * page) - limit).sort({ Date: -1 }).limit(limit)
         let result = []
         for (let data of datas) {
             let userReceive = await userModel.findOne({ fromId: data.idUserReceive }, { userName: 1, _id: -1, firstName: 1 })
@@ -161,6 +161,10 @@ class Admin {
                 success: false,
             })
         }
+    }
+    async deletePointMessage(req, res) {
+        let id = req.query.id
+        console.log(id)
     }
     //dashboard
     async getChartUserWithTime(req, res) {

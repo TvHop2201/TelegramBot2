@@ -1,5 +1,6 @@
 <template>
   <div class='container mt-5'>
+        <div v-show="!loading">
             <table class='table'>
                 <thead>
                     <tr>
@@ -30,7 +31,7 @@
                             <button class='btn btn-outline-success' @click="showDeatail(index)">Chi Tiết</button>
                         </td>
                     </tr>                   
-                        <DeaTail :okData="deatailData" @close="deatailShow = false" v-show="deatailShow"/>
+                        <DeaTail :okData="deatailData" @close="closeDeatail" v-show="deatailShow"/>
                 </tbody>
             </table>
             <div class=' text-center ' v-if="!deatailShow">
@@ -48,7 +49,11 @@
                     </el-pagination>
                 </div>
             </div>
-        </div >
+        </div>
+        <div class="loading text-center pt-5" v-show="loading" >
+            <img src="./loading.gif" class="pt-5 my-5" >
+        </div>
+    </div >
 </template>
 
 <script>
@@ -61,6 +66,7 @@ export default {
     data() {
         return {
             url: process.env.VUE_APP_URL,
+            loading:false,
             dataok: {},
             deatailData:{},
             page: 1,
@@ -72,21 +78,33 @@ export default {
         };
     },
     async created(){
+        this.loading = true
         let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
         this.dataok = data1.data.data
         this.total = data1.data.total
+        this.loading = false
     },
     methods:{
         showDeatail(index){
             this.deatailData = index
             this.deatailShow =!this.deatailShow
         },
+        async closeDeatail(){
+            this.loading = true
+            let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
+            this.dataok = data1.data.data
+            this.total = data1.data.total
+            this.deatailShow = false
+            this.loading = false
+        },
         async filter(){
+            this.loading = true
             if(this.userName !== ''){
                 this.page = 1
                 let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
                 this.total = data1.data.total
+                this.loading = false
                 return 0
             }
             if(this.firstName!== ''){
@@ -94,6 +112,7 @@ export default {
                 let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
                 this.total = data1.data.total
+                this.loading = false
                 return 0
             }
             if(this.lastName !== ''){
@@ -101,6 +120,7 @@ export default {
                 let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
                 this.total = data1.data.total
+                this.loading = false
                 return 0
             }
             if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
@@ -108,8 +128,10 @@ export default {
                 let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
                 this.dataok = data1.data.data
                 this.total = data1.data.total
+                this.loading = false
                 return 0
             }
+            
         },
         changePage(value){
            this.page = value
@@ -119,28 +141,33 @@ export default {
     watch: {
         async page(){
             if(this.page!==''){
+                this.loading = true
                 if(this.userName !== ''){
                     let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
                     this.total = data1.data.total
+                    this.loading = false
                     return 0
                 }
                 if(this.firstName!== ''){
                     let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
                     this.total = data1.data.total
+                    this.loading = false
                     return 0
                 }
                 if(this.lastName !== ''){
                     let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
                     this.total = data1.data.total
+                    this.loading = false
                     return 0
                 }
                 if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
                     let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=5`)
                     this.dataok = data1.data.data
                     this.total = data1.data.total
+                    this.loading = false
                     return 0
                 }
             }
