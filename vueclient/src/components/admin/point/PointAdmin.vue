@@ -4,8 +4,8 @@
       <button :class="{'btn-success':tableShow,'btn-outline-success':!tableShow}" class="btn mx-3" @click="showTable()">TABLE</button>
       <button :class="{'btn-success':chartShow,'btn-outline-success':!chartShow}" class="btn mx-3" @click="showChart()">CHART</button>
     </div>
-      <PointTable v-show="tableShow" />
-      <PointChart v-show="chartShow"/>
+      <PointTable v-if="tableShow" />
+      <PointChart v-if="chartShow"/>
   </div>
 </template>
 

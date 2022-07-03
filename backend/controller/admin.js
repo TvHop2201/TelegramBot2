@@ -56,7 +56,6 @@ class Admin {
         })
     }
     async getCharUser(req, res) {
-
         const data = await userModel.aggregate([
             { $match: { "create_at": { $gte: Date.now() - 10014800000, $lt: Date.now() } } },
             {
@@ -205,8 +204,8 @@ class Admin {
         if (firstMonth > lastMonth) {
             year = year + 1
         }
-        let first = new Date(2022, firstMonth, firstDay).getTime()
-        let last = new Date(year, lastMonth, lastDay).getTime()
+        let first = new Date(2022, firstMonth - 1, firstDay).getTime()
+        let last = new Date(year, lastMonth - 1, lastDay + 1).getTime()
 
         const data = await userModel.aggregate([
             { $match: { "create_at": { $gte: first, $lt: last } } },
@@ -224,6 +223,11 @@ class Admin {
                 }
             }
         ])
+        data.sort((a, b) => {
+            let adate = a._id.split('-')
+            let bdate = b._id.split('-')
+            return new Date(adate[2], adate[1], adate[0]) - new Date(bdate[2], bdate[1], bdate[0])
+        })
         if (data) {
             res.json({
                 success: true,
