@@ -8,6 +8,8 @@
                             <div class="card-header text-center m-3 h2 fw-bold">ĐĂNG NHẬP</div>
                             <div class="card-body p-5">
                                 <div>
+                                    <h6 class=" alert alert-danger" v-if="validate.username">username không được bỏ trống</h6>
+                                    <h6 class=" alert alert-danger" v-if="validate.password">password không được bỏ trống</h6>
                                     <div class="row mb-3">
                                         <label class="col-md-4 col-form-label text-md-end">username</label>
                                         <div class="col-md-6">
@@ -54,13 +56,29 @@ export default {
         return{
             username : '',
             password :'',
-            url :process.env.VUE_APP_URL
+            url :process.env.VUE_APP_URL,
+            validate :{
+                username:false,
+                password:false,
+            }
         }
     },
     methods:{
+        validation(){
+            if (this.username === '' || this.username.length <3){
+                this.validate.username = true
+                return
+            }
+            if (this.password === '' || this.password.length <3){
+                this.validate.password = true
+                return
+            }
+            this.validate.username = false
+            this.validate.password = false
+        },
         async login(){
-            if(this.username === ''||this.password ===''){
-                alert('Vui lòng nhập tất cả các trường !!!')
+            this.validation()
+            if(this.validate.username === true || this.validate.password === true){
                 return 0
             }
             let data1 = await axios.post(`${this.url}/account/login`,{
