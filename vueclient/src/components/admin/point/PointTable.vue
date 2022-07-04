@@ -30,18 +30,24 @@
             </table>
                         <DeaTail :okData="deatailData" @close="exitDeatail()" v-if="deatailShow"/>
             <div class='text-center' v-show="!deatailShow">
-                <div>
+                <div class="btn-group">
                     <el-pagination
                         background
                         layout="prev, pager, next"
                         :total="total"
                         :key="total"
-                        :page-size="10"
+                        :page-size="limit"
                         @current-change="changePage"
                         @prev-click="page = page-1"
                         @next-click="page=page+1"
                         >
                     </el-pagination>
+                    <select class="form-select" aria-label="Default select example" v-model="limit">
+                        <option selected value="5">5/page</option>
+                        <option value="10">10/page</option>
+                        <option value="15">15/page</option>
+                        <option value="20">20/page</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -62,6 +68,7 @@ export default {
             loading:false,
             dataok: {},
             page: 1,
+            limit :10,
             total:1,
             deatailShow: false,
             deatailData:{}
@@ -69,7 +76,7 @@ export default {
     },
     async created() {
         this.loading = true
-        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=10`);
+        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
         this.dataok = data1.data.data;
         this.total= data1.data.total
         this.loading = false
@@ -78,7 +85,7 @@ export default {
       async exitDeatail (){
         this.deatailShow=false
         this.loading = true
-        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=10`);
+        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
         this.dataok = data1.data.data;
         this.total= data1.data.total
         this.loading = false
@@ -95,7 +102,15 @@ export default {
         async page() {
             if (this.page !== null) {
                 this.loading = true
-                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=10`);
+                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
+                this.dataok = data1.data.data;
+                this.loading = false
+            }
+        },
+        async limit() {
+            if (this.page !== null) {
+                this.loading = true
+                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
                 this.dataok = data1.data.data;
                 this.loading = false
             }
