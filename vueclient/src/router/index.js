@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import AdminCp from '../components/admin/AdminCp.vue'
-import PointAdmin from '../components/admin/point/PointAdmin.vue'
-import UserAdmin from '../components/admin/user/UserAdmin.vue'
+import PointTable from '../components/admin/point/PointTable.vue'
+import UserTable from '../components/admin/user/UserTable.vue'
 import DashBoard from '../components/admin/dashboard/DashBoard.vue'
 import NF404 from '../components/NF404.vue'
 
@@ -25,11 +25,11 @@ const router = new Router({
                     component: DashBoard
                 }, {
                     path: '/admin/point',
-                    component: PointAdmin
+                    component: PointTable
                 },
                 {
                     path: '/admin/user',
-                    component: UserAdmin
+                    component: UserTable
                 }
             ]
         }, {

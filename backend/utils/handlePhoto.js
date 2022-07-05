@@ -167,10 +167,10 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 170px;}
+                    .title2 { fill: #ffff; font-size: 160px;}
                     .title3 { fill: #ffff; font-size: 180px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 225px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 190px; font-weight: bold;}
                 </style>
                 <text x="50%" y="3500px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="50%" y="3900px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText1}</text>
@@ -238,10 +238,10 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 170px;}
+                    .title2 { fill: #ffff; font-size: 160px;}
                     .title3 { fill: #ffff; font-size: 180px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 225px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 190px; font-weight: bold;}
                 </style>
                 <text x="50%" y="4100px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="50%" y="4400px" class="title3" dominant-baseline="middle" text-anchor="middle">${messageText1}</text>
@@ -314,11 +314,11 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 170px;}
+                    .title2 { fill: #ffff; font-size: 160px;}
                     .title3 { fill: #FFF810; font-size: 120px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 225px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 190px; font-weight: bold;}
                 </style>
                 <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="2510px" y="1290px" class="title3" text-anchor="middle">${messageText1}</text>
@@ -395,11 +395,11 @@ class Photo {
                     svg{
                         font-family: font, fallBackFonts, sans-serif;
                     }
-                    .title2 { fill: #ffff; font-size: 170px;}
+                    .title2 { fill: #ffff; font-size: 160px;}
                     .title3 { fill: #BC5404; font-size: 120px; font-weight: bold;}
                     .title4 { fill: #ffff; font-size: 200px; font-weight: bold;}
-                    .tspan1 { fill: #ffff; font-size: 230px; font-weight: bold;}
-                    .tspan2 { fill: #ffff; font-size: 200px; font-weight: bold;}
+                    .tspan1 { fill: #ffff; font-size: 225px; font-weight: bold;}
+                    .tspan2 { fill: #ffff; font-size: 190px; font-weight: bold;}
                 </style>
                 <text x="50%" y="4350px" class="title2" dominant-baseline="middle" text-anchor="middle">${tspan3} đã nhận được ${tspan1} điểm từ ${tspan2}</text>
                 <text x="2510px" y="1290px" class="title3" text-anchor="middle">${messageText1}</text>

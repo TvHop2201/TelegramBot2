@@ -15,17 +15,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="index of dataok" :key="index.data._id">
-                    <td>{{index.data._id}}</td>
-                    <td>{{index.userReceive.firstName ? index.userReceive.firstName : index.userReceive.userName}}</td>
-                    <td>{{index.userSend.firstName ? index.userSend.firstName : index.userSend.userName}}</td>
-                    <td>{{index.data.pointChange}}</td>
-                    <td>{{index.data.message}}</td>
-                    <td>{{new Date(index.data.Date).toLocaleDateString()}}</td>
-                      <td>
-                        <button class='btn btn-outline-success' @click="showDeatail(index)">Chi Tiết</button>
-                      </td>
-                  </tr>
+                    <template v-if="dataok!==null">
+                        <tr v-for="index in dataok" :key="index.data._id">
+                            <td>{{index.data._id}}</td>
+                            <td v-if="index.userReceive">{{index.userReceive.firstName ? index.userReceive.firstName : index.userReceive.userName}}</td>
+                            <td>{{index.userSend.firstName ? index.userSend.firstName : index.userSend.userName}}</td>
+                            <td>{{index.data.pointChange}}</td>
+                            <td>{{index.data.message}}</td>
+                            <td>{{new Date(index.data.Date).toLocaleDateString()}}</td>
+                            <td>
+                                <button class='btn btn-outline-success' @click="showDeatail(index)">Chi Tiết</button>
+                            </td>
+                        </tr>
+                    </template>
                 </tbody>
             </table>
                         <DeaTail :okData="deatailData" @close="exitDeatail()" v-if="deatailShow"/>
@@ -33,12 +35,12 @@
                 <div class="btn-group">
                     <el-pagination
                         background
-                        layout="prev, pager, next"
+                        layout="prev,pager, next"
                         :total="total"
-                        :key="total"
+                        :key="total"    
                         :page-size="limit"
                         @current-change="changePage"
-                        @prev-click="page = page-1"
+                        @prev-click="page=page-1"
                         @next-click="page=page+1"
                         >
                     </el-pagination>
@@ -52,8 +54,8 @@
             </div>
         </div>
     </div>
-    <div class="loading text-center pt-5" v-show="loading" >
-            <img src="./loading.gif" class="pt-5 my-5" >
+    <div class="loading text-center pt-5" v-if="loading" >
+            <img src="../../../assets/loading.gif" class="pt-5 my-5" >
     </div>   
     </div>
 </template>
@@ -110,6 +112,7 @@ export default {
         async limit() {
             if (this.page !== null) {
                 this.loading = true
+                this.page=1
                 let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
                 this.dataok = data1.data.data;
                 this.loading = false

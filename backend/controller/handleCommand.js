@@ -14,7 +14,7 @@ const url4 = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 class HandleCommand {
     async command(text, chatId, fromId) {
         console.log('command : ', text)
-        let commandFull = ['start', 'hop', 'time', 'help', 'thank', 'point', 'gift', 'image', 'weather', 'option', '🎉', '💖', '🌹', '🏆']
+        let commandFull = ['start', 'hop', 'time', 'help', 'thank', 'point', 'gift', 'image', 'weather']
         if (commandFull.indexOf(text.split(' ')[0]) === -1) {
             let textA = '<b> Wrong command !!!! </b>'
             this.sendText(textA, chatId)
@@ -37,7 +37,6 @@ class HandleCommand {
                 "description": `<b>Danh Sách Command</b>\n <b>/thank <i> _user _message </i> : Tặng 1 điểm</b>\n <b>/gift <i>_user _point _message </i>: Tặng nhiều điểm</b>`
                     + `\n<b>/point<i> _user</i> : Xem nhật ký cập nhật điểm và message của user</b> \n<b>/point : Xem điểm của top user điểm cao</b>`
                     + `\n<b>/weather : xem thời tiết tại Vinh</b> \n<b>/weather <i>_location</i>: Xem thời tiết tại location</b>`
-                    + `\n<b>/option : tặng quà theo option</b>`
             }
 
         ]
@@ -69,19 +68,19 @@ class HandleCommand {
         if (text.split(' ')[0] === 'weather') {
             this.handleWeatherCommand(text, chatId)
         }
-        if (text.split(' ')[0] === 'option') {
-            this.handleOption(text, chatId)
-        }
-        if (text.split(' ')[0] === '🎉' || text.split(' ')[0] === '💖' || text.split(' ')[0] === '🌹' || text.split(' ')[0] === '🏆') {
-            this.handleGiftFlower(text, chatId, fromId)
-        }
-
 
     }
 
     async handleThankCommand(text, chatId, fromId111) {
         let [thankCommand, pointUser, ...pointMessage] = text.split(' ')
         pointMessage = pointMessage.join(' ')
+
+        let botPoint = await userModel.findOne({ fromId: 11111111 }, { point: 1 })
+        if (botPoint.point <= 1) {
+            let text = `<b>Bot Đã Hết Số điểm Để Gửi!!!!</b>`
+            this.sendText(text, chatId)
+            return 0
+        }
 
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
@@ -90,7 +89,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!!!</b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.fromId === fromId111) {
+                if (data.fromId === 11111111) {
+                    let text = `<b>không thể tặng điểm cho Bot!!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.fromId === fromId111) {
                     let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
                     this.sendText(text, chatId)
                     return 0
@@ -114,7 +117,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!!!</b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.fromId === fromId111) {
+                if (data.fromId === 11111111) {
+                    let text = `<b>không thể tặng điểm cho Bot!!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.fromId === fromId111) {
                     let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
                     this.sendText(text, chatId)
                     return 0
@@ -199,6 +206,12 @@ class HandleCommand {
             this.sendText(text, chatId)
             return 0
         }
+        let botPoint = await userModel.findOne({ fromId: 11111111 }, { point: 1 })
+        if (botPoint.point <= 1) {
+            let text = `<b>Bot Đã Hết Số điểm Để Gửi!!!!</b>`
+            this.sendText(text, chatId)
+            return 0
+        }
         if (pointUser.charAt(0) === '@') {
             pointUser = pointUser.split('@')[1]
             let data = await userModel.findOne({ userName: pointUser })
@@ -206,7 +219,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!! </b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.fromId === fromId111) {
+                if (data.fromId === 11111111) {
+                    let text = `<b>không thể tặng điểm cho Bot!!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.fromId === fromId111) {
                     let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
                     this.sendText(text, chatId)
                     return 0
@@ -230,7 +247,11 @@ class HandleCommand {
                 let text = '<b>không tồn tại người dùng !!! </b>'
                 this.sendText(text, chatId)
             } else {
-                if (data.fromId === fromId111) {
+                if (data.fromId === 11111111) {
+                    let text = `<b>không thể tặng điểm cho Bot!!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                } else if (data.fromId === fromId111) {
                     let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
                     this.sendText(text, chatId)
                     return 0
@@ -274,112 +295,6 @@ class HandleCommand {
             this.sendText(textOut, chatId)
         }
     }
-
-    async handleOption(text, chatId) {
-        let text1 = encodeURI('MỜi CHỌN !!!! 🎉 🎉 🎉 🎉')
-        let option = {
-            "keyboard": [[
-                `/${encodeURI('🎉')}`, `/${encodeURI('💖')}`, `/${encodeURI('🌹')}`, `/${encodeURI('🏆')}`
-            ]]
-        }
-        option = JSON.stringify(option)
-        await axios.get(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${text1}&reply_markup=${option}`)
-    }
-
-    async sendGFOptionChoseUser(text, chatId) {
-        let text1 = encodeURI(`MỜi CHỌN !!!!  ${text}  ${text} ${text}`)
-        let userData = await userModel.find({}, { userName: 1, firstName: 1, lastName: 1 })
-        let arrayUser = []
-        userData.forEach(index => {
-            if (index.userName) {
-                arrayUser.push([`/${text} @${index.userName}`])
-            } else if (index.firstName) {
-                arrayUser.push([`/${text} ${index.firstName}`])
-            } else {
-                arrayUser.push([`/${text} ${index.lastName}`])
-            }
-        })
-
-        let option = {
-            "keyboard": arrayUser
-        }
-        option = encodeURI(JSON.stringify(option))
-        await axios.get(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${text1}&reply_markup=${option}`)
-    }
-
-    async handleGiftFlower(text, chatId, fromId111) {
-        let [icon, ...userReceive] = text.split(' ')
-        let pointChange, textOut
-        if (icon === '🎉') {
-            pointChange = 10
-            textOut = "Tặng Hoa"
-        } else if (icon === '💖') {
-            pointChange = 20
-            textOut = "Thả Tym"
-        } else if (icon === '🌹') {
-            pointChange = 30
-            textOut = "Tặng Hoa Hồng"
-        } else if (icon === '🏆') {
-            pointChange = 40
-            textOut = "Tặng Cúp"
-        }
-        userReceive = userReceive.join(' ')
-        if (userReceive === '') {
-            this.sendGFOptionChoseUser(icon, chatId)
-            return
-        }
-        if (userReceive.charAt(0) === '@') {
-            userReceive = userReceive.split('@')[1]
-            let data = await userModel.findOne({ userName: userReceive })
-            if (!data) {
-                let text = '<b>không tồn tại người dùng !!! </b>'
-                this.sendText(text, chatId)
-            } else {
-                if (data.fromId === fromId111) {
-                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
-                    this.sendText(text, chatId)
-                    return 0
-                } else if (data.point) {
-                    await pointMessageModel.create({
-                        idUserReceive: data.fromId,
-                        idUserSendGift: fromId111,
-                        pointChange: pointChange,
-                        message: icon
-                    })
-                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.userName, pointChange, textOut)
-                    this.saveText(text, chatId)
-                } else {
-                    let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
-                    this.sendText(text, chatId)
-                }
-            }
-        } else {
-            let data = await userModel.findOne({ firstName: userReceive })
-            if (!data) {
-                let text = '<b>không tồn tại người dùng !!! </b>'
-                this.sendText(text, chatId)
-            } else {
-                if (data.fromId === fromId111) {
-                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
-                    this.sendText(text, chatId)
-                    return 0
-                } else if (data.point) {
-                    await pointMessageModel.create({
-                        idUserReceive: data.fromId,
-                        idUserSendGift: fromId111,
-                        pointChange: pointChange,
-                        message: icon
-                    })
-                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.firstName, pointChange, textOut)
-                    this.saveText(text, chatId)
-                } else {
-                    let text = '<b>Không Đủ Số Điểm Để Tặng !!! </b>'
-                    this.sendText(text, chatId)
-                }
-            }
-        }
-    }
-
     async sendText(text, chatId) {
         let textEncode = encodeURI(text)
         let textBr = text.replace(/\n/g, '<br/>')

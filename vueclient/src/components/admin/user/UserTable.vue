@@ -39,7 +39,7 @@
                     <el-pagination
                             background
                             layout="prev, pager, next"
-                            :total="10"
+                            :total="total"
                             :key="total"    
                             :page-size="limit"
                             @current-change="changePage"
@@ -56,8 +56,8 @@
                 </div>
             </div>
         </div>
-        <div class="loading text-center pt-5" v-show="loading" >
-            <img src="./loading.gif" class="pt-5 my-5" >
+        <div class="loading text-center pt-5" v-if="loading" >
+            <img src="../../../assets/loading.gif" class="pt-5 my-5" >
         </div>
     </div >
 </template>
@@ -182,6 +182,7 @@ export default {
         async limit(){
             if(this.page!==''){
                 this.loading = true
+                this.page=1
                 if(this.userName !== ''){
                     let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=${this.limit}`)
                     this.dataok = data1.data.data

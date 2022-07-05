@@ -1,24 +1,24 @@
 <template>
   <div>
-    <div class='row'>
-        <div class='mt-3 col-lg-6 text-center'>
-            <div class='col-md-3 mx-auto float-left'>
-                        <input type="date" v-model="firstDate" >
-                    </div>
-            </div>
-            <div class='mt-3 text-center col-lg-6'>
-                <div class='col-md-3 mx-auto float-left'>
-                        <input type="date" v-model="lastDate" >
-                </div>
-            </div>
-    </div>
-    <div class='row float-left mx-auto'>
-        <div class='col-lg-6 User '>
+    <div class='row float-left mx-3 mt-5'>
+        <div class='col-lg-5 text-center mx-auto'>
             <UserChart :time="time" />
+            <h5 class="mt-2">Biểu Đồ Tăng Trưởng USER</h5>
         </div>
-        <div class='col-lg-6'>
+        <div class='col-lg-5 text-center mx-auto'>
             <PointChart/>
+            <h5 class="mt-2">Biểu Đồ Top USER Cao Điểm</h5>
         </div>
+    </div>
+    <div class="row mx-auto mt-5">
+        <div class='col-md-2 float-right'>
+            <span>ngày bắt đầu</span>
+            <input type="date" v-model="firstDate" >
+        </div>
+        <div class='col-md-2'>
+                <span>ngày kết thúc</span>
+                <input type="date" v-model="lastDate" >
+        </div>   
     </div>
 </div>
 </template>
