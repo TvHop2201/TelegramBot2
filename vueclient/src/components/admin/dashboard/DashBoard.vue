@@ -16,9 +16,10 @@
             <input type="date" v-model="firstDate" >
         </div>
         <div class='col-md-2'>
-                <span>ngày kết thúc</span>
-                <input type="date" v-model="lastDate" >
-        </div>   
+            <span>ngày kết thúc</span>
+            <input type="date" v-model="lastDate" >
+        </div>
+        <div v-if="alert" class="alert alert-danger">{{alert}}</div>   
     </div>
 </div>
 </template>
@@ -33,7 +34,8 @@ export default {
         return{
             firstDate : this.getfirstDate(),
             lastDate: this.getlastDate(),
-            time: this.getTime()
+            time: this.getTime(),
+            alert:''
         }
     },
     methods :{
@@ -63,23 +65,59 @@ export default {
             return date
         },
         getTime (){
-            let date = new Date().toLocaleDateString()
-            date = date.split('/')
-            date = `${date[0]}-${date[1]-2}-${date[0]}-${date[1]}`
+            let startTime = `startTime=${this.getfirstDate()}`
+            let endTime = `endTime=${this.getlastDate()}`
+            let date = `${startTime}&${endTime}`
             return date
         }
     },
     
     watch : {
         firstDate(){
-            let nFirstDate = this.firstDate.split('-')
-            let nlastDate = this.lastDate.split('-')
-            this.time = `${nFirstDate[2]}-${nFirstDate[1]}-${nlastDate[2]}-${nlastDate[1]}`
+            let first = this.firstDate.split('-')
+            let last = this.lastDate.split('-')
+            if(first[0]>last[0]){
+                console.log(first[0] ,last[0])
+                this.alert ='Năm bắt đầu không thể lớn hơn năm kết thúc !!!'
+            }else{
+                this.alert = ''
+            }
+            if(first[0]>last[0]&&first[1]> last[1]){
+                this.alert ='Tháng bắt đầu không thể lớn hơn tháng kết thúc !!!'
+            }else{
+                this.alert = ''
+            }
+            if(first[0]>last[0]&&first[1]> last[1] && first[2] > last[2]){
+                this.alert ='Ngày bắt đầu không thể lớn hơn ngày kết thúc !!!'
+            }else{
+                this.alert = ''
+            }
+            let startTime = `startTime=${this.firstDate}`
+            let endTime = `endTime=${this.lastDate}`
+            this.time = `${startTime}&${endTime}`
         },
         lastDate(){
-            let nFirstDate = this.firstDate.split('-')
-            let nlastDate = this.lastDate.split('-')
-            this.time = `${nFirstDate[2]}-${nFirstDate[1]}-${nlastDate[2]}-${nlastDate[1]}`
+            let first = this.firstDate.split('-')
+            let last = this.lastDate.split('-')
+            if(first[0]>last[0]){
+                console.log(first[0] ,last[0])
+                this.alert ='Năm bắt đầu không thể lớn hơn năm kết thúc !!!'
+            }else{
+                this.alert = ''
+            }
+            if(first[0]>last[0]&&first[1]> last[1]){
+                this.alert ='Tháng bắt đầu không thể lớn hơn tháng kết thúc !!!'
+            }else{
+                this.alert = ''
+            }
+            if(first[0]>last[0]&&first[1]> last[1] && first[2] > last[2]){
+                this.alert ='Ngày bắt đầu không thể lớn hơn ngày kết thúc !!!'
+            }else{
+                this.alert = ''
+            }
+            let startTime = `startTime=${this.firstDate}`
+            let endTime = `endTime=${this.lastDate}`
+            this.time = `${startTime}&${endTime}`
         }
     }
     

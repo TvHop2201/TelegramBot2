@@ -198,14 +198,12 @@ class Admin {
     }
     //dashboard
     async getChartUserWithTime(req, res) {
-        let { time } = req.query
-        let [firstDay, firstMonth, lastDay, lastMonth] = time.split('-')
-        let year = 2022
-        if (firstMonth > lastMonth) {
-            year = year + 1
-        }
-        let first = new Date(2022, firstMonth - 1, firstDay).getTime()
-        let last = new Date(year, lastMonth - 1, lastDay + 1).getTime()
+        let { startTime, endTime } = req.query
+        startTime = startTime.split('-')
+        endTime = endTime.split('-')
+        console.log(startTime, endTime)
+        let first = new Date(parseInt(startTime[0], 10), parseInt(startTime[1], 10) - 1, parseInt(startTime[2]), 10).getTime()
+        let last = new Date(parseInt(endTime[0], 10), parseInt(endTime[1], 10) - 1, parseInt(endTime[2]), 10).getTime()
 
         const data = await userModel.aggregate([
             { $match: { "create_at": { $gte: first, $lt: last } } },
