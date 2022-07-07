@@ -537,6 +537,7 @@ class Photo {
     }
 
     async randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
+        console.time('merge Ảnh : ')
         let func = [0, 1, 2, 3, 4]
         let random = Math.floor(Math.random() * func.length)
         if (func[random] === 0) {
@@ -550,6 +551,7 @@ class Photo {
         } else if (func[random] === 4) {
             await this.mergeText4(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         }
+        console.timeEnd('gửi ảnh lên chat : ')
     }
 
 

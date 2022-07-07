@@ -8,6 +8,7 @@ const handleCommand = require('../controller/handleCommand')
 
 class HandleWebhook {
     async webHook(datas) {
+        console.time('handle WebHook : ')
         for (const data of datas) {
             if (!data.edited_message) {
                 const messageId = `${data.message.message_id}_${data.message.chat.id}`
@@ -66,6 +67,8 @@ class HandleWebhook {
                 })
             }
         }
+
+        console.timeEnd('handle WebHook : ')
     }
 
 }

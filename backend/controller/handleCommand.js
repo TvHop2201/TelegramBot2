@@ -429,10 +429,12 @@ class HandleCommand {
     }
 
     async sendThankPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
+        console.time('send Thank Photo : ')
         let date = Date.now()
         let fixPointMessage = pointMessage.replace(/(<([^>]+)>)/gi, "")
         fixPointMessage = fixPointMessage.replace(/</g, "")
         await handlePhoto.randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, fixPointMessage, date)
+        console.time('gửi ảnh lên chat : ')
         axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
             .then(() => {
                 let path = __dirname
@@ -440,6 +442,8 @@ class HandleCommand {
                 fs.unlinkSync(`${path}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
             })
             .catch(err => console.log(err))
+        console.timeEnd('gửi ảnh lên chat : ')
+        console.timeEnd('send Thank Photo : ')
     }
 
     async sendListPointPhoto(listUser, chatId) {
