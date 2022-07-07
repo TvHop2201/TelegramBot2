@@ -14,6 +14,8 @@ Route.post('/updatePointMessage', adminController.updatePointMessage)
 Route.get('/deletePointMessage', adminController.deletePointMessage)
 //dashboard
 Route.get('/getChartUserWithTime/', adminController.getChartUserWithTime)
+//logUser
+Route.post('/createLogUser', adminController.createLogUser)
 
 
 module.exports = Route

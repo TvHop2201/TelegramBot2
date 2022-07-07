@@ -1,5 +1,6 @@
 const userModel = require('../model/user')
 const pointMessageModel = require('../model/pointMessage')
+const logUserModel = require('../model/logUser')
 const tryCatch = require('../utils/handleTryCatch').handle
 class Admin {
     //user
@@ -119,6 +120,39 @@ class Admin {
                 success: false,
             })
         }
+    }
+    //log
+    async getLogUser(req, res) {
+        let { page, limit } = req.body
+        let logData = await logUserModel.find().sort({ _id: -1 }).skip((limit * page) - limit).limit(limit)
+        let total = await logUserModel.find().count()
+        if (data) {
+            res.json({
+                success: true,
+                data: logData,
+                total: total
+            })
+        } else {
+            res.json({
+                success: false
+            })
+        }
+    }
+    async createLogUser(req, res) {
+        let idUser = req.body.idUser
+        let adminChange = req.body.admin
+        let user = req.body.admin
+        let pointChange = req.body.pointChange
+        let message = req.body.message
+
+        let data = await logUserModel.create({
+            idUser: idUser,
+            adminChange: adminChange,
+            user: user,
+            pointChange: pointChange,
+            messaged: message
+        })
+        console.log(data)
     }
     //point
     async getChartPoint(req, res) {

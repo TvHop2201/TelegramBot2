@@ -106,6 +106,24 @@ class Photo {
             .webp()
             .toFile(`public/image/crop/${fromId}_3.jpg`)
     }
+    async cropPhotoPoint(fromId) {
+        let photoSource = fromId
+        let checkPhoto = fs.existsSync(`./public/image/${fromId}.jpg`)
+        if (checkPhoto === false) {
+            photoSource = 'profile'
+        }
+        let width = 600
+        let r = width / 2
+        let circleShape = Buffer.from(`<svg><circle cx="${r}" cy="${r}" r="${r}" /></svg>`);
+        await sharp(`public/image/${photoSource}.jpg`)
+            .resize(width, width)
+            .composite([{
+                input: circleShape,
+                blend: 'dest-in'
+            }])
+            .webp()
+            .toFile(`public/image/crop/${fromId}_p.jpg`)
+    }
 
     async getName(fromId) {
         let getName = await userModel.findOne({ fromId: fromId })
@@ -425,6 +443,98 @@ class Photo {
         fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_3.jpg`)
     }
 
+    async mergeListPoint(listUser, date) {
+        let textFull = ''
+        for (let i = 0; i < listUser.length; i++) {
+            let userText = `<text x="1250px" y="${1150 + (350 * i)}px" class="title" text-anchor="middle">${listUser[i].user}</text>`
+            let pointText = `<text x="4000px" y="${1150 + (350 * i)}px" class="title" text-anchor="middle">${listUser[i].point}</text>`
+            textFull = textFull + userText + pointText
+        }
+        let text = Buffer.from(
+            `<svg width="5000" height="5000">
+                <style>
+                    @font-face {
+                        font-family: font;
+                        src: url(public/font/font.tff);
+                    }
+                    svg{
+                        font-family: font, fallBackFonts, sans-serif;
+                    }
+                    .title { fill: #ffff; font-size: 180px; font-weight: bold;}
+                   
+                </style>
+                ${textFull}
+            </svg>`);
+
+        await sharp('./public/image/point.jpg')
+            .composite([
+                { input: text }
+            ])
+            .toFile(`./public/image/merge/PointListand${date}.jpg`)
+
+    }
+
+    async mergerUserPoint(data, date) {
+        //check photo
+        let checkPhoto = fs.existsSync(`./public/image/${data.fromId}.jpg`)
+        if (checkPhoto === false) {
+            await this.downloadPhoto(data.fromId)
+        }
+        //check Crop
+        let checkCrop = fs.existsSync(`./public/image/crop/${data.fromId}_p.jpg`)
+        if (checkCrop === false) {
+            await this.cropPhotoPoint(data.fromId)
+        }
+        //xu ly text
+        let textUserName = `<text x="2500px" y="750px" class="title" text-anchor="middle">${data.userName}</text>`
+        let textPoint = `<text x="4000px" y="750px" class="title2" text-anchor="middle">${data.point}</text>`
+        let textOut = ''
+        for (let i = 0; i < data.message.length; i++) {
+            let textPointChange = `<text x="4000px" y="${1900 + 560 * i}px" class="title3" text-anchor="middle">+${data.message[i].pointChange}</text>`
+            let textGoc = data.message[i].message.replace(/(<([^>]+)>)/gi, "")
+            textGoc = textGoc.replace(/</g, "")
+            let textMessage = `<text x="1550px" y="${1900 + 560 * i}px" class="title3" text-anchor="middle">${textGoc}</text>`
+            let check = textGoc.split(' ')
+            if (check.length > 8) {
+                let messageText1 = `<text x="1550px" y="${1900 + 560 * i}px" class="title3" text-anchor="middle">${check.slice(0, 8).join(' ')}</text>`
+                let messageText2 = `<text x="1550px" y="${1900 + 560 * i + 200}px" class="title3" text-anchor="middle">${check.slice(8, check.length).join(' ')}</text>`
+                textMessage = messageText1 + messageText2
+            }
+            textOut = textOut + textPointChange + textMessage
+        }
+        //merge
+        let text = Buffer.from(
+            `<svg width="5000" height="5000">
+                <style>
+                    @font-face {
+                        font-family: font;
+                        src: url(public/font/font.tff);
+                    }
+                    svg{
+                        font-family: font, fallBackFonts, sans-serif;
+                    }
+                    .title { fill: #ffff; font-size: 180px; font-weight: bold;}
+                    .title2 { fill: #ffff; font-size: 220px; font-weight: bold;}
+                    .title3 { fill: #ffff; font-size: 160px; font-weight: bold;}
+
+                </style>
+                ${textUserName}
+                ${textPoint}
+                ${textOut}
+            </svg>`);
+        await sharp('./public/image/pointOne.jpg')
+            .composite([
+                { input: `./public/image/crop/${data.fromId}_p.jpg`, left: 800, top: 460 },
+                { input: text }
+            ])
+            .toFile(`./public/image/merge/PointUserand${date}.jpg`)
+        // delete crop photo
+        let path = __dirname
+        path = path.split('/utils').join('')
+        fs.unlinkSync(`${path}/public/image/crop/${data.fromId}_p.jpg`)
+
+
+    }
 
     async randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
         let func = [0, 1, 2, 3, 4]

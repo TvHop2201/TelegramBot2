@@ -18,6 +18,12 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
+                        <router-link to='/admin/log' class="nav-link" href="#">
+                            <span data-feather="file" class="align-text-bottom"></span>
+                                Log
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link to='/admin/point' class="nav-link" href="#">
                             <span data-feather="shopping-cart" class="align-text-bottom "></span>
                                 Point

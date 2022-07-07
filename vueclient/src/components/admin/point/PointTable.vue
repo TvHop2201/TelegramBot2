@@ -18,8 +18,8 @@
                     <template v-if="dataok!==null">
                         <tr v-for="index in dataok" :key="index.data._id">
                             <td>{{index.data._id}}</td>
-                            <td v-if="index.userReceive">{{index.userReceive.firstName ? index.userReceive.firstName : index.userReceive.userName}}</td>
-                            <td>{{index.userSend.firstName ? index.userSend.firstName : index.userSend.userName}}</td>
+                            <td v-if="index.userReceive">{{index.userReceive.userName ? index.userReceive.userName : index.userReceive.firstName}}</td>
+                            <td v-if="index.userSend">{{index.userSend ? index.userSend.userName : index.userSend.firstName}}</td>
                             <td>{{index.data.pointChange}}</td>
                             <td>{{index.data.message}}</td>
                             <td>{{new Date(index.data.Date).toLocaleDateString()}}</td>

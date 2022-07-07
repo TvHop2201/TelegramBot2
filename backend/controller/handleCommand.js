@@ -14,45 +14,22 @@ const url4 = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`
 class HandleCommand {
     async command(text, chatId, fromId) {
         console.log('command : ', text)
-        let commandFull = ['start', 'hop', 'time', 'help', 'thank', 'point', 'gift', 'image', 'weather']
+        let commandFull = ['time', 'help', 'thank', 'point', 'gift']
         if (commandFull.indexOf(text.split(' ')[0]) === -1) {
             let textA = '<b> Wrong command !!!! </b>'
             this.sendText(textA, chatId)
         }
-        let commands = [
-            {
-                "command": 'start',
-                "description": "i'm BOT"
-            },
-            {
-                "command": 'hop',
-                "description": "<code> hop</code> "
-            },
-            {
-                "command": 'time',
-                "description": new Date().toDateString()
-            },
-            {
-                "command": 'help',
-                "description": `<b>Danh Sách Command</b>\n <b>/thank <i> _user _message </i> : Tặng 1 điểm</b>\n <b>/gift <i>_user _point _message </i>: Tặng nhiều điểm</b>`
-                    + `\n<b>/point<i> _user</i> : Xem nhật ký cập nhật điểm và message của user</b> \n<b>/point : Xem điểm của top user điểm cao</b>`
-                    + `\n<b>/weather : xem thời tiết tại Vinh</b> \n<b>/weather <i>_location</i>: Xem thời tiết tại location</b>`
-            }
 
-        ]
-        commands.forEach(async (index) => {
-            if (text === index.command) {
-                let textEncode = encodeURI(index.description)
-                await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
-                await chatModel.create({
-                    fromId: 11111111,
-                    chatId: chatId,
-                    text: index.description,
-                    date: Date.now()
-                })
-            }
-        })
 
+        if (text.split(' ')[0] === 'help') {
+            let text1 = `<b>Danh Sách Command</b>\n <b>/thank <i> _user _point "_message" </i> : Tặng điểm</b>`
+                + `\n<b>/point<i> _user</i> : Xem nhật ký cập nhật điểm và message của user</b> \n<b>/point : Xem điểm của top user điểm cao</b>`
+            this.sendText(text1, chatId)
+        }
+        if (text.split(' ')[0] === 'time') {
+            let text1 = new Date().toLocaleString()
+            this.sendText(text1, chatId)
+        }
         if (text.split(' ')[0] === 'thank') {
             this.handleThankCommand(text, chatId, fromId)
         }
@@ -62,16 +39,117 @@ class HandleCommand {
         if (text.split(' ')[0] === 'gift') {
             this.handleGiftCommand(text, chatId, fromId)
         }
-        if (text.split(' ')[0] === 'image') {
-            this.handleImageCommand(text, chatId)
-        }
-        if (text.split(' ')[0] === 'weather') {
-            this.handleWeatherCommand(text, chatId)
-        }
 
     }
 
-    async handleThankCommand(text, chatId, fromId111) {
+    async handleThankCommand(text, chatId, fromIdsend) {
+        let [minPoint, maxPoint] = [15, 150]
+        let [text1, message] = text.split('"')
+        let [thank, userReceive, pointChange] = text1.split(' ')
+        //xử lý đầu vào
+        if (!pointChange) {
+            pointChange = minPoint
+        }
+        pointChange = parseInt(pointChange)
+        if (Number.isNaN(pointChange)) {
+            let text = '<b>Wrong point !!!</b>'
+            this.sendText(text, chatId)
+            return 0;
+        }
+        if (pointChange > maxPoint) {
+            let text = `<b>Không thể tặng hơn 150 điểm </b>`
+            this.sendText(text, chatId)
+            return 0
+        }
+        if (pointChange < minPoint) {
+            let text = `<b>Không thể tặng dưới 15 điểm </b>`
+            this.sendText(text, chatId)
+            return 0
+        }
+        if (!message) {
+            message = ''
+        }
+
+        console.log('thank : ', thank)
+        console.log('userReceive : ', userReceive)
+        console.log('poitntChange : ', pointChange)
+        console.log('message : ', message)
+
+        //check điểm của bot
+        let botPoint = await userModel.findOne({ fromId: 11111111 }, { point: 1 })
+        if (botPoint.point <= 1) {
+            let text = `<b>Bot Đã Hết Số điểm Để Gửi!!!!</b>`
+            this.sendText(text, chatId)
+            return 0
+        }
+
+        //trường hợp là userName
+        if (userReceive.charAt(0) === '@') {
+            userReceive = userReceive.split('@')[1]
+            let dataUN = await userModel.findOne({ userName: userReceive })
+            if (!dataUN) {
+                let text = '<b>không tồn tại người dùng !!! </b>'
+                this.sendText(text, chatId)
+                return 0
+            } else {
+                if (dataUN.fromId === 11111111) {
+                    let text = `<b>không thể gửi điểm cho Bot!!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                }
+                if (dataUN.fromId === fromIdsend) {
+                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    this.sendText(text, chatId)
+                    return 0
+                }
+                await pointMessageModel.create({
+                    idUserReceive: dataUN.fromId,
+                    idUserSendGift: fromIdsend,
+                    pointChange: pointChange,
+                    message: message
+                })
+                this.sendThankPhoto(chatId, fromIdsend, dataUN.fromId, dataUN.userName, pointChange, message)
+                this.saveText(text, chatId)
+                return 0
+            }
+        } else {
+            if (userReceive.search("_")) {
+                userReceive = userReceive.split('_').join(' ')
+            }
+            let dataFN = await userModel.findOne({ firstName: userReceive })
+            console.log(dataFN)
+            if (!dataFN) {
+                let text = '<b>không tồn tại người dùng !!! </b>'
+                this.sendText(text, chatId)
+                return 0
+            } else {
+                if (dataFN.fromId === 11111111) {
+                    let text = `<b>không thể gửi điểm cho Bot!!!!</b>`
+                    console.log(text)
+                    this.sendText(text, chatId)
+                    return 0
+                }
+                if (dataFN.fromId === fromIdsend) {
+                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    console.log(text)
+                    this.sendText(text, chatId)
+                    return 0
+                }
+                //gửi
+                await pointMessageModel.create({
+                    idUserReceive: dataFN.fromId,
+                    idUserSendGift: fromIdsend,
+                    pointChange: pointChange,
+                    message: message
+                })
+                this.sendThankPhoto(chatId, fromIdsend, dataFN.fromId, dataFN.userName, pointChange, message)
+                this.saveText(text, chatId)
+                return 0
+            }
+        }
+    }
+
+    async handleThankCommand2(text, chatId, fromId111) {
         let [thankCommand, pointUser, ...pointMessage] = text.split(' ')
         pointMessage = pointMessage.join(' ')
 
@@ -104,7 +182,7 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.userName, 1, pointMessage)
+                    this.sendThankPhoto(chatId, fromId111, data.fromId, data.userName, 1, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!</b>'
@@ -132,7 +210,7 @@ class HandleCommand {
                         pointChange: '1',
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.firstName, 1, pointMessage)
+                    this.sendThankPhoto(chatId, fromId111, data.fromId, data.firstName, 1, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
@@ -142,7 +220,69 @@ class HandleCommand {
         }
 
     }
+
     async handlePointCommand(text, chatId) {
+        let [pointCM, userView] = text.split(' ')
+        if (userView === 'Bot') {
+            let text = '<b>Không Thể Xem Điểm Của Bot !!! </b>'
+            this.sendText(text, chatId)
+            return 0
+        }
+        if (!userView) {
+            let listData = await userModel.find({ fromId: { $ne: 11111111 } }).sort({ point: -1 }).limit(10)
+            let listUser = []
+            listData.forEach(index => {
+                let text = {
+                    user: index.userName ? index.userName : `${index.firstName} ${index.lastName}`,
+                    point: index.point
+                }
+                listUser.push(text)
+            })
+            this.sendListPointPhoto(listUser, chatId)
+        } else {
+            if (userView.charAt(0) === '@') {
+                userView = userView.split('@')[1]
+                let dataUN = await userModel.findOne({ userName: userView }, { point: 1, fromId: 1 })
+                if (!dataUN) {
+                    let text = '<b>không tồn tại người dùng !!! </b>'
+                    console.log(text)
+                    this.sendText(text, chatId)
+                    return 0
+                }
+                let dataMessage = await pointMessageModel.find({ idUserReceive: dataUN.fromId }, { pointChange: 1, message: 1, _id: 0 }).limit(5).sort({ _id: -1 })
+                let outData = {
+                    fromId: dataUN.fromId,
+                    userName: userView,
+                    point: dataUN.point,
+                    message: dataMessage
+                }
+                this.sendUserPointPhoto(outData, chatId)
+
+            } else {
+                if (userView.search("_")) {
+                    userView = userView.split("_").join(" ")
+                }
+                let dataFN = await userModel.findOne({ firstName: userView }, { point: 1, fromId: 1 })
+                if (!dataFN) {
+                    let text = '<b>không tồn tại người dùng !!! </b>'
+                    this.sendText(text, chatId)
+                    return 0
+                }
+                let dataMessage = await pointMessageModel.find({ idUserReceive: dataFN.fromId }, { pointChange: 1, message: 1, _id: 0 }).limit(5).sort({ _id: -1 })
+                let outData = {
+                    fromId: dataFN.fromId,
+                    userName: userView,
+                    point: dataFN.point,
+                    message: dataMessage
+                }
+                this.sendUserPointPhoto(outData, chatId)
+
+            }
+        }
+
+    }
+
+    async handlePointCommand2(text, chatId) {
         let [pointCommand, pointUser] = text.split(' ')
         if (!pointUser) {
             let pData = await userModel.find().sort({ point: -1 }).limit(10)
@@ -234,7 +374,7 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.userName, numPoint, pointMessage)
+                    this.sendThankPhoto(chatId, fromId111, data.fromId, data.userName, numPoint, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!!!</b>'
@@ -262,7 +402,7 @@ class HandleCommand {
                         pointChange: numPoint,
                         message: pointMessage
                     })
-                    this.sendGiftPhoto(chatId, fromId111, data.fromId, data.firstName, numPoint, pointMessage)
+                    this.sendThankPhoto(chatId, fromId111, data.fromId, data.firstName, numPoint, pointMessage)
                     this.saveText(text, chatId)
                 } else {
                     let text = '<b>Không Đủ Số Điểm Để Tặng !!! </b>'
@@ -272,39 +412,10 @@ class HandleCommand {
         }
 
     }
-    async handleImageCommand(text, chatId) {
-        let textEncode = encodeURI('aaa\nhttps://placeimg.com/640/480')
-        await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
-    }
-    async handleWeatherCommand(text, chatId) {
-        let [weatherCommand, ...location] = text.split(' ')
-        const weatherAppid = 'b1ac492954c5e04bdb2ff86ca85b8de7';
-        if (location.length !== 0) {
-            location = encodeURI(location.join(' '));
-            let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${weatherAppid}&lang=vi&units=metric`)
-            if (data.code === 404) {
-                let textOut = '<b>Không có dữ liệu về địa chỉ này </b>'
-                this.sendText(textOut, chatId)
-            } else {
-                let textOut = `Thời Tiết Tại :<i> ${data.data.name}</i> \n Nhiệt Dộ : ${Math.round(data.data.main.temp)}\nTình Trạng : ${data.data.weather[0].description}\nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
-                this.sendText(textOut, chatId)
-            }
-        } else {
-            let data = await axios(`https://api.openweathermap.org/data/2.5/weather?q=vinh&appid=${weatherAppid}&lang=vi&units=metric`)
-            let textOut = `Thời Tiết Tại : ${data.data.name} \nNhiệt Dộ : ${Math.round(data.data.main.temp)}  \nTình Trạng : ${data.data.weather[0].description} \nTốc Độ Gió : ${(data.data.wind.speed * 3.6).toFixed(2)} `
-            this.sendText(textOut, chatId)
-        }
-    }
     async sendText(text, chatId) {
         let textEncode = encodeURI(text)
         let textBr = text.replace(/\n/g, '<br/>')
         await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
-        await chatModel.create({
-            fromId: 11111111,
-            chatId: chatId,
-            text: textBr,
-            date: Date.now()
-        })
     }
 
     async saveText(text, chatId) {
@@ -317,7 +428,7 @@ class HandleCommand {
         })
     }
 
-    async sendGiftPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
+    async sendThankPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
         let date = Date.now()
         let fixPointMessage = pointMessage.replace(/(<([^>]+)>)/gi, "")
         fixPointMessage = fixPointMessage.replace(/</g, "")
@@ -329,6 +440,28 @@ class HandleCommand {
                 fs.unlinkSync(`${path}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
             })
             .catch(err => console.log(err))
+    }
+
+    async sendListPointPhoto(listUser, chatId) {
+        let date = Date.now()
+        await handlePhoto.mergeListPoint(listUser, date)
+        axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/PointListand${date}.jpg`)
+            .then(() => {
+                let path = __dirname
+                path = path.split('/controller').join('')
+                fs.unlinkSync(`${path}/public/image/merge/PointListand${date}.jpg`)
+            })
+
+    }
+    async sendUserPointPhoto(data, chatId) {
+        let date = Date.now()
+        await handlePhoto.mergerUserPoint(data, date)
+        axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/PointUserand${date}.jpg`)
+            .then(() => {
+                let path = __dirname
+                path = path.split('/controller').join('')
+                fs.unlinkSync(`${path}/public/image/merge/PointUserand${date}.jpg`)
+            })
     }
 
     async getName(fromId) {

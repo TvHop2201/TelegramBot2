@@ -1,5 +1,16 @@
 <template>
   <div>
+    <div class="row mx-auto mt-5">
+        <div class='col-md-2 float-right border-1 input_date'>
+            <span class="">ngày bắt đầu</span>
+            <input type="date" class="input-group date" v-model="firstDate" >
+        </div>
+        <div class='col-md-2 input_date'>
+            <span>ngày kết thúc</span>
+            <input type="date" class="input-group date" v-model="lastDate" >
+        </div>
+        <div v-if="alert" class="alert alert-danger">{{alert}}</div>   
+    </div>
     <div class='row float-left mx-3 mt-5'>
         <div class='col-lg-5 text-center mx-auto'>
             <UserChart :time="time" />
@@ -10,17 +21,7 @@
             <h5 class="mt-2">Biểu Đồ Top USER Cao Điểm</h5>
         </div>
     </div>
-    <div class="row mx-auto mt-5">
-        <div class='col-md-2 float-right'>
-            <span>ngày bắt đầu</span>
-            <input type="date" v-model="firstDate" >
-        </div>
-        <div class='col-md-2'>
-            <span>ngày kết thúc</span>
-            <input type="date" v-model="lastDate" >
-        </div>
-        <div v-if="alert" class="alert alert-danger">{{alert}}</div>   
-    </div>
+    
 </div>
 </template>
 
@@ -124,6 +125,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 
 </style>
