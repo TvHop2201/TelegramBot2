@@ -142,7 +142,7 @@ class HandleCommand {
                     pointChange: pointChange,
                     message: message
                 })
-                this.sendThankPhoto(chatId, fromIdsend, dataFN.fromId, dataFN.userName, pointChange, message)
+                this.sendThankPhoto(chatId, fromIdsend, dataFN.fromId, dataFN.firstName, pointChange, message)
                 this.saveText(text, chatId)
                 return 0
             }
