@@ -66,6 +66,11 @@ class HandleCommand {
             this.sendText(text, chatId)
             return 0
         }
+        if (!userReceive) {
+            let text = `<b>Mời nhập username người nhận  </b>`
+            this.sendText(text, chatId)
+            return 0
+        }
         if (!message) {
             message = ''
         }
