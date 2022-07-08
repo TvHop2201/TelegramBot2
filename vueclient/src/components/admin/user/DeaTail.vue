@@ -8,15 +8,15 @@
                           <form class='mx-5'>
                               <div class="form-group m-2">
                                   <label>userName: </label>
-                                  <input disabled class="form-control" placeholder="userName" v-model="userName" />
+                                  <input class="form-control" disabled placeholder="userName" v-model="userName" />
                               </div>
                               <div class="form-group m-2">
                                   <label>firstName: </label>
-                                  <input disabled class="form-control" placeholder="firstName" v-model="firstName" />
+                                  <input class="form-control" disabled placeholder="firstName" v-model="firstName" />
                               </div>
                               <div class="form-group m-2">
                                   <label>lastName : </label>
-                                  <input disabled class="form-control" placeholder="lastName" v-model="lastName"  />
+                                  <input class="form-control" disabled placeholder="lastName" v-model="lastName"  />
                               </div>
                               <div class="form-group m-2">
                                   <label>Point : </label>
