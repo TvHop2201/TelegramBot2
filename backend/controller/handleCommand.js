@@ -57,6 +57,11 @@ class HandleCommand {
             this.sendText(text, chatId)
             return 0;
         }
+        if (message.length > 65) {
+            let text = `<b>Bạn ${userSend} ơi !! Không thể gửi nhiều hơn 65 ký tự trong một tin nhắn !!!! </b>`
+            this.sendText(text, chatId)
+            return 0
+        }
         if (pointChange > maxPoint) {
             let text = `<b>Bạn ${userSend} ơi !! Không thể tặng hơn 150 điểm </b>`
             this.sendText(text, chatId)
