@@ -34,7 +34,7 @@ class HandleCommand {
             this.handleThankCommand(text, chatId, fromId)
         }
         if (text.split(' ')[0] === 'point') {
-            this.handlePointCommand(text, chatId)
+            this.handlePointCommand(text, chatId, fromId)
         }
     }
 
@@ -148,7 +148,7 @@ class HandleCommand {
         }
     }
 
-    async handlePointCommand(text, chatId) {
+    async handlePointCommand(text, chatId, fromIdSend) {
         let [pointCM, userView] = text.split(' ')
         let userSend = await this.getName(fromIdsend)
         if (userView === 'Bot') {
