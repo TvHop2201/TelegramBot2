@@ -116,7 +116,7 @@ class HandleCommand {
                     pointChange: pointChange,
                     message: message
                 })
-                this.sendThankPhoto(chatId, fromIdsend, dataUN.fromId, dataUN.userName, pointChange, message)
+                await this.sendThankPhoto(chatId, fromIdsend, dataUN.fromId, dataUN.userName, pointChange, message)
                 return 0
             }
         } else {
@@ -147,7 +147,7 @@ class HandleCommand {
                     pointChange: pointChange,
                     message: message
                 })
-                this.sendThankPhoto(chatId, fromIdsend, dataFN.fromId, dataFN.firstName, pointChange, message)
+                await this.sendThankPhoto(chatId, fromIdsend, dataFN.fromId, dataFN.firstName, pointChange, message)
                 return 0
             }
         }
