@@ -551,7 +551,7 @@ class Photo {
         } else if (func[random] === 4) {
             await this.mergeText4(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date)
         }
-        console.timeEnd('gửi ảnh lên chat : ')
+        console.timeEnd('merge Ảnh : ')
     }
 
 

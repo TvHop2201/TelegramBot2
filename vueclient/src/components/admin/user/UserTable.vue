@@ -47,7 +47,7 @@
                             @next-click="page=page+1"
                             >
                     </el-pagination>
-                    <select class="form-select" aria-label="Default select example" v-model="limit">
+                    <select class="form-select" aria-label="Default select example" v-model.number="limit">
                         <option selected value="5">5/page</option>
                         <option value="10">10/page</option>
                         <option value="15">15/page</option>
@@ -72,11 +72,12 @@ export default {
     data() {
         return {
             url: process.env.VUE_APP_URL,
+            token : this.$cookies.get('token'),
             loading:false,
             dataok: {},
             deatailData:{},
             page: 1,
-            limit:5,
+            limit:10,
             total :1,
             deatailShow: false,
             userName : '',
@@ -86,7 +87,11 @@ export default {
     },
     async created(){
         this.loading = true
-        let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`)
+        let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`,{
+        headers:{
+            Authorization: 'Bearer '+ this.token
+        }
+        })
         this.dataok = data1.data.data
         this.total = data1.data.total
         this.loading = false
@@ -99,7 +104,11 @@ export default {
         async closeDeatail(){
             this.deatailShow = false
             this.loading = true
-            let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`)
+            let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`,{
+            headers:{
+                Authorization: 'Bearer '+ this.token
+            }
+            })
             this.dataok = data1.data.data
             this.total = data1.data.total
             this.loading = false
@@ -108,7 +117,11 @@ export default {
             this.loading = true
             if(this.userName !== ''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=${this.limit}`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=${this.limit}`,{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+                })
                 this.dataok = data1.data.data
                 this.total = data1.data.total
                 this.loading = false
@@ -116,7 +129,11 @@ export default {
             }
             if(this.firstName!== ''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=${this.limit}`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=${this.limit}`,{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+                })
                 this.dataok = data1.data.data
                 this.total = data1.data.total
                 this.loading = false
@@ -124,7 +141,11 @@ export default {
             }
             if(this.lastName !== ''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=${this.limit}`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=${this.limit}`,{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+                })
                 this.dataok = data1.data.data
                 this.total = data1.data.total
                 this.loading = false
@@ -132,7 +153,11 @@ export default {
             }
             if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
                 this.page = 1
-                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`)
+                let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`,{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+                })
                 this.dataok = data1.data.data
                 this.total = data1.data.total
                 this.loading = false
@@ -150,28 +175,44 @@ export default {
             if(this.page!==''){
                 this.loading = true
                 if(this.userName !== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false
                     return 0
                 }
                 if(this.firstName!== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false
                     return 0
                 }
                 if(this.lastName !== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false
                     return 0
                 }
                 if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false
@@ -184,28 +225,44 @@ export default {
                 this.loading = true
                 this.page=1
                 if(this.userName !== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.userName}&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false
                     return 0
                 }
                 if(this.firstName!== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.firstName}&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false
                     return 0
                 }
                 if(this.lastName !== ''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=${this.lastName}&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false
                     return 0
                 }
                 if(this.firstName ===''&& this.lastName ===''&& this.userName ==''){
-                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`)
+                    let data1 = await axios.get(`${this.url}/admin/findModeTableUser/?key=&page=${this.page}&limit=${this.limit}`,{
+                    headers:{
+                        Authorization: 'Bearer '+ this.token
+                    }
+                    })
                     this.dataok = data1.data.data
                     this.total = data1.data.total
                     this.loading = false

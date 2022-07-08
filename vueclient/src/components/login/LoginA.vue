@@ -101,12 +101,11 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
 .full {
     background-image: url(./bg.jpg);
     background-repeat: no-repeat;
     background-size: 100%;
-    font-family: 'Quicksand';
+    font-family: "Quicksand";
     height: 100vh;
     overflow: auto;
 }

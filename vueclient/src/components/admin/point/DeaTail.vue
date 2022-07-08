@@ -58,6 +58,7 @@ export default {
     data (){
         return{
             url: process.env.VUE_APP_URL,
+            token : this.$cookies.get('token'),
             id: this.okData.data._id,
             pointChange: this.okData.data.pointChange,
             message : this.okData.data.message,
@@ -70,6 +71,10 @@ export default {
                 id:this.id,
                 pointChange : this.pointChange,
                 message : this.message
+            },{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
             })
             if(result.data.success){
                 this.alertMessage = true
@@ -83,7 +88,11 @@ export default {
         },
         async remove(){
             confirm("Bạn có muốn xóa message !!!")
-            let result = await axios.get(`${this.url}/admin/deletePointMessage/?id=${this.id}`)
+            let result = await axios.get(`${this.url}/admin/deletePointMessage/?id=${this.id}`,{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+            })
             if(result.data.success=== true){
                 alert("Thành công !!!")
                 this.$emit('close')
@@ -122,9 +131,9 @@ export default {
 }
 
 .tr-enter-active, .tr-leave-active {
-  transition: opacity 1s;
+  transition: opacity 0.5s;
 }
-.tr-enter, .tr-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.tr-enter, .tr-leave-to {
   opacity: 0;
 }
   

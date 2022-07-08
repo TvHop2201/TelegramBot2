@@ -21,11 +21,16 @@ export default {
         labels: [],
         datasets: [],
       },
-      url : process.env.VUE_APP_URL
+      url : process.env.VUE_APP_URL,
+      token : this.$cookies.get('token')
     }
   },
   async created (){
-    let data =await axios.get(`${this.url}/admin/getChartPoint`)
+    let data =await axios.get(`${this.url}/admin/getChartPoint`,{
+        headers:{
+            Authorization: 'Bearer '+ this.token
+        }
+        })
     this.chartData.labels = data.data.data.map(index =>index.firstName)
     let data2  = {data :data.data.data.map(index=>index.point),label: 'point',backgroundColor: ["#bef264","#fcd34d","#fca5a5",],}
     this.chartData.datasets = [data2]

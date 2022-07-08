@@ -122,11 +122,11 @@ class Admin {
         }
     }
     //log
-    async getLogUser(req, res) {
-        let { page, limit } = req.body
+    async getLogUser(req, res, next) {
+        let { page, limit } = req.query
         let logData = await logUserModel.find().sort({ _id: -1 }).skip((limit * page) - limit).limit(limit)
         let total = await logUserModel.find().count()
-        if (data) {
+        if (logData) {
             res.json({
                 success: true,
                 data: logData,
@@ -138,28 +138,60 @@ class Admin {
             })
         }
     }
+    async findLogUser(req, res) {
+        let { page, limit, key } = req.query
+        key = new RegExp(`.*${key}.*`, "i")
+        let logData = await logUserModel.find({
+            $or: [
+                { adminChange: key },
+                { user: key }
+            ]
+        }).sort({ _id: -1 }).skip((limit * page) - limit).limit(limit)
+        let total = await logUserModel.find().count()
+        if (logData) {
+            res.json({
+                success: true,
+                data: logData,
+                total: total
+            })
+        } else {
+            res.json({
+                success: false
+            })
+        }
+
+    }
     async createLogUser(req, res) {
         let idUser = req.body.idUser
-        let adminChange = req.body.admin
-        let user = req.body.admin
+        let adminChange = req.body.adminChange
+        let user = req.body.user
         let pointChange = req.body.pointChange
-        let message = req.body.message
+        let log = req.body.log
 
         let data = await logUserModel.create({
             idUser: idUser,
             adminChange: adminChange,
             user: user,
             pointChange: pointChange,
-            messaged: message
+            log: log
         })
-        console.log(data)
+        if (data) {
+            res.json({
+                success: true,
+                data: data
+            })
+        } else {
+            res.json({
+                success: false
+            })
+        }
     }
     //point
     async getChartPoint(req, res) {
-        const data = await userModel.find({}, {
+        const data = await userModel.find({ fromId: { $ne: 11111111 } }, {
             firstName: 1,
             userName: 1,
-            point: 1
+            point: 1,
         }).sort({ point: -1 }).limit(5)
         if (data) {
             res.json({

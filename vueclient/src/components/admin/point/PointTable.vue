@@ -44,7 +44,7 @@
                         @next-click="page=page+1"
                         >
                     </el-pagination>
-                    <select class="form-select" aria-label="Default select example" v-model="limit">
+                    <select class="form-select" aria-label="Default select example" v-model.number="limit">
                         <option selected value="5">5/page</option>
                         <option value="10">10/page</option>
                         <option value="15">15/page</option>
@@ -73,12 +73,17 @@ export default {
             limit :10,
             total:1,
             deatailShow: false,
-            deatailData:{}
+            deatailData:{},
+            token : this.$cookies.get('token')
         };
     },
     async created() {
         this.loading = true
-        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
+        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`,{
+            headers:{
+                Authorization: 'Bearer '+ this.token
+            }
+            });
         this.dataok = data1.data.data;
         this.total= data1.data.total
         this.loading = false
@@ -87,7 +92,11 @@ export default {
       async exitDeatail (){
         this.deatailShow=false
         this.loading = true
-        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
+        let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`,{
+        headers:{
+            Authorization: 'Bearer '+ this.token
+        }
+        });
         this.dataok = data1.data.data;
         this.total= data1.data.total
         this.loading = false
@@ -104,7 +113,11 @@ export default {
         async page() {
             if (this.page !== null) {
                 this.loading = true
-                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
+                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`,{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+                });
                 this.dataok = data1.data.data;
                 this.loading = false
             }
@@ -113,7 +126,11 @@ export default {
             if (this.page !== null) {
                 this.loading = true
                 this.page=1
-                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`);
+                let data1 = await axios.get(`${this.url}/admin/getPointMessage/?page=${this.page}&limit=${this.limit}`,{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+                });
                 this.dataok = data1.data.data;
                 this.loading = false
             }

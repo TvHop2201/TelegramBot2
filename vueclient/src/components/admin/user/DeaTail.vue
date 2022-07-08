@@ -1,6 +1,6 @@
 <template>
     <transition name="tr">
-        <div class='popup'>
+        <div class='popup' tabindex="-1" @keydown.esc="$emit('close')">
               <div class='popup_inner' >
                       <button class='btn btn-outline-danger float-right mt-3 mx-3' @click="$emit('close')">X</button>
                       <div class='container'>
@@ -20,7 +20,11 @@
                               </div>
                               <div class="form-group m-2">
                                   <label>Point : </label>
-                                  <input class="form-control" placeholder="point" v-model="point" />
+                                  <input class="form-control" :placeholder="[[okData.point]]" v-model="point" />
+                              </div>
+                              <div class="form-group m-2">
+                                  <label>log : </label>
+                                  <input class="form-control" placeholder="lý do cập nhật điểm" v-model="log" />
                               </div>
                               <div class="form-group m-2">
                                   <label>create_at : </label>
@@ -39,6 +43,7 @@
 
 <script>
 import axios from 'axios'
+import jwtDecode from 'jwt-decode'
 export default {
     props:['okData'],
     data(){
@@ -47,20 +52,42 @@ export default {
             userName:this.okData.userName,
             firstName: this.okData.firstName,
             lastName : this.okData.lastName,
-            point:this.okData.point,
+            point:'',
+            pointChange:'',
+            log:'',
+            admin: 'ADMIN',
             url: process.env.VUE_APP_URL,
+            token : this.$cookies.get('token')
         }
     },
     methods:{
         async update(){
+            this.admin = jwtDecode(this.token).username
+            let logData = await axios.post(`${this.url}/admin/createLogUser`,{
+
+                idUser :this.okData.fromId,
+                adminChange : this.admin,
+                user: this.okData.userName||this.okData.firstName,
+                pointChange: this.pointChange,
+                log: this.log
+            },{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
+            })
             let data1 = await axios.post(`${this.url}/admin/updateUser`,{
                 _id:  this.id,
                 userName : this.userName,
                 firstName: this.firstName,
                 lastName: this.lastName,
                 point : this.point,
+            },{
+                headers:{
+                    Authorization: 'Bearer '+ this.token
+                }
             })
-            if(data1.data.success){
+            
+            if(data1.data.success &&logData.data.success){
                 alert("Cập Nhật Thành Công !!!!")
                 this.$emit('close')
             }else{
@@ -83,6 +110,15 @@ export default {
             this.firstName= this.okData.firstName
             this.lastName = this.okData.lastName
             this.point=this.okData.point
+            this.pointChange = ''
+            this.list =''
+        },
+        point(){
+          if(this.point > this.okData.point) {
+            this.pointChange = `+${this.point-this.okData.point}`
+          }else if(this.point < this.okData.point){
+            this.pointChange = `${this.point - this.okData.point}`
+          }
         }
     }
 }
@@ -117,9 +153,9 @@ export default {
 
 
 .tr-enter-active, .tr-leave-active {
-  transition: opacity 1s;
+  transition: opacity 0.5s;
 }
-.tr-enter, .tr-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.tr-enter, .tr-leave-to  {
   opacity: 0;
 }
   

@@ -16,8 +16,12 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
-body{
-     font-family: 'Quicksand';
+@font-face {
+  font-family: "Quicksand";
+  src: local("Quicksand"),
+   url(./assets/font/Quicksand-Medium.ttf) format("truetype");
+}
+#app{
+  font-family: "Quicksand";
 }
 </style>
