@@ -203,10 +203,15 @@ class Photo {
             ])
             .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
         //delete crop photo
-        let path = __dirname
-        path = path.split('/utils').join('')
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_1.jpg`)
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_1.jpg`)
+        try {
+            let path = __dirname
+            path = path.split('/utils').join('')
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_1.jpg`)
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_1.jpg`)
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     async mergeText2(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
@@ -275,10 +280,15 @@ class Photo {
             .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
 
         //delete crop photto
-        let path = __dirname
-        path = path.split('/utils').join('')
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_2.jpg`)
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_2.jpg`)
+        try {
+            let path = __dirname
+            path = path.split('/utils').join('')
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_2.jpg`)
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_2.jpg`)
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     async mergeText3(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
@@ -355,10 +365,15 @@ class Photo {
             ])
             .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
         //delete crop photo
-        let path = __dirname
-        path = path.split('/utils').join('')
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_3.jpg`)
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_3.jpg`)
+        try {
+            let path = __dirname
+            path = path.split('/utils').join('')
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_3.jpg`)
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_3.jpg`)
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     async mergeText4(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {
@@ -437,10 +452,15 @@ class Photo {
             ])
             .toFile(`./public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
         // delete crop photo
-        let path = __dirname
-        path = path.split('/utils').join('')
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_3.jpg`)
-        fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_3.jpg`)
+        try {
+            let path = __dirname
+            path = path.split('/utils').join('')
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdSend}_3.jpg`)
+            fs.unlinkSync(`${path}/public/image/crop/${fromIdReceive}_3.jpg`)
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     async mergeListPoint(listUser, date) {
@@ -529,11 +549,13 @@ class Photo {
             ])
             .toFile(`./public/image/merge/PointUserand${date}.jpg`)
         // delete crop photo
-        let path = __dirname
-        path = path.split('/utils').join('')
-        fs.unlinkSync(`${path}/public/image/crop/${data.fromId}_p.jpg`)
-
-
+        try {
+            let path = __dirname
+            path = path.split('/utils').join('')
+            fs.unlinkSync(`${path}/public/image/crop/${data.fromId}_p.jpg`)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage, date) {

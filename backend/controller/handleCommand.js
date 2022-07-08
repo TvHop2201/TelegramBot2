@@ -40,6 +40,7 @@ class HandleCommand {
 
     async handleThankCommand(text, chatId, fromIdsend) {
         let [minPoint, maxPoint] = [15, 150]
+        text = text.replace(/“/gi, '"')
         let [text1, ...message] = text.split('"')
         message = message.join('"')
         let [thank, userReceive, pointChange] = text1.split(' ')
