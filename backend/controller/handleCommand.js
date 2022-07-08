@@ -148,7 +148,7 @@ class HandleCommand {
         }
     }
 
-    async handlePointCommand(text, chatId, fromIdSend) {
+    async handlePointCommand(text, chatId, fromIdsend) {
         let [pointCM, userView] = text.split(' ')
         let userSend = await this.getName(fromIdsend)
         if (userView === 'Bot') {
