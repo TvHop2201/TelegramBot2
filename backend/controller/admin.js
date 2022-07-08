@@ -267,7 +267,6 @@ class Admin {
         let { startTime, endTime } = req.query
         startTime = startTime.split('-')
         endTime = endTime.split('-')
-        console.log(startTime, endTime)
         let first = new Date(parseInt(startTime[0], 10), parseInt(startTime[1], 10) - 1, parseInt(startTime[2]), 10).getTime()
         let last = new Date(parseInt(endTime[0], 10), parseInt(endTime[1], 10) - 1, parseInt(endTime[2]), 10).getTime()
 

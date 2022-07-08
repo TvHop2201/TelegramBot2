@@ -40,35 +40,40 @@ class HandleCommand {
 
     async handleThankCommand(text, chatId, fromIdsend) {
         let [minPoint, maxPoint] = [15, 150]
-        let [text1, message] = text.split('"')
+        let [text1, ...message] = text.split('"')
+        message = message.join('"')
         let [thank, userReceive, pointChange] = text1.split(' ')
+        let userSend = await this.getName(fromIdsend)
         //xử lý đầu vào
+        if (message.charAt(message.length - 1) === '"') {
+            message = message.slice(0, -1)
+        }
         if (!pointChange) {
             pointChange = minPoint
         }
         pointChange = parseInt(pointChange)
         if (Number.isNaN(pointChange)) {
-            let text = '<b>Wrong point !!!</b>'
+            let text = `<b>Bạn ${userSend} ơi!! bạn chưa nhập điểm !!!</b>`
             this.sendText(text, chatId)
             return 0;
         }
         if (pointChange > maxPoint) {
-            let text = `<b>Không thể tặng hơn 150 điểm </b>`
+            let text = `<b>Bạn ${userSend} ơi !! Không thể tặng hơn 150 điểm </b>`
             this.sendText(text, chatId)
             return 0
         }
         if (pointChange < minPoint) {
-            let text = `<b>Không thể tặng dưới 15 điểm </b>`
+            let text = `<b>Bạn ${userSend} ơi !! Không thể tặng dưới 15 điểm </b>`
             this.sendText(text, chatId)
             return 0
         }
         if (!userReceive) {
-            let text = `<b>Mời nhập username người nhận  </b>`
+            let text = `<b>Bạn ${userSend} ơi !! Mời nhập username người nhận  </b>`
             this.sendText(text, chatId)
             return 0
         }
         if (!message) {
-            let text = `<b>Phải nhập lời nhắn trong dấu ngoặc kép</b>`
+            let text = `<b>Bạn ${userSend} ơi !! Phải nhập lời nhắn trong dấu ngoặc kép</b>`
             this.sendText(text, chatId)
             return 0
         }
@@ -76,7 +81,7 @@ class HandleCommand {
         //check điểm của bot
         let botPoint = await userModel.findOne({ fromId: 11111111 }, { point: 1 })
         if (botPoint.point <= 1) {
-            let text = `<b>Bot Đã Hết Số điểm Để Gửi!!!!</b>`
+            let text = `<b>Bạn ${userSend} ơi !! Bot Đã Hết Số điểm Để Gửi!!!!</b>`
             this.sendText(text, chatId)
             return 0
         }
@@ -86,17 +91,17 @@ class HandleCommand {
             userReceive = userReceive.split('@')[1]
             let dataUN = await userModel.findOne({ userName: userReceive })
             if (!dataUN) {
-                let text = '<b>không tồn tại người dùng !!! </b>'
+                let text = `<b>Bạn ${userSend} ơi !! không tồn tại người người nhận !!! </b>`
                 this.sendText(text, chatId)
                 return 0
             } else {
                 if (dataUN.fromId === 11111111) {
-                    let text = `<b>không thể gửi điểm cho Bot!!!!</b>`
+                    let text = `<b>Bạn ${userSend} ơi !! không thể gửi điểm cho Bot!!!!</b>`
                     this.sendText(text, chatId)
                     return 0
                 }
                 if (dataUN.fromId === fromIdsend) {
-                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    let text = `<b>Bạn ${userSend} ơi !! không thể tự gửi cho bản thân !!!!</b>`
                     this.sendText(text, chatId)
                     return 0
                 }
@@ -116,17 +121,17 @@ class HandleCommand {
             let dataFN = await userModel.findOne({ firstName: userReceive })
             console.log(dataFN)
             if (!dataFN) {
-                let text = '<b>không tồn tại người dùng !!! </b>'
+                let text = `<b>Bạn ${userSend} ơi !! không tồn tại người nhận !!! </b>`
                 this.sendText(text, chatId)
                 return 0
             } else {
                 if (dataFN.fromId === 11111111) {
-                    let text = `<b>không thể gửi điểm cho Bot!!!!</b>`
+                    let text = `<b>Bạn ${userSend} ơi !! không thể gửi điểm cho Bot!!!!</b>`
                     this.sendText(text, chatId)
                     return 0
                 }
                 if (dataFN.fromId === fromIdsend) {
-                    let text = `<b>không thể tự gửi cho bản thân !!!!</b>`
+                    let text = `<b>Bạn ${userSend} ơi !! không thể tự gửi cho bản thân !!!!</b>`
                     this.sendText(text, chatId)
                     return 0
                 }
@@ -145,8 +150,9 @@ class HandleCommand {
 
     async handlePointCommand(text, chatId) {
         let [pointCM, userView] = text.split(' ')
+        let userSend = await this.getName(fromIdsend)
         if (userView === 'Bot') {
-            let text = '<b>Không Thể Xem Điểm Của Bot !!! </b>'
+            let text = `<b>Bạn ${userSend} ơi !! Không Thể Xem Điểm Của Bot !!! </b>`
             this.sendText(text, chatId)
             return 0
         }
@@ -166,7 +172,7 @@ class HandleCommand {
                 userView = userView.split('@')[1]
                 let dataUN = await userModel.findOne({ userName: userView }, { point: 1, fromId: 1 })
                 if (!dataUN) {
-                    let text = '<b>không tồn tại người dùng !!! </b>'
+                    let text = `<b>Bạn ${userSend} ơi !! không tồn tại người dùng !!! </b>`
                     console.log(text)
                     this.sendText(text, chatId)
                     return 0
@@ -186,7 +192,7 @@ class HandleCommand {
                 }
                 let dataFN = await userModel.findOne({ firstName: userView }, { point: 1, fromId: 1 })
                 if (!dataFN) {
-                    let text = '<b>không tồn tại người dùng !!! </b>'
+                    let text = `<b>Bạn ${userSend} ơi !! không tồn tại người dùng !!! </b>`
                     this.sendText(text, chatId)
                     return 0
                 }
