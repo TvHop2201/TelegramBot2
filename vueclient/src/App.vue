@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -19,9 +19,10 @@ export default {
 @font-face {
   font-family: "Quicksand";
   src: local("Quicksand"),
-   url(./assets/font/Quicksand-Medium.ttf) format("truetype");
+    url(./assets/font/Quicksand-Medium.ttf) format("truetype");
 }
-#app{
+
+#app {
   font-family: "Quicksand";
 }
 </style>

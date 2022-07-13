@@ -221,44 +221,55 @@ class HandleCommand {
         await axios.post(`${telegramBot}/sendMessage?chat_id=${chatId}&text=${textEncode}&parse_mode=html`)
     }
 
-
     async sendThankPhoto(chatId, fromIdSend, fromIdReceive, userNameReceive, pointChange, pointMessage) {
-        let date = Date.now()
-        let fixPointMessage = pointMessage.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-        await handlePhoto.randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, fixPointMessage, date)
-        axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-            .then(() => {
-                let path = __dirname
-                path = path.split('/controller').join('')
-                fs.unlinkSync(`${path}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
-            })
-            .catch(err => console.log(err))
+        try {
+            let date = Date.now()
+            let fixPointMessage = pointMessage.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+            await handlePhoto.randomPhoto(fromIdSend, fromIdReceive, userNameReceive, pointChange, fixPointMessage, date)
+            axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+                .then(() => {
+                    let path = __dirname
+                    path = path.split('/controller').join('')
+                    fs.unlinkSync(`${path}/public/image/merge/${fromIdSend}and${fromIdReceive}and${date}.jpg`)
+                })
+                .catch(err => console.log(err))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async sendListPointPhoto(listUser, chatId) {
-        let date = Date.now()
-        await handlePhoto.mergeListPoint(listUser, date)
-        axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/PointListand${date}.jpg`)
-            .then(() => {
-                let path = __dirname
-                path = path.split('/controller').join('')
-                fs.unlinkSync(`${path}/public/image/merge/PointListand${date}.jpg`)
-            })
+        try {
+            let date = Date.now()
+            await handlePhoto.mergeListPoint(listUser, date)
+            axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/PointListand${date}.jpg`)
+                .then(() => {
+                    let path = __dirname
+                    path = path.split('/controller').join('')
+                    fs.unlinkSync(`${path}/public/image/merge/PointListand${date}.jpg`)
+                })
+        } catch (error) {
+            console.log(error)
+        }
 
     }
     async sendUserPointPhoto(data, chatId) {
-        let date = Date.now()
-        await handlePhoto.mergerUserPoint(data, date)
-        axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/PointUserand${date}.jpg`)
-            .then(() => {
-                let path = __dirname
-                path = path.split('/controller').join('')
-                fs.unlinkSync(`${path}/public/image/merge/PointUserand${date}.jpg`)
-            })
+        try {
+            let date = Date.now()
+            await handlePhoto.mergerUserPoint(data, date)
+            axios.get(`${url4}/sendPhoto?chat_id=${chatId}&photo=${process.env.URLSEVER}image/merge/PointUserand${date}.jpg`)
+                .then(() => {
+                    let path = __dirname
+                    path = path.split('/controller').join('')
+                    fs.unlinkSync(`${path}/public/image/merge/PointUserand${date}.jpg`)
+                })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async getName(fromId) {

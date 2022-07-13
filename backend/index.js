@@ -43,6 +43,15 @@ app.get('/webhook', (req, res) => {
 const websocket = require('./service/websocket.js')
 websocket()
 
+//CronJob
+const cron = require('node-cron')
+const CronJob = require('./service/cronJob')
+cron.schedule('* 23 * * *', () => {
+    console.log('CRON JOB REMOVE IMAGE RUNNING !!!')
+    CronJob.deleteImage()
+    console.log('CRON JOB REMOVE IMAGE END !!!!')
+})
+
 //Listen
 app.listen(process.env.PORT || 8000, () => {
     console.log(`App listening on port ${process.env.PORT || 8000}`);
@@ -55,3 +64,5 @@ app.listen(process.env.PORT || 8000, () => {
 // }, 3000);
 
 //test
+
+
